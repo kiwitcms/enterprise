@@ -31,8 +31,8 @@ Initial configuration of running container
 
 You need to do initial configuration by executing:
 
-    docker exec -it kiwi_web_1 /Kiwi/manage.py migrate
-    docker exec -it kiwi_web_1 /Kiwi/manage.py createsuperuser
+    docker exec -it kiwi_web /Kiwi/manage.py migrate
+    docker exec -it kiwi_web /Kiwi/manage.py createsuperuser
 
 Upgrading
 ---------
@@ -40,10 +40,10 @@ Upgrading
 To upgrade running KiwiTestPad containers execute the following commands::
 
     docker-compose stop
-    docker rm kiwi_web_1 kiwi_db_1
+    docker rm kiwi_web kiwi_db
     docker pull # to fetch latest version from Docker.io
     docker-compose up -d
-    docker exec -it kiwi_web_1 /Kiwi/manage.py migrate
+    docker exec -it kiwi_web /Kiwi/manage.py migrate
 
 .. note::
     Uploads and database data should stay intact because they are split into
