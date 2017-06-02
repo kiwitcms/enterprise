@@ -2,7 +2,7 @@ Docker compose for KiwiTestPad
 ==============================
 
 This is a docker compose to help you install and configure the
-[KiwiTestPad](https://github.com/MrSenkoKiwi/) test case management
+[KiwiTestPad](https://github.com/MrSenko/Kiwi/) test case management
 system when running as a Docker container.
 
 
