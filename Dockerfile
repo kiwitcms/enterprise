@@ -6,5 +6,5 @@ FROM mrsenko/kiwi
 ENV VIRTUAL_ENV /venv
 ENV PATH /venv/bin:$PATH
 
-# Install additional
-RUN pip install gunicorn strazar
+# Install additional Python dependencies
+RUN pip install kerberos

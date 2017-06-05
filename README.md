@@ -34,6 +34,7 @@ You need to do initial configuration by executing:
     docker exec -it kiwi_web /Kiwi/manage.py migrate
     docker exec -it kiwi_web /Kiwi/manage.py createsuperuser
 
+
 Upgrading
 ---------
 
@@ -45,7 +46,34 @@ To upgrade running KiwiTestPad containers execute the following commands::
     docker-compose up -d
     docker exec -it kiwi_web /Kiwi/manage.py migrate
 
-.. note::
+**NOTE:**
+
     Uploads and database data should stay intact because they are split into
     separate volumes, which makes upgrading very easy. However you may want to
     back these up before upgrading!
+
+
+Customization
+-------------
+
+The local file `product.py` is mounted inside the running Docker container.
+You can add any site-specific settings to this file.
+
+**IMPORTANT**
+
+    Be sure to provide correct values for the `SECRET_KEY` and `ADMINS`
+    settings!
+
+
+**WARNING**
+
+    Be careful not to upload your local `product.py` to GitHub!
+
+You can also build your own customized version of KiwiTestPad by adjusting
+the contents of the local `Dockerfile`. Use that file to install additional
+Python dependencies you may need then:
+
+    docker build -t my_org/my_kiwi:<version> .
+
+Next make sure to modify `docker-compose.yml` to use your customized image
+instead the default `mrsenko/kiwi:latest`!
