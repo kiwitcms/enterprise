@@ -13,6 +13,6 @@ SECRET_KEY = 'change-me'
 
 
 # Administrators error report email settings
-ADMINS = (
+ADMINS = [
     # ('Your Name', 'your_email@example.com'),
-)
+]
