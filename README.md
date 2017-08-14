@@ -42,7 +42,7 @@ To upgrade running KiwiTestPad containers execute the following commands::
 
     docker-compose stop
     docker rm kiwi_web kiwi_db
-    docker pull # to fetch latest version from Docker.io
+    docker pull mrsenko/kiwi # to fetch latest version from Docker.io
     docker-compose up -d
     docker exec -it kiwi_web /Kiwi/manage.py migrate
 
