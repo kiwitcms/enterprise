@@ -53,6 +53,16 @@ To upgrade running KiwiTestPad containers execute the following commands::
     back these up before upgrading!
 
 
+SSL configuration
+-----------------
+
+By default Kiwi TCMS is served via HTTPS. This docker compose is configured with
+a default self-signed certificate. If you want to use a different SSL certificate
+you need to update the `kiwi-https.key` and `kiwi-https.crt` files! More information
+about generating your own self-signed certificates can be found at
+https://wiki.centos.org/HowTos/Https.
+
+
 Customization
 -------------
 
