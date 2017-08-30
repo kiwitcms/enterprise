@@ -21,10 +21,12 @@ services:
         # NOTE: mrsenko/kiwi is a private image on Docker Store!
         image: mrsenko/kiwi:latest
         ports:
-            - 80
+            - 443
         volumes:
             - uploads:/var/kiwi/uploads
             - ./product.py:/usr/lib/python2.7/site-packages/tcms/settings/product.py
+            - ./kiwi-https.crt:/etc/pki/tls/certs/localhost.crt
+            - ./kiwi-https.key:/etc/pki/tls/private/localhost.key
         environment:
             KIWI_DB_HOST: db
             KIWI_DB_PORT: 3306
