@@ -1,5 +1,5 @@
 import os
-from common import *
+from .common import *
 
 # Debug settings
 DEBUG = False

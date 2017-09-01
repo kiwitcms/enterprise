@@ -24,7 +24,7 @@ services:
             - 443
         volumes:
             - uploads:/var/kiwi/uploads
-            - ./product.py:/usr/lib/python2.7/site-packages/tcms/settings/product.py
+            - ./product.py:/venv/lib64/python3.5/site-packages/tcms/settings/product.py
             - ./kiwi-https.crt:/etc/pki/tls/certs/localhost.crt
             - ./kiwi-https.key:/etc/pki/tls/private/localhost.key
         environment:
