@@ -1,8 +1,8 @@
-Docker compose for KiwiTestPad
-==============================
+Docker compose for Kiwi TCMS
+============================
 
 This is a docker compose to help you install and configure the
-[KiwiTestPad](https://github.com/MrSenko/Kiwi/) test case management
+[Kiwi TCMS](https://github.com/kiwitcms/Kiwi/) test case management
 system when running as a Docker container.
 
 
@@ -12,13 +12,13 @@ Create Docker container
 Before you start you will need the `mrsenko/kiwi:<version>` image pulled
 locally. Alternatively you have to build it yourself!
 
-You can then start using KiwiTestPad by executing:
+You can then start using Kiwi TCMS by executing:
 
     docker-compose up -d
 
 This will create two containers:
 
-1) A web container based on the latest KiwiTestPad image
+1) A web container based on the latest Kiwi TCMS image
 2) A DB container based on the official centos/mariadb image
 
 
@@ -38,7 +38,7 @@ You need to do initial configuration by executing:
 Upgrading
 ---------
 
-To upgrade running KiwiTestPad containers execute the following commands::
+To upgrade running Kiwi TCMS containers execute the following commands::
 
     docker-compose down
     docker pull mrsenko/kiwi # to fetch latest version from Docker.io
@@ -78,9 +78,9 @@ You can add any site-specific settings to this file.
 
     Be careful not to upload your local `product.py` to GitHub!
 
-You can also build your own customized version of KiwiTestPad by adjusting
+You can also build your own customized version of Kiwi TCMS by adjusting
 the contents of the local `Dockerfile`. Use that file to install additional
-Python dependencies you may need then:
+Python dependencies you may need and then:
 
     docker build -t my_org/my_kiwi:<version> .
 
