@@ -21,7 +21,7 @@ services:
         # NOTE: mrsenko/kiwi is a private image on Docker Store!
         image: mrsenko/kiwi:latest
         ports:
-            - 443
+            - 443:443
         volumes:
             - uploads:/var/kiwi/uploads
             - ./product.py:/venv/lib64/python3.5/site-packages/tcms/settings/product.py
