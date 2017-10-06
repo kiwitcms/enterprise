@@ -16,3 +16,12 @@ SECRET_KEY = 'change-me'
 ADMINS = [
     # ('Your Name', 'your_email@example.com'),
 ]
+
+
+### DO NOT CHANGE THE SETTINGS BELOW
+
+# provides filename versioning
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
+# indicate that this is the Enterprise Edition version
+KIWI_VERSION = "%s-ee" % KIWI_VERSION
