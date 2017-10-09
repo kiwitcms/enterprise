@@ -1,0 +1,5 @@
+FROM centos/mariadb
+
+# workaround until upstream gets support for CHARACTER SET and COLLATION
+# https://github.com/CentOS/CentOS-Dockerfiles/pull/146
+COPY ./mariadb-docker-entrypoint.sh /docker-entrypoint.sh

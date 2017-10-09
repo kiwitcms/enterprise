@@ -3,7 +3,7 @@ version: '2'
 services:
     db:
         container_name: kiwi_db
-        image: centos/mariadb
+        image: mrsenko/mariadb
         volumes:
             - db_data:/var/lib/mysql
         restart: always
@@ -12,6 +12,10 @@ services:
             MYSQL_DATABASE: kiwi
             MYSQL_USER: kiwi
             MYSQL_PASSWORD: kiwi
+            # workaround for
+            # https://github.com/CentOS/CentOS-Dockerfiles/pull/146
+            MYSQL_CHARSET: utf8
+            MYSQL_COLLATION: utf8_unicode_ci
 
     web:
         container_name: kiwi_web
