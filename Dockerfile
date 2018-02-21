@@ -6,9 +6,11 @@ FROM kiwitcms/kiwi
 ENV VIRTUAL_ENV /venv
 ENV PATH /venv/bin:$PATH
 
-### customize this image as you wish
-# Install additional Python dependencies
-#RUN pip install kerberos
+# Install any additional Python dependencies
+# we may have specified
+COPY ./requirements.d/ /Kiwi/requirements.d/
+RUN pip install -r /Kiwi/requirements.d/*.txt
+
 
 COPY ./product.py /venv/lib64/python3.5/site-packages/tcms/settings/
 # collect static files again

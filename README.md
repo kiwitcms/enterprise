@@ -2,8 +2,11 @@ Docker compose for Kiwi TCMS
 ============================
 
 This is a docker compose to help you install and configure the
-[Kiwi TCMS](https://github.com/kiwitcms/Kiwi/) test case management
-system when running as a Docker container.
+[Kiwi TCMS](http://kiwitcms.org) test case management
+system when running as a Docker container. The existing configuration
+is a downstream distribution designed and supported by
+[Mr. Senko, Ltd.](http://mrsenko.com) and thus differs from the upstream
+docker-compose and Docker image for Kiwi TCMS!
 
 
 Create Docker container
@@ -65,6 +68,11 @@ https://wiki.centos.org/HowTos/Https.
 Customization
 -------------
 
+The local directory `requirements.d` may contain text files listing additional
+pip packages. These will be installed when rebuilding the docker image. To avoid
+git conflicts you should place extra packages in a separate file with the `.txt`
+extension!
+
 The local file `product.py` is mounted inside the running Docker container.
 You can add any site-specific settings to this file.
 
@@ -79,8 +87,7 @@ You can add any site-specific settings to this file.
     Be careful not to upload your local `product.py` to GitHub!
 
 You can also build your own customized version of Kiwi TCMS by adjusting
-the contents of the local `Dockerfile`. Use that file to install additional
-Python dependencies you may need and then:
+the contents of `Dockerfile` or inheriting from the base Docker images and then:
 
     docker build -t my_org/my_kiwi:<version> .
 
