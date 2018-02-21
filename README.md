@@ -68,13 +68,14 @@ https://wiki.centos.org/HowTos/Https.
 Customization
 -------------
 
-The local directory `requirements.d` may contain text files listing additional
-pip packages. These will be installed when rebuilding the docker image. To avoid
-git conflicts you should place extra packages in a separate file with the `.txt`
-extension!
-
-The local file `product.py` is mounted inside the running Docker container.
-You can add any site-specific settings to this file.
+- `libs.d/` may contain additional Python modules. These will be installed
+  under `tcms.libs` inside the Docker image;
+- `requirements.d/` may contain text files listing additional pip packages.
+  These will be installed when rebuilding the docker image. To avoid git
+  git conflicts you should place extra packages in a separate file with the
+  `.txt` extension!
+- `product.py` is mounted inside the running Docker container. You can add
+  any site-specific settings to this file.
 
 **IMPORTANT**
 
@@ -86,8 +87,7 @@ You can add any site-specific settings to this file.
 
     Be careful not to upload your local `product.py` to GitHub!
 
-You can also build your own customized version of Kiwi TCMS by adjusting
-the contents of `Dockerfile` or inheriting from the base Docker images and then:
+You can also build your own customized version of Kiwi TCMS by executing:
 
     docker build -t my_org/my_kiwi:<version> .
 
