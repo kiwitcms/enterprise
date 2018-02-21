@@ -9,7 +9,7 @@ ENV PATH /venv/bin:$PATH
 # Install any additional Python dependencies
 # we may have specified
 COPY ./requirements.d/ /Kiwi/requirements.d/
-RUN pip install -r /Kiwi/requirements.d/*.txt
+RUN for F in /Kiwi/requirements.d/*.txt; do pip install -r $F; done
 
 
 COPY ./product.py /venv/lib64/python3.5/site-packages/tcms/settings/
