@@ -27,9 +27,8 @@ services:
             - 443:443
         volumes:
             - uploads:/var/kiwi/uploads
-            - ./product.py:/venv/lib64/python3.5/site-packages/tcms/settings/product.py
-            - ./kiwi-https.crt:/etc/pki/tls/certs/localhost.crt
-            - ./kiwi-https.key:/etc/pki/tls/private/localhost.key
+            - ./product.py:/venv/lib64/python3.5/site-packages/tcms/settings/product.py:Z
+            - ./ssl:/etc/kiwitcms/ssl:Z
         environment:
             KIWI_DB_HOST: db
             KIWI_DB_PORT: 3306

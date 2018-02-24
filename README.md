@@ -55,19 +55,12 @@ To upgrade running Kiwi TCMS containers execute the following commands::
     back these up before upgrading!
 
 
-SSL configuration
------------------
-
-By default Kiwi TCMS is served via HTTPS. This docker compose is configured with
-a default self-signed certificate. If you want to use a different SSL certificate
-you need to update the `kiwi-https.key` and `kiwi-https.crt` files! More information
-about generating your own self-signed certificates can be found at
-https://wiki.centos.org/HowTos/Https.
-
-
 Customization
 -------------
 
+- `ssl` contains self-signed SSL certificates. Update the contents of
+  `localhost.key` and `localhost.crt` or bind-mount your own SSL directory
+  to `/etc/kiwitcms/ssl` inside the docker container;
 - `libs.d/` may contain additional Python modules. These will be installed
   under `tcms.libs` inside the Docker image;
 - `requirements.d/` may contain text files listing additional pip packages.
