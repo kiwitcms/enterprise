@@ -3,7 +3,7 @@ ifeq ($(DOCKER_ORG),)
 endif
 
 ifeq ($(KIWI_VERSION),)
-    KIWI_VERSION=5.0-ee
+    KIWI_VERSION=5.1-ee
 endif
 
 docker-image:
