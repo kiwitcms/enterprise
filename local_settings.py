@@ -1,39 +1,24 @@
 import os
 import raven
-from .common import *
-
-# Debug settings
-DEBUG = False
-
-### Add any site-specific Kiwi settings below this line
-# for more information about available settings see
-# http://kiwitcms.readthedocs.io/en/latest/configuration.html
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = 'change-me'
 
 
-# Administrators error report email settings
-ADMINS = [
-    # ('Your Name', 'your_email@example.com'),
-]
+# indicate that this is the Enterprise Edition
+KIWI_VERSION = "%s-ee" % KIWI_VERSION
 
-
-### DO NOT CHANGE THE SETTINGS BELOW
 
 # provides filename versioning
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
-# indicate that this is the Enterprise Edition version
-KIWI_VERSION = "%s-ee" % KIWI_VERSION
 
 # enable reporting errors to Setry for easier debugging
 INSTALLED_APPS += ['raven.contrib.django.raven_compat']  # noqa: F405
+
 
 try:
     raven_version = "%s-%s" % (KIWI_VERSION, raven.fetch_git_sha(os.path.abspath(os.pardir)))
 except raven.exceptions.InvalidGitRepository:
     raven_version = KIWI_VERSION
+
 
 # configuration for Sentry. For now only backend errors are sent to Sentry
 # by default all reports go to Mr. Senko
