@@ -1,9 +1,11 @@
 import os
 import raven
 
+from django.conf import settings
+
 
 # indicate that this is the Enterprise Edition
-KIWI_VERSION = "%s-ee" % KIWI_VERSION
+KIWI_VERSION = "%s-ee" % settings.KIWI_VERSION
 
 
 # provides filename versioning
@@ -11,7 +13,7 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 
 
 # enable reporting errors to Setry for easier debugging
-INSTALLED_APPS += ['raven.contrib.django.raven_compat']  # noqa: F405
+settings.INSTALLED_APPS += ['raven.contrib.django.raven_compat']  # noqa: F405
 
 
 try:
