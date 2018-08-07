@@ -12,8 +12,20 @@ KIWI_VERSION = "%s-ee" % settings.KIWI_VERSION
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 
+ROOT_URLCONF = 'tcms.ee_urls'
+
+
 # enable reporting errors to Setry for easier debugging
-settings.INSTALLED_APPS += ['raven.contrib.django.raven_compat']  # noqa: F405
+settings.INSTALLED_APPS += [
+    'raven.contrib.django.raven_compat',
+    'social_django',
+]  # noqa: F405
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+settings.TEMPLATES[0]['OPTIONS']['context_processors'].extend([
+    'social_django.context_processors.backends',
+    'social_django.context_processors.login_redirect',
+])
 
 
 try:
