@@ -1,0 +1,19 @@
+{% extends "registration/login.html" %}
+{% load static %}
+
+{% block custom_login %}
+<div>
+    <p>
+        or Continue With
+    </p>
+
+    {% for backend in backends.backends %}
+    <a href='{% url "social:begin" backend|lower %}'>
+        {% with "images/social_auth/backends/"|add:backend|lower|add:".png" as image_path %}
+            <img src='{% static image_path %}' alt="{{ backend|title }} login" title="{{ backend|title }} login">
+        {% endwith %}
+    </a>
+    &nbsp;
+    {% endfor %}
+</div>
+{% endblock %}

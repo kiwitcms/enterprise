@@ -10,7 +10,7 @@ KIWI_VERSION = "%s-ee" % settings.KIWI_VERSION
 
 # provides filename versioning
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-
+settings.STATICFILES_DIRS.insert(0, os.path.join(settings.TCMS_ROOT_PATH, 'ee_static'))
 
 ROOT_URLCONF = 'tcms.ee_urls'
 
@@ -33,6 +33,7 @@ settings.TEMPLATES[0]['OPTIONS']['context_processors'].extend([
     'social_django.context_processors.backends',
     'social_django.context_processors.login_redirect',
 ])
+settings.TEMPLATES[0]['DIRS'].insert(0, os.path.join(settings.TCMS_ROOT_PATH, 'ee_templates'))
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
