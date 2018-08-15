@@ -37,6 +37,7 @@ settings.TEMPLATES[0]['DIRS'].insert(0, os.path.join(settings.TCMS_ROOT_PATH, 'e
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
+    'tcms.pipeline.email_is_required',
     'tcms.pipeline.check_if_email_is_in_use',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.social_user',
@@ -47,7 +48,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
     'tcms.pipeline.initiate_defaults',
 )
-
+SOCIAL_AUTH_GITHUB_SCOPE = ['public_repo', 'user']
 
 try:
     raven_version = "%s-%s" % (KIWI_VERSION, raven.fetch_git_sha(os.path.abspath(os.pardir)))
