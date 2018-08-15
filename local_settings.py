@@ -5,7 +5,7 @@ from django.conf import settings
 
 
 # indicate that this is the Enterprise Edition
-KIWI_VERSION = "%s-ee" % settings.KIWI_VERSION
+KIWI_VERSION = "%s-ee-816.3" % settings.KIWI_VERSION
 
 
 # provides filename versioning
