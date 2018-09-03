@@ -1,4 +1,4 @@
-KIWI_VERSION=5.2-ee-816.3
+KIWI_VERSION=5.3-ee
 
 docker-image:
 	docker build -t docker.io/mrsenko/kiwi:$(KIWI_VERSION) .
