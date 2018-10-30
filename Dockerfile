@@ -1,5 +1,7 @@
 FROM kiwitcms/kiwi
 
+USER 1001
+
 # Install any additional Python dependencies
 COPY ./requirements.d/ /Kiwi/requirements.d/
 RUN for F in /Kiwi/requirements.d/*.txt; do pip install --no-cache-dir -r $F; done
