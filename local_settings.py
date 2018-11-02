@@ -35,7 +35,7 @@ settings.TEMPLATES[0]['OPTIONS']['context_processors'].extend([
 ])
 settings.TEMPLATES[0]['DIRS'].insert(0, os.path.join(settings.TCMS_ROOT_PATH, 'ee_templates'))
 
-SOCIAL_AUTH_PIPELINE = (
+SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.social_details',
     'tcms.pipeline.email_is_required',
     'tcms.pipeline.check_if_email_is_in_use',
@@ -47,7 +47,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
     'tcms.pipeline.initiate_defaults',
-)
+]
 SOCIAL_AUTH_GITHUB_SCOPE = ['public_repo', 'user']
 
 try:
