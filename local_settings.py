@@ -8,7 +8,7 @@ from django.conf import settings
 settings.DATABASES['default'].update(dj_database_url.config())
 
 # indicate that this is the Enterprise Edition
-KIWI_VERSION = "%s-Enterprise" % settings.KIWI_VERSION
+KIWI_VERSION = "%s-Enterprise-1124" % settings.KIWI_VERSION
 
 
 # provides filename versioning
