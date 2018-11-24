@@ -1,8 +1,11 @@
 import os
 import raven
+import dj_database_url
 
 from django.conf import settings
 
+# update DB connection string from the DATABASE_URL environment variable
+settings.DATABASES['default'].update(dj_database_url.config())
 
 # indicate that this is the Enterprise Edition
 KIWI_VERSION = "%s-Enterprise" % settings.KIWI_VERSION
