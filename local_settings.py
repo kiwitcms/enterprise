@@ -7,6 +7,11 @@ from django.conf import settings
 # update DB connection string from the DATABASE_URL environment variable
 settings.DATABASES['default'].update(dj_database_url.config())
 
+# link to legal information, see https://github.com/kiwitcms/Kiwi/issues/249
+settings.HELP_MENU_ITEMS.append(
+    ('http://kiwitcms.org/legal/', 'Legal information')
+)
+
 # indicate that this is the Enterprise Edition
 KIWI_VERSION = "%s-Enterprise-1124" % settings.KIWI_VERSION
 
