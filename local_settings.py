@@ -55,7 +55,7 @@ SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.user.user_details',
     'tcms.pipeline.initiate_defaults',
 ]
-SOCIAL_AUTH_GITHUB_SCOPE = ['public_repo', 'user']
+SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 
 try:
     raven_version = "%s-%s" % (KIWI_VERSION, raven.fetch_git_sha(os.path.abspath(os.pardir)))
