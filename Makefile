@@ -1,4 +1,4 @@
-KIWI_VERSION=6.5.1
+KIWI_VERSION=6.5.2
 
 docker-image:
 	docker build -t docker.io/mrsenko/kiwitcms-enterprise:$(KIWI_VERSION) .
