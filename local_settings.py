@@ -28,6 +28,7 @@ ROOT_URLCONF = 'tcms.ee_urls'
 
 # enable reporting errors to Setry for easier debugging
 settings.INSTALLED_APPS += [
+    'tcms_enterprise',
     'raven.contrib.django.raven_compat',
     'social_django',
 ]  # noqa: F405

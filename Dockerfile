@@ -11,6 +11,7 @@ COPY ./pipeline.py /venv/lib64/python3.6/site-packages/tcms/
 COPY ./local_settings.py /venv/lib64/python3.6/site-packages/tcms/settings/
 COPY ./templates.d/ /venv/lib64/python3.6/site-packages/tcms/ee_templates/
 COPY ./static.d/    /venv/lib64/python3.6/site-packages/tcms/ee_static/
+COPY ./tcms_enterprise/ /venv/lib64/python3.6/site-packages/tcms_enterprise/
 
 # woraround broken CSS which will break collectstatic
 # because they refer to non-existing ../fonts/glyphicons-halflings-regular.eot (no fonts/ directory)
