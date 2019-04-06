@@ -3,6 +3,9 @@ import raven
 import dj_database_url
 
 from django.conf import settings
+from django.urls import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
+
 
 # update DB connection string from the DATABASE_URL environment variable
 settings.DATABASES['default'].update(dj_database_url.config())
@@ -69,3 +72,70 @@ RAVEN_CONFIG = {
     'dsn': 'https://e9a370eba7bd41fe8faead29552f12d7:1417b740821a45ef8fe3ae68ea9bfc8b@sentry.io/277775',  # noqa: E501
     'release': raven_version,
 }
+
+try:
+    import tcms_tenants
+
+    # Allows serving non-public tenants on a sub-domain
+    # WARNING: doesn't work well when you have a non-standard port-number
+    KIWI_TENANTS_DOMAIN = os.environ.get('KIWI_TENANTS_DOMAIN', 'tenant.localdomain')
+
+    # share login session between tenants
+    SESSION_COOKIE_DOMAIN = ".%s" % KIWI_TENANTS_DOMAIN
+
+    # override the default ROOT_URLCONF!, see in
+    # test_project/urls.py how to extend the patterns coming from Kiwi TCMS
+#    ROOT_URLCONF = 'test_project.urls'
+# ^^^ fix me
+
+
+    ##### start multi-tenant settings override
+    settings.DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
+
+    DATABASE_ROUTERS = [
+        'django_tenants.routers.TenantSyncRouter',
+    ]
+
+    settings.MIDDLEWARE.insert(0, 'django_tenants.middleware.main.TenantMainMiddleware')
+    settings.MIDDLEWARE.append('tcms_tenants.middleware.BlockUnauthorizedUserMiddleware')
+
+    TENANT_MODEL = "tcms_tenants.Tenant"
+    TENANT_DOMAIN_MODEL = "tcms_tenants.Domain"
+
+    settings.INSTALLED_APPS.insert(0, 'django_tenants')
+    settings.INSTALLED_APPS.insert(1, 'tcms_tenants')
+
+    TENANT_APPS = [
+        'django.contrib.contenttypes',
+        'django.contrib.sites',
+
+        'attachments',
+        'django_comments',
+        'modernrpc',
+        'simple_history',
+
+        'tcms.core.contrib.comments.apps.AppConfig',
+        'tcms.core.contrib.linkreference',
+        'tcms.management',
+        'tcms.testcases.apps.AppConfig',
+        'tcms.testplans.apps.AppConfig',
+        'tcms.testruns.apps.AppConfig',
+    ]
+
+    # everybody can access the main instance
+    SHARED_APPS = settings.INSTALLED_APPS
+
+    # main navigation menu
+    settings.MENU_ITEMS.append(
+        (_('TENANT'), [
+            (_('Create'), reverse_lazy('tcms_tenants:create-tenant')),
+            ('-', '-'),
+            (_('Authorized users'), '/admin/tcms_tenants/tenant_authorized_users/'),
+        ]),
+    )
+
+    # attachments storage
+    DEFAULT_FILE_STORAGE = "tcms_tenants.storage.TenantFileSystemStorage"
+    MULTITENANT_RELATIVE_MEDIA_ROOT = "tenant/%s"
+except ImportError:
+    pass
