@@ -3,8 +3,8 @@ FROM kiwitcms/kiwi
 USER 1001
 
 # Install any additional Python dependencies
-COPY ./requirements.d/ /Kiwi/requirements.d/
-RUN for F in /Kiwi/requirements.d/*.txt; do pip install --no-cache-dir -r $F; done
+COPY ./requirements.txt /Kiwi/
+RUN pip install --no-cache-dir -r /Kiwi/requirements.txt
 
 COPY ./ee_urls.py  /venv/lib64/python3.6/site-packages/tcms/
 COPY ./pipeline.py /venv/lib64/python3.6/site-packages/tcms/

@@ -1,2 +1,5 @@
+django-ses
+dj-database-url
+raven
 social-auth-app-django
 social-auth-kerberos
