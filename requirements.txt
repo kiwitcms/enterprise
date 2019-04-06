@@ -1,4 +1,4 @@
-django-ses
+django-ses==0.8.10
 dj-database-url
 raven
 social-auth-app-django
