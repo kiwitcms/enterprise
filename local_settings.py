@@ -83,12 +83,6 @@ try:
     # share login session between tenants
     SESSION_COOKIE_DOMAIN = ".%s" % KIWI_TENANTS_DOMAIN
 
-    # override the default ROOT_URLCONF!, see in
-    # test_project/urls.py how to extend the patterns coming from Kiwi TCMS
-#    ROOT_URLCONF = 'test_project.urls'
-# ^^^ fix me
-
-
     ##### start multi-tenant settings override
     settings.DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
 
