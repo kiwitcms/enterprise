@@ -23,7 +23,7 @@ KIWI_VERSION = "%s-Enterprise" % settings.KIWI_VERSION
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 settings.STATICFILES_DIRS.insert(0, os.path.join(settings.TCMS_ROOT_PATH, 'ee_static'))
 
-ROOT_URLCONF = 'tcms.ee_urls'
+ROOT_URLCONF = 'tcms_enterprise.urls'
 
 
 # enable reporting errors to Setry for easier debugging
@@ -49,7 +49,7 @@ settings.TEMPLATES[0]['DIRS'].insert(0, os.path.join(settings.TCMS_ROOT_PATH, 'e
 
 SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.social_details',
-    'tcms.pipeline.email_is_required',
+    'tcms_enterprise.pipeline.email_is_required',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
