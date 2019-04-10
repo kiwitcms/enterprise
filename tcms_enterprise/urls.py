@@ -1,3 +1,4 @@
+import os
 from django.conf.urls import include, url
 
 from tcms.urls import urlpatterns
@@ -12,7 +13,8 @@ try:
     from tcms_tenants import urls as tcms_tenants_urls
 
     urlpatterns += [
-        url(r'^tenants/', include(tcms_tenants_urls, namespace='tenants')),
+        url(r'^%stenants/' % os.environ.get('KIWI_TENANTS_URL_PREFIX', ''),
+            include(tcms_tenants_urls, namespace='tenants')),
     ]
 except ImportError:
     pass
