@@ -85,52 +85,54 @@ try:
     SESSION_COOKIE_DOMAIN = ".%s" % KIWI_TENANTS_DOMAIN
 
     ##### start multi-tenant settings override
-    settings.DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
+    ##### only if outside docker image has defined a PostgreSQL database
+    if os.environ.get('KIWI_DB_ENGINE', '').find('postgresql') > -1:
+        settings.DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
 
-    DATABASE_ROUTERS = [
-        'django_tenants.routers.TenantSyncRouter',
-    ]
+        DATABASE_ROUTERS = [
+            'django_tenants.routers.TenantSyncRouter',
+        ]
 
-    settings.MIDDLEWARE.insert(0, 'django_tenants.middleware.main.TenantMainMiddleware')
-    settings.MIDDLEWARE.append('tcms_tenants.middleware.BlockUnauthorizedUserMiddleware')
+        settings.MIDDLEWARE.insert(0, 'django_tenants.middleware.main.TenantMainMiddleware')
+        settings.MIDDLEWARE.append('tcms_tenants.middleware.BlockUnauthorizedUserMiddleware')
 
-    TENANT_MODEL = "tcms_tenants.Tenant"
-    TENANT_DOMAIN_MODEL = "tcms_tenants.Domain"
+        TENANT_MODEL = "tcms_tenants.Tenant"
+        TENANT_DOMAIN_MODEL = "tcms_tenants.Domain"
 
-    settings.INSTALLED_APPS.insert(0, 'django_tenants')
-    settings.INSTALLED_APPS.insert(1, 'tcms_tenants')
+        settings.INSTALLED_APPS.insert(0, 'django_tenants')
+        settings.INSTALLED_APPS.insert(1, 'tcms_tenants')
 
-    TENANT_APPS = [
-        'django.contrib.contenttypes',
-        'django.contrib.sites',
+        TENANT_APPS = [
+            'django.contrib.contenttypes',
+            'django.contrib.sites',
 
-        'attachments',
-        'django_comments',
-        'modernrpc',
-        'simple_history',
+            'attachments',
+            'django_comments',
+            'modernrpc',
+            'simple_history',
 
-        'tcms.core.contrib.comments.apps.AppConfig',
-        'tcms.core.contrib.linkreference',
-        'tcms.management',
-        'tcms.testcases.apps.AppConfig',
-        'tcms.testplans.apps.AppConfig',
-        'tcms.testruns.apps.AppConfig',
-    ]
+            'tcms.core.contrib.comments.apps.AppConfig',
+            'tcms.core.contrib.linkreference',
+            'tcms.management',
+            'tcms.testcases.apps.AppConfig',
+            'tcms.testplans.apps.AppConfig',
+            'tcms.testruns.apps.AppConfig',
+        ]
 
-    # everybody can access the main instance
-    SHARED_APPS = settings.INSTALLED_APPS
+        # everybody can access the main instance
+        SHARED_APPS = settings.INSTALLED_APPS
 
-    # main navigation menu
-    settings.MENU_ITEMS.append(
-        (_('TENANT'), [
-            (_('Create'), reverse_lazy('tcms_tenants:create-tenant')),
-            ('-', '-'),
-            (_('Authorized users'), '/admin/tcms_tenants/tenant_authorized_users/'),
-        ]),
-    )
+        # main navigation menu
+        settings.MENU_ITEMS.append(
+            (_('TENANT'), [
+                (_('Create'), reverse_lazy('tcms_tenants:create-tenant')),
+                ('-', '-'),
+                (_('Authorized users'), '/admin/tcms_tenants/tenant_authorized_users/'),
+            ]),
+        )
 
-    # attachments storage
-    DEFAULT_FILE_STORAGE = "tcms_tenants.storage.TenantFileSystemStorage"
-    MULTITENANT_RELATIVE_MEDIA_ROOT = "tenant/%s"
+        # attachments storage
+        DEFAULT_FILE_STORAGE = "tcms_tenants.storage.TenantFileSystemStorage"
+        MULTITENANT_RELATIVE_MEDIA_ROOT = "tenant/%s"
 except ImportError:
     pass
