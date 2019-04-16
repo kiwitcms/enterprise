@@ -74,19 +74,19 @@ RAVEN_CONFIG = {
     'release': raven_version,
 }
 
-try:
-    import tcms_tenants
+##### only if outside docker image has defined a PostgreSQL database
+if os.environ.get('KIWI_DB_ENGINE', '').find('postgresql') > -1:
+    try:
+        import tcms_tenants
 
-    # Allows serving non-public tenants on a sub-domain
-    # WARNING: doesn't work well when you have a non-standard port-number
-    KIWI_TENANTS_DOMAIN = os.environ.get('KIWI_TENANTS_DOMAIN', 'tenant.localdomain')
+        # Allows serving non-public tenants on a sub-domain
+        # WARNING: doesn't work well when you have a non-standard port-number
+        KIWI_TENANTS_DOMAIN = os.environ.get('KIWI_TENANTS_DOMAIN', 'tenant.localdomain')
 
-    # share login session between tenants
-    SESSION_COOKIE_DOMAIN = ".%s" % KIWI_TENANTS_DOMAIN
+        # share login session between tenants
+        SESSION_COOKIE_DOMAIN = ".%s" % KIWI_TENANTS_DOMAIN
 
-    ##### start multi-tenant settings override
-    ##### only if outside docker image has defined a PostgreSQL database
-    if os.environ.get('KIWI_DB_ENGINE', '').find('postgresql') > -1:
+        ##### start multi-tenant settings override
         settings.DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
 
         DATABASE_ROUTERS = [
@@ -134,5 +134,5 @@ try:
         # attachments storage
         DEFAULT_FILE_STORAGE = "tcms_tenants.storage.TenantFileSystemStorage"
         MULTITENANT_RELATIVE_MEDIA_ROOT = "tenant/%s"
-except ImportError:
-    pass
+    except ImportError:
+        pass
