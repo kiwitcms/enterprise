@@ -2,6 +2,7 @@
 
 # Licensed under the GPL 3.0: https://www.gnu.org/licenses/gpl-3.0.txt
 
+import os
 from django import template
 from django.db import connection
 
@@ -17,9 +18,12 @@ def next_url(request):
 
         Used for the ?next= parameter of PSA URLs.
     """
-    try:
-        from tcms_tenants import utils
+    if os.environ.get('KIWI_DB_ENGINE', '').find('postgresql') > -1:
+        try:
+            from tcms_tenants import utils
 
-        return utils.tenant_url(request, connection.schema_name)
-    except ImportError:
-        return request.GET.get('next', '/')
+            return utils.tenant_url(request, connection.schema_name)
+        except ImportError:
+            pass
+
+    return request.GET.get('next', '/')
