@@ -21,7 +21,7 @@ def next_url(request):
     """
     next = request.GET.get('next', '/')
 
-    if os.environ.get('KIWI_DB_ENGINE', '').find('postgresql') > -1:
+    if (os.environ.get('KIWI_DB_ENGINE', '').find('postgresql') > -1) and (connection.schema_name != 'public'):
         try:
             from tcms_tenants import urls
 
