@@ -103,7 +103,6 @@ if os.environ.get('KIWI_DB_ENGINE', '').find('postgresql') > -1:
         settings.INSTALLED_APPS.insert(1, 'tcms_tenants')
 
         TENANT_APPS = [
-            'django.contrib.contenttypes',
             'django.contrib.sites',
 
             'attachments',
