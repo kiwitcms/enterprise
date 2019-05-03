@@ -1,6 +1,5 @@
 {% extends "registration/login.html" %}
 {% load static %}
-{% load tcms_tenants %}
 {% load enterprise_tags %}
 
 {% block custom_login %}
@@ -10,7 +9,7 @@
     </p>
 
     {% for backend in backends.backends %}
-    <a href='{% tenant_url request "public" %}{% url "social:begin" backend|lower %}?next={% next_url request %}'>
+    <a href='{% next_domain request "public" %}{% url "social:begin" backend|lower %}?next={% next_url request %}'>
         {% with "images/social_auth/backends/"|add:backend|lower|add:".png" as image_path %}
             <img src='{% static image_path %}' alt="{{ backend|title }} login" title="{{ backend|title }} login">
         {% endwith %}

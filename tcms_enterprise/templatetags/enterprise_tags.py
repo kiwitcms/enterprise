@@ -30,3 +30,21 @@ def next_url(request):
             pass
     # handle double slashes in case we want to redirect to tenant's root
     return next.replace('//', '/')
+
+
+@register.simple_tag
+def next_domain(request, schema_name = None):
+    """
+        Return the domain through we are going to redirect if
+        tenants are configured and installed. Otherwise we go
+        directly to the current domain.
+    """
+    if (os.environ.get('KIWI_DB_ENGINE', '').find('postgresql') > -1):
+        try:
+            from tcms_tenants.templatetags.tcms_tenants import tenant_url
+
+            return tenant_url(request, schema_name)
+        except ImportError:
+            pass
+
+    return ''
