@@ -1,3 +1,5 @@
+import uuid
+
 from django.urls import reverse
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -18,3 +20,11 @@ def email_is_required(strategy, details, backend, user=None, *args, **kwargs):
 def initiate_defaults(strategy, details, backend, user=None, *args, **kwargs):
     if user:
         initiate_user_with_default_setups(user)
+
+
+def random_password(strategy, details, backend, user=None, *args, **kwargs):
+    """
+        Generate's a random password b/c when it is None Django will not
+        allow the user to reset it!
+    """
+    return {'password': uuid.uuid4().hex}
