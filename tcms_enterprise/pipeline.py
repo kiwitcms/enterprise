@@ -27,4 +27,6 @@ def random_password(strategy, details, backend, user=None, *args, **kwargs):
         Generate's a random password b/c when it is None Django will not
         allow the user to reset it!
     """
-    return {'password': uuid.uuid4().hex}
+    if user:
+        user.set_password(uuid.uuid4().hex)
+        user.save()

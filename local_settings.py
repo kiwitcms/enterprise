@@ -53,11 +53,11 @@ SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
-    'tcms_enterprise.pipeline.random_password',
     'social_core.pipeline.user.create_user',
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
+    'tcms_enterprise.pipeline.random_password',
     'tcms_enterprise.pipeline.initiate_defaults',
 ]
 SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
