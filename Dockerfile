@@ -1,5 +1,10 @@
 FROM kiwitcms/kiwi
 
+USER 0
+RUN yum -y --setopt=tsflags=nodocs install \
+    gcc krb5-devel rh-python36-python-devel && \
+    yum clean all
+
 USER 1001
 
 # Install any additional Python dependencies
@@ -20,4 +25,4 @@ RUN rm -rf /venv/lib64/python3.6/site-packages/tcms/node_modules/c3/htdocs/ \
            /venv/lib64/python3.6/site-packages/django_tenants/templates/admin/index.html
 
 # collect static files again
-RUN /Kiwi/manage.py collectstatic -c --noinput
+RUN /Kiwi/manage.py collectstatic --clear --link --noinput
