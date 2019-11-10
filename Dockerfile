@@ -1,8 +1,8 @@
 FROM kiwitcms/kiwi
 
 USER 0
-RUN yum -y --setopt=tsflags=nodocs install \
-    gcc krb5-devel rh-python36-python-devel && \
+RUN dnf -y --setopt=tsflags=nodocs install \
+    gcc krb5-devel python3-devel && \
     yum clean all
 
 USER 1001
