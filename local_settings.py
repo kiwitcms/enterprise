@@ -112,7 +112,6 @@ if os.environ.get('KIWI_DB_ENGINE', '').find('postgresql') > -1:
             'simple_history',
 
             'tcms.bugs',
-            'tcms.core.contrib.comments.apps.AppConfig',
             'tcms.core.contrib.linkreference',
             'tcms.management',
             'tcms.testcases.apps.AppConfig',
