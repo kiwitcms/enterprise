@@ -39,6 +39,7 @@ settings.PUBLIC_VIEWS.extend([
     'social_django.views.auth',
     'social_django.views.complete',
     'social_django.views.disconnect',
+    'tcms_github_app.views.WebHook',
 ])
 
 settings.TEMPLATES[0]['OPTIONS']['context_processors'].extend([
@@ -136,3 +137,6 @@ if os.environ.get('KIWI_DB_ENGINE', '').find('postgresql') > -1:
         MULTITENANT_RELATIVE_MEDIA_ROOT = "tenant/%s"
     except ImportError:
         pass
+
+# middleware to warn for unconfigured GitHub App installations
+settings.MIDDLEWARE.append('tcms_github_app.middleware.CheckGitHubAppMiddleware')

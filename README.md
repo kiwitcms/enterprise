@@ -11,7 +11,7 @@ This repository contains downstream distribution for the
 system, dubbed *Enterprise Edition*.
 
 This is designed and supported by [Mr. Senko](http://mrsenko.com)
-and thus differs from the upstream Docker image for Kiwi TCMS:
+with the following add-ons:
 
 * Based on `kiwitcms/kiwi` Docker image
 * Automated error logs sent to Mr. Senko via Sentry
@@ -22,6 +22,8 @@ and thus differs from the upstream Docker image for Kiwi TCMS:
   [python-social-auth](http://python-social-auth-docs.readthedocs.io/en/latest/backends/index.html#supported-backends)
 * Database configuration possible via `DATABASE_URL` environment
   variable, see [dj-database-url](https://github.com/kennethreitz/dj-database-url)
+* GitHub integration ready, see
+  [kiwitcms-github-app](https://github.com/kiwitcms/github-app/)
 
 While the software itself is open source we do not provide public
 access to the resulting `mrsenko/kiwitcms-enterprise` Docker image.
