@@ -95,7 +95,11 @@ if os.environ.get('KIWI_DB_ENGINE', '').find('postgresql') > -1:
         ]
 
         settings.MIDDLEWARE.insert(0, 'django_tenants.middleware.main.TenantMainMiddleware')
-        settings.MIDDLEWARE.append('tcms_tenants.middleware.BlockUnauthorizedUserMiddleware')
+        settings.MIDDLEWARE.extend([
+            'tcms_tenants.middleware.BlockUnauthorizedUserMiddleware',
+            'tcms_github_app.middleware.CheckGitHubAppMiddleware',
+        ])
+        settings.PUBLIC_VIEWS.append('tcms_github_app.views.WebHook')
 
         TENANT_MODEL = "tcms_tenants.Tenant"
         TENANT_DOMAIN_MODEL = "tcms_tenants.Domain"
@@ -136,3 +140,6 @@ if os.environ.get('KIWI_DB_ENGINE', '').find('postgresql') > -1:
         MULTITENANT_RELATIVE_MEDIA_ROOT = "tenant/%s"
     except ImportError:
         pass
+else:
+    # GitHub App integration depends on multi-tenant so disable it if MT not enabled
+    settings.INSTALLED_APPS.remove('tcms_github_app')
