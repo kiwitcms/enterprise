@@ -111,7 +111,7 @@ if os.environ.get('KIWI_DB_ENGINE', '').find('postgresql') > -1:
             'modernrpc',
             'simple_history',
 
-            'tcms.bugs',
+            'tcms.bugs.apps.AppConfig',
             'tcms.core.contrib.linkreference',
             'tcms.management',
             'tcms.testcases.apps.AppConfig',
