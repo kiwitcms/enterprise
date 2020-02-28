@@ -11,7 +11,7 @@ USER 1001
 COPY ./requirements.txt /Kiwi/
 RUN pip install --no-cache-dir -r /Kiwi/requirements.txt
 
-COPY ./local_settings.py /venv/lib64/python3.6/site-packages/tcms/settings/
+COPY ./enterprise.py /venv/lib64/python3.6/site-packages/tcms/settings/local_settings_dir/
 COPY ./tcms_enterprise/  /venv/lib64/python3.6/site-packages/tcms_enterprise/
 COPY ./templates.d/ /venv/lib64/python3.6/site-packages/tcms/ee_templates/
 COPY ./static.d/    /venv/lib64/python3.6/site-packages/tcms/ee_static/
