@@ -9,14 +9,10 @@ urlpatterns += [
 ]
 
 
-# only if outside docker image has defined a PostgreSQL database
-if os.environ.get('KIWI_DB_ENGINE', '').find('postgresql') > -1:
-    try:
-        from tcms_tenants import urls as tcms_tenants_urls
+# unconditional configuration of multi-tenant URLs
+from tcms_tenants import urls as tcms_tenants_urls
 
-        urlpatterns += [
-            url(r'^%stenants/' % os.environ.get('KIWI_TENANTS_URL_PREFIX', ''),
-                include(tcms_tenants_urls, namespace='tenants')),
-        ]
-    except ImportError:
-        pass
+urlpatterns += [
+    url(r'^%stenants/' % os.environ.get('KIWI_TENANTS_URL_PREFIX', ''),
+        include(tcms_tenants_urls, namespace='tenants')),
+]

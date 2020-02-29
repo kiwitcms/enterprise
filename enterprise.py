@@ -78,59 +78,59 @@ RAVEN_CONFIG = {
     'release': raven_version,
 }
 
-##### enable multi-tenant only if configured from the outside
-if os.environ.get('KIWI_TENANTS_DOMAIN'):
-    # Allows serving non-public tenants on a sub-domain
-    # WARNING: doesn't work well when you have a non-standard port-number
-    KIWI_TENANTS_DOMAIN = os.environ.get('KIWI_TENANTS_DOMAIN')
+##### enable multi-tenant unconditionally
 
-    # share login session between tenants
-    SESSION_COOKIE_DOMAIN = ".%s" % KIWI_TENANTS_DOMAIN
+# Allows serving non-public tenants on a sub-domain
+# WARNING: doesn't work well when you have a non-standard port-number
+KIWI_TENANTS_DOMAIN = os.environ.get('KIWI_TENANTS_DOMAIN')
 
-    ##### start multi-tenant settings override
-    settings.DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
+# share login session between tenants
+SESSION_COOKIE_DOMAIN = ".%s" % KIWI_TENANTS_DOMAIN
 
-    DATABASE_ROUTERS = [
-        'django_tenants.routers.TenantSyncRouter',
-    ]
+##### start multi-tenant settings override
+settings.DATABASES['default']['ENGINE'] = 'django_tenants.postgresql_backend'
 
-    settings.MIDDLEWARE.insert(0, 'django_tenants.middleware.main.TenantMainMiddleware')
-    settings.MIDDLEWARE.append('tcms_tenants.middleware.BlockUnauthorizedUserMiddleware')
+DATABASE_ROUTERS = [
+    'django_tenants.routers.TenantSyncRouter',
+]
 
-    TENANT_MODEL = "tcms_tenants.Tenant"
-    TENANT_DOMAIN_MODEL = "tcms_tenants.Domain"
+settings.MIDDLEWARE.insert(0, 'django_tenants.middleware.main.TenantMainMiddleware')
+settings.MIDDLEWARE.append('tcms_tenants.middleware.BlockUnauthorizedUserMiddleware')
 
-    settings.INSTALLED_APPS.insert(0, 'django_tenants')
-    settings.INSTALLED_APPS.insert(1, 'tcms_tenants')
+TENANT_MODEL = "tcms_tenants.Tenant"
+TENANT_DOMAIN_MODEL = "tcms_tenants.Domain"
 
-    TENANT_APPS = [
-        'django.contrib.sites',
+settings.INSTALLED_APPS.insert(0, 'django_tenants')
+settings.INSTALLED_APPS.insert(1, 'tcms_tenants')
 
-        'attachments',
-        'django_comments',
-        'modernrpc',
-        'simple_history',
+TENANT_APPS = [
+    'django.contrib.sites',
 
-        'tcms.bugs.apps.AppConfig',
-        'tcms.core.contrib.linkreference',
-        'tcms.management',
-        'tcms.testcases.apps.AppConfig',
-        'tcms.testplans.apps.AppConfig',
-        'tcms.testruns.apps.AppConfig',
-    ]
+    'attachments',
+    'django_comments',
+    'modernrpc',
+    'simple_history',
 
-    # everybody can access the main instance
-    SHARED_APPS = settings.INSTALLED_APPS
+    'tcms.bugs.apps.AppConfig',
+    'tcms.core.contrib.linkreference',
+    'tcms.management',
+    'tcms.testcases.apps.AppConfig',
+    'tcms.testplans.apps.AppConfig',
+    'tcms.testruns.apps.AppConfig',
+]
 
-    # main navigation menu
-    settings.MENU_ITEMS.append(
-        (_('TENANT'), [
-            (_('Create'), reverse_lazy('tcms_tenants:create-tenant')),
-            ('-', '-'),
-            (_('Authorized users'), '/admin/tcms_tenants/tenant_authorized_users/'),
-        ]),
-    )
+# everybody can access the main instance
+SHARED_APPS = settings.INSTALLED_APPS
 
-    # attachments storage
-    DEFAULT_FILE_STORAGE = "tcms_tenants.storage.TenantFileSystemStorage"
-    MULTITENANT_RELATIVE_MEDIA_ROOT = "tenant/%s"
+# main navigation menu
+settings.MENU_ITEMS.append(
+    (_('TENANT'), [
+        (_('Create'), reverse_lazy('tcms_tenants:create-tenant')),
+        ('-', '-'),
+        (_('Authorized users'), '/admin/tcms_tenants/tenant_authorized_users/'),
+    ]),
+)
+
+# attachments storage
+DEFAULT_FILE_STORAGE = "tcms_tenants.storage.TenantFileSystemStorage"
+MULTITENANT_RELATIVE_MEDIA_ROOT = "tenant/%s"
