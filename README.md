@@ -22,6 +22,8 @@ and thus differs from the upstream Docker image for Kiwi TCMS:
   [python-social-auth](http://python-social-auth-docs.readthedocs.io/en/latest/backends/index.html#supported-backends)
 * Database configuration possible via `DATABASE_URL` environment
   variable, see [dj-database-url](https://github.com/kennethreitz/dj-database-url)
+* Multi-tenant configuration enabled
+* **Compatible only with PostgreSQL !!!**
 
 While the software itself is open source we do not provide public
 access to the resulting `mrsenko/kiwitcms-enterprise` Docker image.
