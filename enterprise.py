@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 # update DB connection string from the DATABASE_URL environment variable
 settings.DATABASES['default'].update(dj_database_url.config())
 if settings.DATABASES['default']['ENGINE'].find('mysql') == -1:
-    del settings.DATABASES['default']['OPTIONS']['init_command']
+    del settings.DATABASES['default']['OPTIONS']
 
 
 # link to legal information, see https://github.com/kiwitcms/Kiwi/issues/249
