@@ -1,0 +1,25 @@
+name: testing
+
+on:
+  pull_request:
+    branches:
+      - "*"
+  push:
+    branches:
+      - "*"
+
+jobs:
+  docker:
+    name: build docker-image
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Build the docker image
+      run: |
+        make docker-image
