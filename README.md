@@ -10,24 +10,27 @@ This repository contains downstream distribution for the
 [Kiwi TCMS](http://kiwitcms.org) open source test case management
 system, dubbed *Enterprise Edition*.
 
-This is designed and supported by [Mr. Senko](http://mrsenko.com)
-and thus differs from the upstream Docker image for Kiwi TCMS:
-
 * Based on `kiwitcms/kiwi` Docker image
-* Automated error logs sent to Mr. Senko via Sentry
-* Versioned static files, CDN ready
-* Amazon SES available as email backend,
-  see [django-ses](https://github.com/django-ses/django-ses)
-* Extra authentication backends available, see
-  [python-social-auth](http://python-social-auth-docs.readthedocs.io/en/latest/backends/index.html#supported-backends)
-* Database configuration possible via `DATABASE_URL` environment
-  variable, see [dj-database-url](https://github.com/kennethreitz/dj-database-url)
-* Multi-tenant configuration enabled
 * **Compatible only with PostgreSQL !!!**
+* Versioned static files
+* Add-ons:
+  - [django-ses](https://github.com/django-ses/django-ses) - Amazon SES email backend
+  - [dj-database-url](https://github.com/jacobian/dj-database-url) - DB configuration
+    via `DATABASE_URL`
+  - [kiwitcms-github-app](https://github.com/kiwitcms/github-app/) - extra integration
+    with GitHub
+  - [kiwitcms-tenants](https://github.com/kiwitcms/tenants/) - multi-tenant support
+  - [raven](https://github.com/getsentry/raven-python) - automatic error logs via Sentry
+  - [social-auth-app-django](https://github.com/python-social-auth/social-app-django) -
+    extra [authentication backends](http://python-social-auth-docs.readthedocs.io/en/latest/backends/index.html#supported-backends)
+  - [social-auth-kerberos](https://github.com/kiwitcms/python-social-auth-kerberos/) -
+    MIT Kerberos authentication backend
+
 
 While the software itself is open source we do not provide public
 access to the resulting `mrsenko/kiwitcms-enterprise` Docker image.
 This will be made available only to our subscribers.
-See http://mrsenko.com/#subscriptions for more information.
+See [*Enterprise Subscription*](https://kiwitcms.org/#subscriptions)
+for more information.
 
 If you want to use Kiwi TCMS free of charge head to http://kiwitcms.org!
