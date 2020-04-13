@@ -3,7 +3,7 @@ FROM kiwitcms/kiwi
 USER 0
 RUN dnf -y --setopt=tsflags=nodocs install \
     gcc krb5-devel python3-devel && \
-    yum clean all
+    dnf clean all
 
 USER 1001
 
