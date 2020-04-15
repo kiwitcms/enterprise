@@ -1,4 +1,3 @@
-import os
 from django.conf.urls import include, url
 
 from tcms.urls import urlpatterns
