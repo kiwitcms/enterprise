@@ -9,8 +9,28 @@ on:
       - "*"
 
 jobs:
+  flake8:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: [3.6]
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        make flake8
+
   docker:
-    name: build docker-image
+    name: make docker-image
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
