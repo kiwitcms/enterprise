@@ -38,7 +38,7 @@ jobs:
         make ${{ matrix.command }}
 
   docker:
-    name: make docker-image
+    name: docker image
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -51,3 +51,49 @@ jobs:
     - name: Build the docker image
       run: |
         make docker-image
+
+    - name: Sanity test - boot the docker image
+      run: |
+        docker-compose -f docker-compose.testing up -d
+        sleep 5
+
+        IP_ADDRESS=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web`
+        echo "--- web.example.bg: $IP_ADDRESS --"
+        sudo sh -c "echo '$IP_ADDRESS    testing.example.bg' >> /etc/hosts"
+
+    - name: Sanity test - initial configuration
+      run: |
+        docker exec -i web /Kiwi/manage.py migrate
+        docker exec -i web /Kiwi/manage.py createsuperuser --noinput --username super-root --email root@example.com
+        docker exec -i web /Kiwi/manage.py create_tenant                \
+            --schema_name public --name "TT" --paid_until 2050-12-31    \
+            --on_trial False --owner_id 1 --organization "Testing dept" \
+            --domain-domain testing.example.bg --domain-is_primary True
+
+    - name: Sanity test - download login page
+      run: |
+        curl -k -L -o page.html https://testing.example.bg:8443/
+
+    - name: Archive page.html
+      uses: actions/upload-artifact@v1
+      with:
+        name: page.html
+        path: page.html
+
+    - name: Sanity test - check page.html
+      run: |
+        set -x
+
+        # version is Enterprise
+        cat page.html | grep "Version.*-Enterprise"
+
+        # plugins are listed
+        cat page.html | grep 'href="/kiwitcms_tenants/'
+        cat page.html | grep 'href="/kiwitcms_github_app/'
+
+        # template override for social icons
+        cat page.html | grep "or Continue With"
+
+    - name: Sanity test - shut down the docker image
+      run: |
+        docker-compose -f docker-compose.testing down

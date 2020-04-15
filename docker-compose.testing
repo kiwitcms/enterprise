@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+    db:
+        container_name: db
+        image: centos/postgresql-12-centos7
+        restart: always
+        volumes:
+            - db_data:/var/lib/mysql/data
+        environment:
+            POSTGRESQL_DATABASE: dummy_db
+            POSTGRESQL_USER: dummy_usr
+            POSTGRESQL_PASSWORD: dummy_s3cr3t
+
+    web:
+        container_name: web
+        image: mrsenko/kiwitcms-enterprise:latest
+        depends_on:
+            - db
+        restart: always
+        environment:
+            KIWI_TENANTS_DOMAIN: testing.example.bg
+            DATABASE_URL: postgres://dummy_usr:dummy_s3cr3t@db:5432/dummy_db
+
+volumes:
+    db_data:
