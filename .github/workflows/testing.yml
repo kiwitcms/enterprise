@@ -9,12 +9,14 @@ on:
       - "*"
 
 jobs:
-  flake8:
+  static_analysis:
+    name: ${{ matrix.command }} (${{ matrix.python-version}})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
         python-version: [3.6]
+        command: [flake8, pylint]
 
     steps:
     - uses: actions/checkout@v1
@@ -24,10 +26,16 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Lint with flake8
+    - name: Install Python dependencies
       run: |
-        pip install flake8
-        make flake8
+        sudo apt-get install libkrb5-dev
+        pip install -r devel.txt
+
+    - name: make ${{ matrix.command }}
+      run: |
+        sudo apt-get install libkrb5-dev
+        pip install -r devel.txt
+        make ${{ matrix.command }}
 
   docker:
     name: make docker-image
