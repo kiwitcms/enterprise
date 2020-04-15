@@ -6,7 +6,9 @@ from django.conf import settings
 
 
 # update DB connection string from the DATABASE_URL environment variable
-settings.DATABASES['default'].update(dj_database_url.config())
+settings.DATABASES['default'].update(  # pylint: disable=objects-update-used
+    dj_database_url.config()
+)
 if settings.DATABASES['default']['ENGINE'].find('mysql') == -1:
     del settings.DATABASES['default']['OPTIONS']
 
@@ -30,7 +32,7 @@ ROOT_URLCONF = 'tcms_enterprise.urls'
 
 
 # enable reporting errors to Setry for easier debugging
-settings.INSTALLED_APPS += [
+settings.INSTALLED_APPS += [  # pylint: disable=no-member
     'tcms_enterprise',
     'raven.contrib.django.raven_compat',
     'social_django',
@@ -76,6 +78,6 @@ except raven.exceptions.InvalidGitRepository:
 # configuration for Sentry. For now only backend errors are sent to Sentry
 # by default all reports go to Mr. Senko
 RAVEN_CONFIG = {
-    'dsn': 'https://e9a370eba7bd41fe8faead29552f12d7:1417b740821a45ef8fe3ae68ea9bfc8b@sentry.io/277775',  # noqa: E501
+    'dsn': 'https://e9a370eba7bd41fe8faead29552f12d7:1417b740821a45ef8fe3ae68ea9bfc8b@sentry.io/277775',  # noqa: E501, pylint: disable=line-too-long
     'release': RAVEN_VERSION,
 }

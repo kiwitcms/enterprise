@@ -1,3 +1,5 @@
+# pylint: disable=unused-argument, keyword-arg-before-vararg
+
 import uuid
 
 from django.urls import reverse
