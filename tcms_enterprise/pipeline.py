@@ -16,6 +16,8 @@ def email_is_required(strategy, details, backend, user=None, *args, **kwargs):
         )
         return HttpResponseRedirect(reverse('tcms-login'))
 
+    return None
+
 
 def initiate_defaults(strategy, details, backend, user=None, *args, **kwargs):
     if user and kwargs.get('is_new', False):
