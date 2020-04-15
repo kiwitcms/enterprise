@@ -3,8 +3,6 @@ import raven
 import dj_database_url
 
 from django.conf import settings
-from django.urls import reverse_lazy
-from django.utils.translation import gettext_lazy as _
 
 
 # update DB connection string from the DATABASE_URL environment variable
@@ -23,8 +21,10 @@ KIWI_VERSION = "%s-Enterprise" % settings.KIWI_VERSION
 
 
 # provides filename versioning
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-settings.STATICFILES_DIRS.insert(0, os.path.join(settings.TCMS_ROOT_PATH, 'ee_static'))
+STATICFILES_STORAGE = \
+    'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+settings.STATICFILES_DIRS.insert(
+    0, os.path.join(settings.TCMS_ROOT_PATH, 'ee_static'))
 
 ROOT_URLCONF = 'tcms_enterprise.urls'
 
@@ -48,7 +48,8 @@ settings.TEMPLATES[0]['OPTIONS']['context_processors'].extend([
     'social_django.context_processors.backends',
     'social_django.context_processors.login_redirect',
 ])
-settings.TEMPLATES[0]['DIRS'].insert(0, os.path.join(settings.TCMS_ROOT_PATH, 'ee_templates'))
+settings.TEMPLATES[0]['DIRS'].insert(
+    0, os.path.join(settings.TCMS_ROOT_PATH, 'ee_templates'))
 
 SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.social_details',
@@ -66,7 +67,8 @@ SOCIAL_AUTH_PIPELINE = [
 SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 
 try:
-    raven_version = "%s-%s" % (KIWI_VERSION, raven.fetch_git_sha(os.path.abspath(os.pardir)))
+    raven_version = "%s-%s" % (KIWI_VERSION,
+                               raven.fetch_git_sha(os.path.abspath(os.pardir)))
 except raven.exceptions.InvalidGitRepository:
     raven_version = KIWI_VERSION
 

@@ -21,7 +21,8 @@ def next_url(request):
     next = request.GET.get('next', '/')
 
     if connection.schema_name != 'public':
-        next = reverse('tcms_tenants:redirect-to', args=[connection.schema_name, next])
+        next = reverse('tcms_tenants:redirect-to',
+                       args=[connection.schema_name, next])
 
     # handle double slashes in case we want to redirect to tenant's root
     return next.replace('//', '/')
