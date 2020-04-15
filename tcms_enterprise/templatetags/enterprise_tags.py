@@ -18,11 +18,11 @@ def next_url(request):
 
         Used for the ?next= parameter of PSA URLs.
     """
-    next = request.GET.get('next', '/')
+    next_value = request.GET.get('next', '/')
 
     if connection.schema_name != 'public':
-        next = reverse('tcms_tenants:redirect-to',
-                       args=[connection.schema_name, next])
+        next_value = reverse('tcms_tenants:redirect-to',
+                             args=[connection.schema_name, next_value])
 
     # handle double slashes in case we want to redirect to tenant's root
-    return next.replace('//', '/')
+    return next_value.replace('//', '/')
