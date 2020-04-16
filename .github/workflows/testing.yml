@@ -94,6 +94,20 @@ jobs:
         # template override for social icons
         cat page.html | grep "or Continue With"
 
+        # social backends are listed
+        for ICON in static.d/images/social_auth/backends/*.png; do
+            BACKEND=`basename $ICON | sed 's/.png//'`
+
+            cat page.html | grep "/login/$BACKEND/"
+            cat page.html | grep "<img src='/static/images/social_auth/backends/$BACKEND.*.png'"
+        done
+
+        # social icons are present
+        for URL in `cat page.html | grep "/static/images/social_auth/backends/" | cut -d= -f2 | cut -d"'" -f2`; do
+            echo "Verify image $URL is present"
+            curl -k -f -o /dev/null https://testing.example.bg:8443/$URL
+        done
+
     - name: Sanity test - shut down the docker image
       run: |
         docker-compose -f docker-compose.testing down
