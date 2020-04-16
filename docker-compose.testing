@@ -6,7 +6,7 @@ services:
         image: centos/postgresql-12-centos7
         restart: always
         volumes:
-            - db_data:/var/lib/mysql/data
+            - db_data:/var/lib/pgsql/data
         environment:
             POSTGRESQL_DATABASE: dummy_db
             POSTGRESQL_USER: dummy_usr
