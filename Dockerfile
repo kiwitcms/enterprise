@@ -7,11 +7,8 @@ RUN dnf -y --setopt=tsflags=nodocs install \
 
 USER 1001
 
-# Install any additional Python dependencies
-COPY ./requirements.txt /Kiwi/
-RUN pip install --no-cache-dir -r /Kiwi/requirements.txt
-
-COPY ./tcms_enterprise/  /venv/lib64/python3.6/site-packages/tcms_enterprise/
+COPY ./dist/kiwitcms_enterprise*.whl /Kiwi/
+RUN pip install --no-cache-dir /Kiwi/kiwitcms_enterprise*.whl
 
 # woraround broken CSS which will break collectstatic
 # because they refer to non-existing ../fonts/glyphicons-halflings-regular.eot (no fonts/ directory)
