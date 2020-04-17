@@ -25,8 +25,6 @@ KIWI_VERSION = "%s-Enterprise" % settings.KIWI_VERSION
 # provides filename versioning
 STATICFILES_STORAGE = \
     'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-settings.STATICFILES_DIRS.insert(
-    0, os.path.join(settings.TCMS_ROOT_PATH, 'ee_static'))
 
 ROOT_URLCONF = 'tcms_enterprise.urls'
 
