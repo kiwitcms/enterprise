@@ -1,53 +1,58 @@
+# pylint: disable=undefined-variable
+
 import os
 import raven
 import dj_database_url
 
-from django.conf import settings
-
+from tcms import __version__
 
 # update DB connection string from the DATABASE_URL environment variable
-settings.DATABASES['default'].update(  # pylint: disable=objects-update-used
+DATABASES['default'].update(  # noqa: F821, pylint: disable=objects-update-used
     dj_database_url.config()
 )
-if settings.DATABASES['default']['ENGINE'].find('mysql') == -1:
-    del settings.DATABASES['default']['OPTIONS']
-
+if DATABASES['default']['ENGINE'].find('mysql') == -1:  # noqa: F821
+    del DATABASES['default']['OPTIONS']                 # noqa: F821
 
 # link to legal information, see https://github.com/kiwitcms/Kiwi/issues/249
-settings.HELP_MENU_ITEMS.append(
-    ('http://kiwitcms.org/legal/', 'Legal information')
-)
+LEGAL_MENU_ITEM = ('http://kiwitcms.org/legal/', 'Legal information')
+if LEGAL_MENU_ITEM not in HELP_MENU_ITEMS:   # noqa: F821
+    HELP_MENU_ITEMS.append(LEGAL_MENU_ITEM)  # noqa: F821
 
 # indicate that this is the Enterprise Edition
-KIWI_VERSION = "%s-Enterprise" % settings.KIWI_VERSION
-
+KIWI_VERSION = "%s-Enterprise" % __version__
 
 # provides filename versioning
 STATICFILES_STORAGE = \
     'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
-
 ROOT_URLCONF = 'tcms_enterprise.root_urls'
 
+if 'raven.contrib.django.raven_compat' not in INSTALLED_APPS:   # noqa: F821
+    INSTALLED_APPS.append('raven.contrib.django.raven_compat')  # noqa: F821
 
-# enable reporting errors to Setry for easier debugging
-settings.INSTALLED_APPS += [  # pylint: disable=no-member
-    'raven.contrib.django.raven_compat',
-    'social_django',
-]  # noqa: F405
+if 'social_django' not in INSTALLED_APPS:   # noqa: F821
+    INSTALLED_APPS.append('social_django')  # noqa: F821
 
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
-settings.PUBLIC_VIEWS.extend([
-    'social_django.views.auth',
-    'social_django.views.complete',
-    'social_django.views.disconnect',
-])
+if 'social_django.views.auth' not in PUBLIC_VIEWS:   # noqa: F821
+    PUBLIC_VIEWS.append('social_django.views.auth')  # noqa: F821
 
-settings.TEMPLATES[0]['OPTIONS']['context_processors'].extend([
-    'social_django.context_processors.backends',
-    'social_django.context_processors.login_redirect',
-])
+if 'social_django.views.complete' not in PUBLIC_VIEWS:   # noqa: F821
+    PUBLIC_VIEWS.append('social_django.views.complete')  # noqa: F821
+
+if 'social_django.views.disconnect' not in PUBLIC_VIEWS:   # noqa: F821
+    PUBLIC_VIEWS.append('social_django.views.disconnect')  # noqa: F821
+
+if 'social_django.context_processors.backends' not in \
+    TEMPLATES[0]['OPTIONS']['context_processors']:         # noqa: F821
+    TEMPLATES[0]['OPTIONS']['context_processors'].append(  # noqa: F821
+        'social_django.context_processors.backends')
+
+if 'social_django.context_processors.login_redirect' not in \
+    TEMPLATES[0]['OPTIONS']['context_processors']:         # noqa: F821
+    TEMPLATES[0]['OPTIONS']['context_processors'].append(  # noqa: F821
+        'social_django.context_processors.login_redirect')
 
 SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.social_details',
@@ -69,7 +74,6 @@ try:
                                raven.fetch_git_sha(os.path.abspath(os.pardir)))
 except raven.exceptions.InvalidGitRepository:
     RAVEN_VERSION = KIWI_VERSION
-
 
 # configuration for Sentry. For now only backend errors are sent to Sentry
 # by default all reports go to Mr. Senko
