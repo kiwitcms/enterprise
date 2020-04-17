@@ -12,7 +12,6 @@ COPY ./requirements.txt /Kiwi/
 RUN pip install --no-cache-dir -r /Kiwi/requirements.txt
 
 COPY ./tcms_enterprise/  /venv/lib64/python3.6/site-packages/tcms_enterprise/
-COPY ./templates.d/ /venv/lib64/python3.6/site-packages/tcms/ee_templates/
 COPY ./static.d/    /venv/lib64/python3.6/site-packages/tcms/ee_static/
 
 # woraround broken CSS which will break collectstatic

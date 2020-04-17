@@ -50,8 +50,6 @@ settings.TEMPLATES[0]['OPTIONS']['context_processors'].extend([
     'social_django.context_processors.backends',
     'social_django.context_processors.login_redirect',
 ])
-settings.TEMPLATES[0]['DIRS'].insert(
-    0, os.path.join(settings.TCMS_ROOT_PATH, 'ee_templates'))
 
 SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.social_auth.social_details',
