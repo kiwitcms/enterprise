@@ -34,3 +34,11 @@ See [*Enterprise Subscription*](https://kiwitcms.org/#subscriptions)
 for more information.
 
 If you want to use Kiwi TCMS free of charge head to http://kiwitcms.org!
+
+
+Changelog
+---------
+
+### v8.3-mt (unreleased)
+
+- upcoming
