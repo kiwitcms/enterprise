@@ -9,17 +9,17 @@ on:
       - "*"
 
 jobs:
-  static_analysis:
+  test_matrix:
     name: ${{ matrix.command }} (${{ matrix.python-version}})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
         python-version: [3.6]
-        command: [flake8, pylint]
+        command: [flake8, pylint, docker-image]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
@@ -33,26 +33,11 @@ jobs:
 
     - name: make ${{ matrix.command }}
       run: |
-        sudo apt-get install libkrb5-dev
-        pip install -r devel.txt
         make ${{ matrix.command }}
 
-  docker:
-    name: docker image
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-
-    steps:
-
-    - name: Check out code
-      uses: actions/checkout@v2
-
-    - name: Build the docker image
-      run: |
-        make docker-image
 
     - name: Sanity test - boot the docker image
+      if: matrix.command == 'docker-image'
       run: |
         docker-compose -f docker-compose.testing up -d
         sleep 5
@@ -62,6 +47,7 @@ jobs:
         sudo sh -c "echo '$IP_ADDRESS    testing.example.bg' >> /etc/hosts"
 
     - name: Sanity test - initial configuration
+      if: matrix.command == 'docker-image'
       run: |
         docker exec -i web /Kiwi/manage.py migrate
         docker exec -i web /Kiwi/manage.py createsuperuser --noinput --username super-root --email root@example.com
@@ -71,16 +57,19 @@ jobs:
             --domain-domain testing.example.bg --domain-is_primary True
 
     - name: Sanity test - download login page
+      if: matrix.command == 'docker-image'
       run: |
         curl -k -L -o page.html https://testing.example.bg:8443/
 
     - name: Archive page.html
+      if: matrix.command == 'docker-image'
       uses: actions/upload-artifact@v1
       with:
         name: page.html
         path: page.html
 
     - name: Sanity test - check page.html
+      if: matrix.command == 'docker-image'
       run: |
         set -x
 
@@ -109,5 +98,6 @@ jobs:
         done
 
     - name: Sanity test - shut down the docker image
+      if: matrix.command == 'docker-image'
       run: |
         docker-compose -f docker-compose.testing down
