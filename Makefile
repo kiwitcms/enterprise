@@ -1,5 +1,12 @@
 KIWI_VERSION=8.2-mt
 
+.PHONY: build
+build:
+	rm -rf dist/ build/ *.egg-info/
+	python setup.py sdist
+	python setup.py bdist_wheel
+	twine check dist/*
+
 .PHONY: docker-image
 docker-image:
 	docker build -t docker.io/mrsenko/kiwitcms-enterprise:$(KIWI_VERSION) .
