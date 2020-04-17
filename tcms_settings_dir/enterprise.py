@@ -26,12 +26,12 @@ KIWI_VERSION = "%s-Enterprise" % settings.KIWI_VERSION
 STATICFILES_STORAGE = \
     'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
-ROOT_URLCONF = 'tcms_enterprise.urls'
+
+ROOT_URLCONF = 'tcms_enterprise.root_urls'
 
 
 # enable reporting errors to Setry for easier debugging
 settings.INSTALLED_APPS += [  # pylint: disable=no-member
-    'tcms_enterprise',
     'raven.contrib.django.raven_compat',
     'social_django',
 ]  # noqa: F405
