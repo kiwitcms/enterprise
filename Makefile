@@ -8,7 +8,7 @@ build:
 	twine check dist/*
 
 .PHONY: docker-image
-docker-image:
+docker-image: build
 	docker build -t docker.io/mrsenko/kiwitcms-enterprise:$(KIWI_VERSION) .
 	docker tag docker.io/mrsenko/kiwitcms-enterprise:$(KIWI_VERSION) docker.io/mrsenko/kiwitcms-enterprise:latest
 
