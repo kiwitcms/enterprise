@@ -29,3 +29,8 @@ pylint:
 	pylint --load-plugins=pylint_django --load-plugins=kiwi_lint \
 	    -d missing-docstring -d duplicate-code -d module-in-directory-without-init \
 	    *.py tcms_enterprise/ tcms_settings_dir/
+
+.PHONY: messages
+messages:
+	./manage.py makemessages --locale en --no-obsolete --ignore "test*.py"
+	ls tcms_enterprise/locale/*/LC_MESSAGES/*.po | xargs -n 1 -I @ msgattrib -o @ --no-fuzzy @
