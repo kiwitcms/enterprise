@@ -17,7 +17,7 @@ docker-image: build
 flake8:
 	@flake8 --exclude=.git *.py tcms_enterprise tcms_settings_dir
 
-KIWI_LINT_INCLUDE_PATH="../../Kiwi"
+KIWI_LINT_INCLUDE_PATH="../Kiwi"
 
 .PHONY: pylint
 pylint:
