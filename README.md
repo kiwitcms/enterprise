@@ -39,6 +39,15 @@ If you want to use Kiwi TCMS free of charge head to http://kiwitcms.org!
 Changelog
 ---------
 
-### v8.3-mt (unreleased)
+### v8.3-mt (27 Apr 2020)
 
-- upcoming
+- Convert into a proper Kiwi TCMS plugin before installing into docker image
+- Update kiwitcms-tenants from 1.0.1 to 1.1.1
+- Ship with kiwitcms-github-app plugin
+- Add icon for kerberos login backend
+- Add translation source strings
+- Add ``tcms_settings_dir/`` like other plugins
+- Make `enterprise.py` settings idempotent
+- Update LICENSE to GPLv3
+- Fix pyllint issues
+- Add tests in CI
