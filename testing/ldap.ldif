@@ -1,0 +1,31 @@
+dn: ou=People,dc=example,dc=com
+ou: People
+objectClass: organizationalUnit
+
+dn: uid=ldap_atodorov,ou=People,dc=example,dc=com
+cn: ldap_atodorov
+givenName: Alex
+sn: Todorov
+mail: atodorov@example.com
+userPassword: h3llo-w0rld
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+
+dn: uid=ldap_kiwitcms-bot,ou=People,dc=example,dc=com
+cn: ldap_kiwitcms-bot
+givenName: Kiwi
+sn: Bot
+mail: bot@example.com
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+
+dn: uid=ldap_zahari,ou=People,dc=example,dc=com
+cn: ldap_zahari
+givenName: Zahari
+sn: Zahariev
+mail: zahari@example.com
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
