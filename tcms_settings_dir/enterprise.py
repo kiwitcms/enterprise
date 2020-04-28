@@ -81,3 +81,7 @@ RAVEN_CONFIG = {
     'dsn': 'https://e9a370eba7bd41fe8faead29552f12d7:1417b740821a45ef8fe3ae68ea9bfc8b@sentry.io/277775',  # noqa: E501, pylint: disable=line-too-long
     'release': RAVEN_VERSION,
 }
+
+
+# make sure users from LDAP are assigned default settings
+LDAP_AUTH_SYNC_USER_RELATIONS = 'tcms_enterprise.ldap.sync_user_relations'

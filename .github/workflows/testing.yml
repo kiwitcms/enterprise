@@ -100,12 +100,12 @@ jobs:
     - name: Sanity test - LDAP login and sync
       if: matrix.command == 'docker-image'
       run: |
-        docker run -d --name openldap_server -p 389:389 -p 636:636 openshift/openldap-2441-centos7:latest
+        LDAP_ADDRESS=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' openldap_server`
 
         # import users from the local config file and query the LDAP server
         sudo apt-get install ldap-utils
-        ldapadd -x -h localhost -p 389 -D cn=Manager,dc=example,dc=com -w admin -f testing/ldap.ldif
-        ldapsearch -x -LLL -h localhost -p 389 -b dc=example,dc=com objectClass=person
+        ldapadd -x -h $LDAP_ADDRESS -p 389 -D cn=Manager,dc=example,dc=com -w admin -f testing/ldap.ldif
+        ldapsearch -x -LLL -h $LDAP_ADDRESS -p 389 -b dc=example,dc=com objectClass=person
 
         # Now install RobotFramework so we can drive the browser automatically
         pip install robotframework robotframework-seleniumlibrary
