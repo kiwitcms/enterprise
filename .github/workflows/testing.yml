@@ -97,6 +97,31 @@ jobs:
             curl -k -f -o /dev/null https://testing.example.bg:8443/$URL
         done
 
+    - name: Sanity test - LDAP login and sync
+      if: matrix.command == 'docker-image'
+      run: |
+        docker run -d --name openldap_server -p 389:389 -p 636:636 openshift/openldap-2441-centos7:latest
+
+        # import users from the local config file and query the LDAP server
+        sudo apt-get install ldap-utils
+        ldapadd -x -h localhost -p 389 -D cn=Manager,dc=example,dc=com -w admin -f testing/ldap.ldif
+        ldapsearch -x -LLL -h localhost -p 389 -b dc=example,dc=com objectClass=person
+
+        # Now install RobotFramework so we can drive the browser automatically
+        pip install robotframework robotframework-seleniumlibrary
+        if [ -z `which firefox` ]; then
+            sudo apt-get install firefox
+        fi
+
+        if [ -z `which geckodriver` ]; then
+            sudo apt-get install firefox-geckodriver
+        fi
+
+        robot testing/ldap.robot
+
+        docker exec -i web /Kiwi/manage.py ldap_sync_users
+        cat testing/ldap.py | docker exec -i web /Kiwi/manage.py shell
+
     - name: Sanity test - shut down the docker image
       if: matrix.command == 'docker-image'
       run: |
