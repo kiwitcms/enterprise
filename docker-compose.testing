@@ -1,6 +1,13 @@
 version: '2'
 
 services:
+    openldap_server:
+        container_name: openldap_server
+        image: openshift/openldap-2441-centos7
+        restart: always
+        ports:
+            - 389:389
+            - 636:636
     db:
         container_name: db
         image: centos/postgresql-12-centos7
@@ -17,6 +24,7 @@ services:
         image: mrsenko/kiwitcms-enterprise:latest
         depends_on:
             - db
+            - openldap_server
         restart: always
         volumes:
             - ./test_settings.py:/venv/lib64/python3.6/site-packages/tcms_settings_dir/test_settings.py:z,ro

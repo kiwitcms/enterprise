@@ -25,6 +25,8 @@ system, dubbed *Enterprise Edition*.
     extra [authentication backends](http://python-social-auth-docs.readthedocs.io/en/latest/backends/index.html#supported-backends)
   - [social-auth-kerberos](https://github.com/kiwitcms/python-social-auth-kerberos/) -
     MIT Kerberos authentication backend
+  - [django-python3-ldap](https://github.com/etianen/django-python3-ldap) -
+    LDAP authentication backend
 
 
 While the software itself is open source we do not provide public
