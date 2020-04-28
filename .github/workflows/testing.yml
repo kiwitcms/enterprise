@@ -43,7 +43,7 @@ jobs:
         sleep 5
 
         IP_ADDRESS=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web`
-        echo "--- web.example.bg: $IP_ADDRESS --"
+        echo "--- testing.example.bg: $IP_ADDRESS --"
         sudo sh -c "echo '$IP_ADDRESS    testing.example.bg' >> /etc/hosts"
 
     - name: Sanity test - initial configuration
