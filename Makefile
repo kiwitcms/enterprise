@@ -32,5 +32,5 @@ pylint:
 
 .PHONY: messages
 messages:
-	./manage.py makemessages --locale en --no-obsolete --ignore "test*.py"
+	./manage.py makemessages --settings l10n_settings --locale en --no-obsolete --ignore "test*.py"
 	ls tcms_enterprise/locale/*/LC_MESSAGES/*.po | xargs -n 1 -I @ msgattrib -o @ --no-fuzzy @
