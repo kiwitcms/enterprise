@@ -4,6 +4,8 @@ import os
 import raven
 import dj_database_url
 
+from django.utils.translation import gettext_lazy as _
+
 from tcms import __version__
 
 # update DB connection string from the DATABASE_URL environment variable
@@ -14,7 +16,7 @@ if DATABASES['default']['ENGINE'].find('mysql') == -1:  # noqa: F821
     del DATABASES['default']['OPTIONS']                 # noqa: F821
 
 # link to legal information, see https://github.com/kiwitcms/Kiwi/issues/249
-LEGAL_MENU_ITEM = ('http://kiwitcms.org/legal/', 'Legal information')
+LEGAL_MENU_ITEM = ('http://kiwitcms.org/legal/', _('Legal information'))
 if LEGAL_MENU_ITEM not in HELP_MENU_ITEMS:   # noqa: F821
     HELP_MENU_ITEMS.append(LEGAL_MENU_ITEM)  # noqa: F821
 

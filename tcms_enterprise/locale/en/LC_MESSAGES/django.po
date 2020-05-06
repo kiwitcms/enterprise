@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-21 22:08+0300\n"
+"POT-Creation-Date: 2020-05-12 07:17-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,4 +20,12 @@ msgstr ""
 
 #: tcms_enterprise/pipeline.py:17
 msgid "Email address is required"
+msgstr ""
+
+#: tcms_enterprise/templates/registration/custom_login.html:10
+msgid "or Continue With"
+msgstr ""
+
+#: tcms_settings_dir/enterprise.py:19
+msgid "Legal information"
 msgstr ""
