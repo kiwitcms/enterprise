@@ -47,12 +47,12 @@ if 'social_django.views.disconnect' not in PUBLIC_VIEWS:   # noqa: F821
     PUBLIC_VIEWS.append('social_django.views.disconnect')  # noqa: F821
 
 if 'social_django.context_processors.backends' not in \
-    TEMPLATES[0]['OPTIONS']['context_processors']:         # noqa: F821
+        TEMPLATES[0]['OPTIONS']['context_processors']:     # noqa: F821
     TEMPLATES[0]['OPTIONS']['context_processors'].append(  # noqa: F821
         'social_django.context_processors.backends')
 
 if 'social_django.context_processors.login_redirect' not in \
-    TEMPLATES[0]['OPTIONS']['context_processors']:         # noqa: F821
+        TEMPLATES[0]['OPTIONS']['context_processors']:     # noqa: F821
     TEMPLATES[0]['OPTIONS']['context_processors'].append(  # noqa: F821
         'social_django.context_processors.login_redirect')
 
