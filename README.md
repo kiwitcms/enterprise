@@ -41,6 +41,13 @@ If you want to use Kiwi TCMS free of charge head to http://kiwitcms.org!
 Changelog
 ---------
 
+### v8.4-mt (03 June 2020)
+
+- Based on Kiwi TCMS v8.4
+- Update social-auth-app-django from 3.1.0 to 3.4.0
+- Add django-python3-ldap add-on for LDAP logins
+
+
 ### v8.3-mt (27 Apr 2020)
 
 - Convert into a proper Kiwi TCMS plugin before installing into docker image
