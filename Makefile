@@ -1,5 +1,6 @@
 # *WARNING:* don't forget to update version in setup.py
-KIWI_VERSION=8.4-mt
+KIWI_VERSION=8.4
+ENTERPRISE_VERSION=$(KIWI_VERSION)-mt
 
 .PHONY: build
 build:
@@ -10,8 +11,13 @@ build:
 
 .PHONY: docker-image
 docker-image: build
-	docker build -t docker.io/mrsenko/kiwitcms-enterprise:$(KIWI_VERSION) .
-	docker tag docker.io/mrsenko/kiwitcms-enterprise:$(KIWI_VERSION) docker.io/mrsenko/kiwitcms-enterprise:latest
+	# tag the regular version so we can provide versioned images to enterprise customers
+	# so they can upgrade from kiwitcms/kiwi:latest before migrating to kiwitcms-enteprise
+	docker tag docker.io/kiwitcms/kiwi:latest mrsenko/kiwitcms:$(KIWI_VERSION)
+
+	# everything else below is Enterprise + multi-tenant
+	docker build -t docker.io/mrsenko/kiwitcms-enterprise:$(ENTERPRISE_VERSION) .
+	docker tag docker.io/mrsenko/kiwitcms-enterprise:$(ENTERPRISE_VERSION) docker.io/mrsenko/kiwitcms-enterprise:latest
 
 .PHONY: flake8
 flake8:
