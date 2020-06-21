@@ -11,13 +11,13 @@ build:
 
 .PHONY: docker-image
 docker-image: build
-	# tag the regular version so we can provide versioned images to enterprise customers
-	# so they can upgrade from kiwitcms/kiwi:latest before migrating to kiwitcms-enteprise
-	docker tag docker.io/kiwitcms/kiwi:latest mrsenko/kiwitcms:$(KIWI_VERSION)
-
 	# everything else below is Enterprise + multi-tenant
 	docker build -t docker.io/mrsenko/kiwitcms-enterprise:$(ENTERPRISE_VERSION) .
 	docker tag docker.io/mrsenko/kiwitcms-enterprise:$(ENTERPRISE_VERSION) docker.io/mrsenko/kiwitcms-enterprise:latest
+
+	# tag the regular version so we can provide versioned images to enterprise customers
+	# so they can upgrade from kiwitcms/kiwi:latest before migrating to kiwitcms-enteprise
+	docker tag kiwitcms/kiwi:latest mrsenko/kiwitcms:$(KIWI_VERSION)
 
 .PHONY: flake8
 flake8:
