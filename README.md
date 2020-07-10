@@ -41,6 +41,16 @@ If you want to use Kiwi TCMS free of charge head to http://kiwitcms.org!
 Changelog
 ---------
 
+### v8.5-mt (10 July 2020)
+
+- Based on Kiwi TCMS v8.5
+- Update django-ses from 0.8.14 to 1.0.1
+- Update kiwitcms-tenants from 1.1.1 to 1.2
+- Update social-auth-app-django from 3.4.0 to 4.0.0
+- Start tagging non-Enterprise images of `kiwitcms/kiwi` - will be provided
+  via separate private repository for enterprise customers
+
+
 ### v8.4-mt (03 June 2020)
 
 - Based on Kiwi TCMS v8.4
