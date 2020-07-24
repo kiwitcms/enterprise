@@ -41,6 +41,13 @@ If you want to use Kiwi TCMS free of charge head to http://kiwitcms.org!
 Changelog
 ---------
 
+
+### v8.5.1-mt (24 July 2020)
+
+- Based on Kiwi TCMS v8.5
+- Update kiwitcms-tenants from 1.2 to 1.2.1
+
+
 ### v8.5-mt (10 July 2020)
 
 - Based on Kiwi TCMS v8.5
