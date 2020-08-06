@@ -42,6 +42,12 @@ Changelog
 ---------
 
 
+### v8.5.2-mt (06 Aug 2020)
+
+- Update django-ses from 1.0.1 to 1.0.2
+- Update kiwitcms-github-app from 1.0 to 1.1
+
+
 ### v8.5.1-mt (24 July 2020)
 
 - Based on Kiwi TCMS v8.5
