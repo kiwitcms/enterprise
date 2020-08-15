@@ -30,8 +30,8 @@ system, dubbed *Enterprise Edition*.
 
 
 While the software itself is open source we do not provide public
-access to the resulting `mrsenko/kiwitcms-enterprise` Docker image.
-This will be made available only to our subscribers.
+access to the resulting `kiwitcms/enterprise` Docker image.
+This is made available only to our subscribers.
 See [*Enterprise Subscription*](https://kiwitcms.org/#subscriptions)
 for more information.
 
