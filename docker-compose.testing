@@ -21,7 +21,7 @@ services:
 
     web:
         container_name: web
-        image: mrsenko/kiwitcms-enterprise:latest
+        image: quay.io/kiwitcms/enterprise:latest
         depends_on:
             - db
             - openldap_server
