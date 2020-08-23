@@ -1,5 +1,5 @@
 # *WARNING:* don't forget to update version in setup.py
-KIWI_VERSION=8.5.2
+KIWI_VERSION=8.6
 ENTERPRISE_VERSION=$(KIWI_VERSION)-mt
 
 .PHONY: build
