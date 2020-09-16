@@ -41,6 +41,16 @@ If you want to use Kiwi TCMS free of charge head to http://kiwitcms.org!
 Changelog
 ---------
 
+### v8.7-mt (16 Sep 2020)
+
+- Based on Kiwi TCMS v8.7
+- Overrides for setting ``PUBLIC_VIEWS`` have been removed b/c this
+  setting has been removed upstream
+- Update django-ses from 1.0.2 to 1.0.3
+- Update kiwitcms-github-app from 1.1 to 1.2
+- Update kiwitcms-tenants from 1.2.1 to 1.3.1
+
+
 ### v8.6-mt (23 Aug 2020)
 
 - Based on Kiwi TCMS v8.6
