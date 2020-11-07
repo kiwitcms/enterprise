@@ -26,7 +26,7 @@ def get_install_requires(path):
 setup(
     name='kiwitcms-enterprise',
     # *WARNING:* don't forget to update version in Makefile
-    version='8.7',
+    version='8.8',
     description='Kiwi TCMS Enterprise Edition',
     long_description=get_long_description(),
     long_description_content_type='text/markdown',
