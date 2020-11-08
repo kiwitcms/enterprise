@@ -13,6 +13,7 @@ AUTHENTICATION_BACKENDS = [
     'django_python3_ldap.auth.LDAPBackend',
 
     'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
 ]
 
 
