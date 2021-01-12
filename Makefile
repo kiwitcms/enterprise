@@ -32,7 +32,8 @@ pylint:
 	    git clone --depth 1 https://github.com/kiwitcms/Kiwi.git $(KIWI_LINT_INCLUDE_PATH); \
 	fi
 
-	PYTHONPATH=$(KIWI_LINT_INCLUDE_PATH) \
+	PYTHONPATH=$(KIWI_LINT_INCLUDE_PATH):. \
+	DJANGO_SETTINGS_MODULE=l10n_settings \
 	pylint --load-plugins=pylint_django --load-plugins=kiwi_lint \
 	    -d missing-docstring -d duplicate-code -d module-in-directory-without-init \
 	    *.py tcms_enterprise/ tcms_settings_dir/
