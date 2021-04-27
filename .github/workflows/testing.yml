@@ -5,8 +5,7 @@ on:
     branches:
       - "*"
   push:
-    branches:
-      - "*"
+    branches: master
 
 jobs:
   test_matrix:
