@@ -1,8 +1,10 @@
 FROM kiwitcms/kiwi
 
 USER 0
-RUN dnf -y --setopt=tsflags=nodocs install \
-    gcc krb5-devel python3-devel && \
+RUN sed -i "s/enabled=0/enabled=1/" /etc/yum.repos.d/CentOS-Linux-PowerTools.repo && \
+    dnf -y --setopt=tsflags=nodocs install \
+    gcc krb5-devel python3-devel \
+    libxml2-devel xmlsec1-devel xmlsec1-openssl-devel libtool-ltdl-devel && \
     dnf clean all
 
 USER 1001
