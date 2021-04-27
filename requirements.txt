@@ -6,3 +6,4 @@ kiwitcms-tenants==1.4.3
 raven==6.10.0
 social-auth-app-django==4.0.0
 social-auth-kerberos==0.2.4
+python3-saml==1.10.1
