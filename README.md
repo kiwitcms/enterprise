@@ -41,6 +41,13 @@ If you want to use Kiwi TCMS free of charge head to http://kiwitcms.org!
 Changelog
 ---------
 
+### v10.0.1-mt (29 Apr 2021)
+
+- Based on Kiwi TCMS v10.0
+- Update django-ses from 1.0.3 to 2.0.0
+- Add python3-saml to dependencies, needed by Python Social Auth SAML backend
+
+
 ### v10.0-mt (02 Mar 2021)
 
 - Based on Kiwi TCMS v10.0
