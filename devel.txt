@@ -3,6 +3,7 @@
 flake8
 kiwitcms
 pylint-django
+textdistance
 twine
 readme_renderer[md]
 wheel
