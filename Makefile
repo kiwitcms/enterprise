@@ -35,7 +35,7 @@ pylint:
 	PYTHONPATH=$(KIWI_LINT_INCLUDE_PATH):. \
 	DJANGO_SETTINGS_MODULE=l10n_settings \
 	pylint --load-plugins=pylint_django --load-plugins=kiwi_lint \
-	    -d missing-docstring -d duplicate-code -d module-in-directory-without-init \
+	    -d missing-docstring -d duplicate-code -d module-in-directory-without-init -d similar-string \
 	    *.py tcms_enterprise/ tcms_settings_dir/
 
 .PHONY: messages
