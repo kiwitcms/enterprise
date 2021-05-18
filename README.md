@@ -41,6 +41,13 @@ If you want to use Kiwi TCMS free of charge head to http://kiwitcms.org!
 Changelog
 ---------
 
+### v10.1-mt (18 May 2021)
+
+- Based on Kiwi TCMS v10.1
+- Container image built with Python 3.8
+- Update kiwitcms-tenants from 1.4.3 to 1.4.4
+
+
 ### v10.0.1-mt (29 Apr 2021)
 
 - Based on Kiwi TCMS v10.0
