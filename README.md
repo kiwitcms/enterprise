@@ -22,7 +22,7 @@ system, dubbed *Enterprise Edition*.
   - [kiwitcms-tenants](https://github.com/kiwitcms/tenants/) - multi-tenant support
   - [raven](https://github.com/getsentry/raven-python) - automatic error logs via Sentry
   - [social-auth-app-django](https://github.com/python-social-auth/social-app-django) -
-    extra [authentication backends](http://python-social-auth-docs.readthedocs.io/en/latest/backends/index.html#supported-backends)
+    extra [authentication backends](http://python-social-auth.readthedocs.io/en/latest/backends/index.html#supported-backends)
   - [social-auth-kerberos](https://github.com/kiwitcms/python-social-auth-kerberos/) -
     MIT Kerberos authentication backend
   - [django-python3-ldap](https://github.com/etianen/django-python3-ldap) -
