@@ -54,7 +54,7 @@ jobs:
         docker exec -i web /Kiwi/manage.py createsuperuser --noinput --username super-root --email root@example.com
         docker exec -i web /Kiwi/manage.py create_tenant                \
             --schema_name public --name "TT" --paid_until 2050-12-31    \
-            --on_trial False --owner_id 1 --organization "Testing dept" \
+            --publicly_readable False --owner_id 1 --organization "Testing dept" \
             --domain-domain testing.example.bg --domain-is_primary True
 
     - name: Sanity test - download login page
