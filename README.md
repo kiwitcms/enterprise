@@ -7,8 +7,8 @@ Kiwi TCMS Enterprise Edition
 ============================
 
 This repository contains downstream distribution for the
-[Kiwi TCMS](http://kiwitcms.org) open source test case management
-system, dubbed *Enterprise Edition*.
+[Kiwi TCMS](http://kiwitcms.org) open source test management
+system, dubbed *Enterprise Edition*, which contains the following changes:
 
 * Based on `kiwitcms/kiwi` Docker image
 * **Compatible only with PostgreSQL !!!**
@@ -36,6 +36,34 @@ See [*Enterprise Subscription*](https://kiwitcms.org/#subscriptions)
 for more information.
 
 If you want to use Kiwi TCMS free of charge head to http://kiwitcms.org!
+
+
+Initial configuration
+---------------------
+
+1. Create your *docker-compose.yml* similar to our
+   [docker-compose.testing](https://github.com/kiwitcms/enterprise/blob/master/docker-compose.testing).
+   Make sure to define the `KIWI_TENANTS_DOMAIN` environment variable.
+2. Once your containers are running execute:
+
+    ```
+    docker exec -it kiwi_web /Kiwi/manage.py initial_setup
+    docker exec -it kiwi_web /Kiwi/manage.py create_tenant --schema_name public
+                                                           --name "Main tenant"
+                                                           --paid_until 2050-12-31
+                                                           --publicly_readable False
+                                                           --owner_id 2
+                                                           --organization "Testing department"
+                                                           --domain-domain main.tenants.example.org
+                                                           --domain-is_primary True
+    ```
+
+   **NOTE:** the value of `--domain-domain` is either the same or one-level up from
+   the value of `KIWI_TENANTS_DOMAIN`.
+
+For more information see
+https://kiwitcms.readthedocs.io/en/latest/installing_docker.html#initial-configuration-of-running-container
+and https://github.com/kiwitcms/tenants/#first-boot-configuration
 
 
 Changelog
