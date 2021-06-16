@@ -36,6 +36,10 @@ jobs:
       run: |
         make ${{ matrix.command }}
 
+    - name: Setup - start and configure Keycloak server
+      if: matrix.command == 'docker-image'
+      run: |
+        ./testing/start_keycloak.sh
 
     - name: Sanity test - boot the docker image
       if: matrix.command == 'docker-image'
@@ -46,6 +50,11 @@ jobs:
         IP_ADDRESS=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web`
         echo "--- testing.example.bg: $IP_ADDRESS --"
         sudo sh -c "echo '$IP_ADDRESS    testing.example.bg' >> /etc/hosts"
+
+        KC_ADDRESS=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' keycloak_server`
+        echo "--- kc.example.bg: $KC_ADDRESS --"
+        # Kiwi TCMS container needs to know how to resolve the Keycloak server address
+        docker exec -u 0 -i web /bin/bash -c "echo '$KC_ADDRESS    kc.example.bg' >> /etc/hosts"
 
     - name: Sanity test - initial configuration
       if: matrix.command == 'docker-image'
@@ -64,7 +73,7 @@ jobs:
 
     - name: Archive page.html
       if: matrix.command == 'docker-image'
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: page.html
         path: page.html
@@ -123,7 +132,20 @@ jobs:
         docker exec -i web /Kiwi/manage.py ldap_sync_users
         cat testing/ldap.py | docker exec -i web /Kiwi/manage.py shell
 
+    - name: Sanity test - Keycloak login
+      if: matrix.command == 'docker-image'
+      run: |
+        robot testing/keycloak.robot
+
+    - name: Archive Keycloak JSON files
+      if: matrix.command == 'docker-image'
+      uses: actions/upload-artifact@v2
+      with:
+        name: kc-json-files
+        path: ./*.json
+
     - name: Sanity test - shut down the docker image
       if: matrix.command == 'docker-image'
       run: |
+        docker kill keycloak_server
         docker-compose -f docker-compose.testing down
