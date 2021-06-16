@@ -30,10 +30,9 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
 
 
 While the software itself is open source we do not provide public
-access to the resulting `kiwitcms/enterprise` Docker image.
-This is made available only to our subscribers.
-See [*Enterprise Subscription*](https://kiwitcms.org/#subscriptions)
-for more information.
+access to the resulting `kiwitcms/enterprise` container image.
+This is made available only to our subscribers, see https://kiwitcms.org/containers/
+and https://kiwitcms.org/#subscriptions for more information.
 
 If you want to use Kiwi TCMS free of charge head to http://kiwitcms.org!
 
