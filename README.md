@@ -65,6 +65,32 @@ https://kiwitcms.readthedocs.io/en/latest/installing_docker.html#initial-configu
 and https://github.com/kiwitcms/tenants/#first-boot-configuration
 
 
+Hacking and customization
+-------------------------
+
+In case you need to customize and extend the container image we recommend to use the
+existing image as a baseline and incorporate all of your changes on top of it. For example
+create a `Dockerfile` like so:
+
+```
+FROM quay.io/kiwitcms/enterprise
+
+# your own changes go here
+```
+
+then build your own image with the command
+`docker build -f Dockerfile.customized -t kiwitcms/customized .`.
+
+
+Rebuilding from source is not recommended b/c it will result in slightly different images
+compared to what we provide online to subscribers. There is no way for the Kiwi TCMS team
+to test or provide any guarantees on container images rebuilt by anyone but us!
+
+In the event that you need to do so then use the `make docker-image` command and watchout
+for errors during the build process. The buildroot generally needs Python 3,
+the `make` and `docker` commands, the `wheel` and `twine` Python packages.
+
+
 Changelog
 ---------
 
