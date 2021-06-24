@@ -46,15 +46,15 @@ Initial configuration
 2. Once your containers are running execute:
 
     ```
-    docker exec -it kiwi_web /Kiwi/manage.py initial_setup
-    docker exec -it kiwi_web /Kiwi/manage.py create_tenant --schema_name public
-                                                           --name "Main tenant"
-                                                           --paid_until 2050-12-31
-                                                           --publicly_readable False
-                                                           --owner_id 2
-                                                           --organization "Testing department"
-                                                           --domain-domain main.tenants.example.org
-                                                           --domain-is_primary True
+    docker exec -it web /Kiwi/manage.py initial_setup
+    docker exec -it web /Kiwi/manage.py create_tenant --schema_name public
+                                                      --name "Public tenant"
+                                                      --paid_until 2050-12-31
+                                                      --publicly_readable False
+                                                      --owner_id 2
+                                                      --organization "Testing department"
+                                                      --domain-domain main.tenants.example.org
+                                                      --domain-is_primary True
     ```
 
    **NOTE:** the value of `--domain-domain` is either the same or one-level up from
