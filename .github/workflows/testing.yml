@@ -108,6 +108,12 @@ jobs:
             curl -k -f -o /dev/null https://testing.example.bg:8443/$URL
         done
 
+        # social icons point to correct backend login URL, even with port
+        for BACKEND in `cat page.html | grep "/static/images/social_auth/backends/" | cut -d= -f2 | cut -d"'" -f2 | cut -f6 -d/ | cut -f1 -d.`; do
+            echo "Verify $BACKEND login is present"
+            cat page.html | grep "https://testing.example.bg/login/$BACKEND/?next=/"
+        done
+
     - name: Sanity test - LDAP login and sync
       if: matrix.command == 'docker-image'
       run: |
