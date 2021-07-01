@@ -94,6 +94,24 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v10.1.1-mt (01 July 2021)
+
+- Based on Kiwi TCMS v10.1
+- Fix URL to Python Social Auth documentation
+- Support read-only view on tenants for anonymous users. Contains a
+  database migration to rename `on_trial` field to `publicly_readable`
+- Document initial configuration. Fixes
+  [Issue #87](https://github.com/kiwitcms/enterprise/issues/87),
+  References
+  [Issue #88](https://github.com/kiwitcms/enterprise/issues/88)
+- Document the build process. Fixes
+  [Issue #89](https://github.com/kiwitcms/enterprise/issues/89)
+- Verify support for Keycloak logins. Fixes
+  [Issue #86](https://github.com/kiwitcms/enterprise/issues/86)
+- Update kiwitcms-github-app from 1.2.4 to 1.3.0
+- Update kiwitcms-tenants from 1.5.0 to 1.6.0
+
+
 ### v10.1-mt (18 May 2021)
 
 - Based on Kiwi TCMS v10.1
