@@ -94,6 +94,14 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v10.2-mt (11 July 2021)
+
+- Based on Kiwi TCMS v10.2
+- Update django-ses from 2.0.0 to 2.1.1
+- Update django-python3-ldap from 0.11.4 to 0.12.0
+- Update documentation around initial config
+
+
 ### v10.1.1-mt (01 July 2021)
 
 - Based on Kiwi TCMS v10.1
