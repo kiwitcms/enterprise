@@ -1,0 +1,11 @@
+FROM registry.access.redhat.com/ubi8/ubi-minimal
+
+RUN microdnf install gcc krb5-devel python38-devel && \
+    microdnf update
+
+ENV PATH /venv/bin:${PATH} \
+    VIRTUAL_ENV /venv
+
+RUN python3 -m venv /venv
+RUN pip3 install --no-cache-dir --upgrade pip wheel
+RUN pip3 wheel --no-deps --wheel-dir /dist gssapi
