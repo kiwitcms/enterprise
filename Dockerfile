@@ -1,16 +1,13 @@
 FROM kiwitcms/kiwi
 
 USER 0
-RUN sed -i "s/enabled=0/enabled=1/" /etc/yum.repos.d/CentOS-Linux-PowerTools.repo && \
-    dnf -y --setopt=tsflags=nodocs install \
-    gcc krb5-devel python38-devel \
-    libxml2-devel xmlsec1-devel xmlsec1-openssl-devel libtool-ltdl-devel && \
-    dnf clean all
+RUN microdnf --nodocs install krb5-libs xmlsec1 xmlsec1-openssl && \
+    microdnf clean all
 
 USER 1001
 
-COPY ./dist/kiwitcms_enterprise*.whl /Kiwi/
-RUN pip install --no-cache-dir /Kiwi/kiwitcms_enterprise*.whl
+COPY ./dist/ /Kiwi/dist/
+RUN pip install --no-cache-dir --find-links /Kiwi/dist/ /Kiwi/dist/kiwitcms_enterprise*.whl
 
 # woraround broken CSS which will break collectstatic
 # because they refer to non-existing ../fonts/glyphicons-halflings-regular.eot (no fonts/ directory)

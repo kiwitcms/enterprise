@@ -4,13 +4,31 @@ ENTERPRISE_VERSION=$(KIWI_VERSION)-mt
 
 .PHONY: build
 build:
-	rm -rf dist/ build/ *.egg-info/
+	sudo rm -rf dist/ build/ *.egg-info/
 	python setup.py sdist
 	python setup.py bdist_wheel
 	twine check dist/*
 
+
+.PHONY: build-gssapi
+build-gssapi:
+	docker pull registry.access.redhat.com/ubi8/ubi-minimal
+	docker build -t kiwitcms/gssapi-buildroot -f Dockerfile.gssapi .
+	docker run --rm --security-opt label=disable \
+	    -v `pwd`/dist/:/host kiwitcms/gssapi-buildroot /bin/bash -c 'cp /dist/*.whl /host/'
+	docker rmi kiwitcms/gssapi-buildroot
+
+.PHONY: build-xmlsec
+build-xmlsec:
+	docker pull quay.io/centos/centos:stream8
+	docker build -t kiwitcms/xmlsec-buildroot -f Dockerfile.xmlsec .
+	docker run --rm --security-opt label=disable \
+	    -v `pwd`/dist/:/host kiwitcms/xmlsec-buildroot /bin/bash -c 'cp /dist/*.whl /host/'
+	docker rmi kiwitcms/xmlsec-buildroot
+
+
 .PHONY: docker-image
-docker-image: build
+docker-image: build build-gssapi build-xmlsec
 	# everything else below is Enterprise + multi-tenant
 	docker build -t quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) .
 	docker tag quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) quay.io/kiwitcms/enterprise:latest
