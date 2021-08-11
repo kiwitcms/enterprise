@@ -10,7 +10,7 @@ on:
 jobs:
   test_matrix:
     name: ${{ matrix.command }} (${{ matrix.python-version}})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     strategy:
       fail-fast: true
       matrix:
