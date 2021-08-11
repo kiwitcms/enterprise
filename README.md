@@ -94,6 +94,15 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v10.3-mt (11 August 2021)
+
+- Based on Kiwi TCMS v10.3
+- Container image based on Red Hat Universal Base Image
+- Update django-ses from 2.1.1 to 2.2.1
+- Update python3-saml from 1.10.1 to 1.11.0
+- Add GitLab login icon
+
+
 ### v10.2-mt (11 July 2021)
 
 - Based on Kiwi TCMS v10.2
