@@ -66,12 +66,10 @@ jobs:
     - name: Sanity test - initial configuration
       if: matrix.command == 'docker-image'
       run: |
-        docker exec -i web /Kiwi/manage.py migrate
-        docker exec -i web /Kiwi/manage.py createsuperuser --noinput --username super-root --email root@example.com
-        docker exec -i web /Kiwi/manage.py create_tenant                \
-            --schema_name public --name "TT" --paid_until 2050-12-31    \
-            --publicly_readable False --owner_id 1 --organization "Testing dept" \
-            --domain-domain testing.example.bg --domain-is_primary True
+        # need to monkey-patch createsuperuser.py b/c it rejects input when not using a TTY
+        docker exec -i web sed -i "s/raise NotRunningInTTYException/pass/" /venv/lib64/python3.8/site-packages/django/contrib/auth/management/commands/createsuperuser.py
+        docker exec -i web sed -i "s/getpass.getpass/input/" /venv/lib64/python3.8/site-packages/django/contrib/auth/management/commands/createsuperuser.py
+        echo -e "super-root\nroot@example.com\nsecret\nsecret\ntesting.example.bg\n" | docker exec -i web /Kiwi/manage.py initial_setup
 
     - name: Sanity test - download login page
       if: matrix.command == 'docker-image'
