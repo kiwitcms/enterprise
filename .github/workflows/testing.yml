@@ -47,6 +47,9 @@ jobs:
       if: matrix.command == 'docker-image'
       run: |
         ./testing/start_keycloak.sh
+        echo "**** DEBUG, /tmp/kc.env ****"
+        cat /tmp/kc.env
+        echo "**** END DEBUG ****"
 
     - name: Sanity test - boot the docker image
       if: matrix.command == 'docker-image'
