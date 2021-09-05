@@ -1,7 +1,6 @@
 """
-    Should be called after superuser has been created *AND*
-    after inactive accounts have been deleted! Verifies that
-    `delete_inactive_accounts.py` does its job.
+    Should be called after superuser has been created!
+    Verifies that `ldap_sync_users` does its job.
 """
 from django.contrib.auth import get_user_model
 

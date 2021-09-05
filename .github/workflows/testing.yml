@@ -59,7 +59,7 @@ jobs:
 
         IP_ADDRESS=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web`
         echo "--- testing.example.bg: $IP_ADDRESS --"
-        sudo sh -c "echo '$IP_ADDRESS    testing.example.bg' >> /etc/hosts"
+        sudo sh -c "echo '$IP_ADDRESS    testing.example.bg     empty.testing.example.bg' >> /etc/hosts"
 
         KC_ADDRESS=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' keycloak_server`
         echo "--- kc.example.bg: $KC_ADDRESS --"
@@ -139,6 +139,12 @@ jobs:
 
         docker exec -i web /Kiwi/manage.py ldap_sync_users
         cat testing/ldap.py | docker exec -i web /Kiwi/manage.py shell
+
+    - name: Sanity test - ADMIN -> Users and Groups menu
+      if: matrix.command == 'docker-image'
+      run: |
+        cat testing/configure_tenant_users.py | docker exec -i web /Kiwi/manage.py shell
+        robot testing/admin_users_groups_menu.robot
 
     - name: Sanity test - Keycloak login
       if: matrix.command == 'docker-image'
