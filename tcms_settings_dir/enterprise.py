@@ -21,7 +21,7 @@ if LEGAL_MENU_ITEM not in HELP_MENU_ITEMS:   # noqa: F821
     HELP_MENU_ITEMS.append(LEGAL_MENU_ITEM)  # noqa: F821
 
 # indicate that this is the Enterprise Edition
-KIWI_VERSION = "%s-Enterprise" % __version__
+KIWI_VERSION = f"{__version__}-Enterprise"
 
 # provides filename versioning
 STATICFILES_STORAGE = \
@@ -63,8 +63,8 @@ SOCIAL_AUTH_PIPELINE = [
 SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 
 try:
-    RAVEN_VERSION = "%s-%s" % (KIWI_VERSION,
-                               raven.fetch_git_sha(os.path.abspath(os.pardir)))
+    _git_sha = raven.fetch_git_sha(os.path.abspath(os.pardir))
+    RAVEN_VERSION = f"{KIWI_VERSION}-{_git_sha}"
 except raven.exceptions.InvalidGitRepository:
     RAVEN_VERSION = KIWI_VERSION
 
