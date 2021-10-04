@@ -86,6 +86,11 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v10.4.1-mt (05 October 2021)
+
+- Update kiwitcms-github-app from 1.3.0 to 1.3.1
+
+
 ### v10.4-mt (04 October 2021)
 
 - Based on Kiwi TCMS v10.4
