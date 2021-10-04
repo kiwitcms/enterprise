@@ -86,6 +86,18 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v10.4-mt (04 October 2021)
+
+- Based on Kiwi TCMS v10.4
+- Update django-ses from 2.2.1 to 2.3.0
+- Update python3-saml from 1.11.0 to 1.12.0
+- Update social-auth-app-django from 4.0.0 to 5.0.0
+- Use initial_setup during testing. Closes
+  [Issue #88](https://github.com/kiwitcms/enterprise/issues/88)
+- Fix new pylint issues and start using f-strings
+- Test "ADMIN -> Users and Groups" menu redirect
+
+
 ### v10.3-mt (11 August 2021)
 
 - Based on Kiwi TCMS v10.3
