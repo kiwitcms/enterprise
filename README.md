@@ -86,6 +86,14 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v11.1-mt (02 January 2022)
+
+- Based on Kiwi TCMS v11.1
+- Update kiwitcms-github-app from 1.3.2 to 1.3.3
+- Update django-ses from 2.3.1 to 2.4.0
+- Update python3-saml from 1.12.0 to 1.13.0
+- Workaround UnicodeDecodeError while building the docker image
+
 ### v11.0-mt (24 January 2022)
 
 - Based on Kiwi TCMS v11.0
