@@ -40,7 +40,7 @@ docker-image: build build-gssapi build-xmlsec
 
 .PHONY: flake8
 flake8:
-	@flake8 --exclude=.git *.py tcms_enterprise tcms_settings_dir
+	@flake8 --exclude=.git --exclude=storage.py *.py tcms_enterprise tcms_settings_dir
 
 KIWI_LINT_INCLUDE_PATH="../Kiwi"
 
@@ -54,6 +54,7 @@ pylint:
 	DJANGO_SETTINGS_MODULE=l10n_settings \
 	pylint --load-plugins=pylint_django --load-plugins=kiwi_lint \
 	    -d missing-docstring -d duplicate-code -d module-in-directory-without-init -d similar-string \
+	    --ignore=storage.py \
 	    *.py tcms_enterprise/ tcms_settings_dir/
 
 .PHONY: messages
