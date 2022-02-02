@@ -1,8 +1,9 @@
-from django.conf.urls import include, url
+from django.urls import re_path
+from django.conf.urls import include
 
 from tcms.urls import urlpatterns
 
 
 urlpatterns += [
-    url('', include('social_django.urls', namespace='social')),
+    re_path(r'', include('social_django.urls', namespace='social')),
 ]
