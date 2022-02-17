@@ -7,7 +7,7 @@ docker network create enterprise_default || echo "Moving on"
 
 docker run --rm -d -p 8080:8080 --name keycloak_server \
     --network=enterprise_default \
-    -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak
+    -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin quay.io/keycloak/keycloak:16.1.1
 
 sleep 10
 
