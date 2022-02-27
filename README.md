@@ -99,7 +99,7 @@ Changelog
 - Based on Kiwi TCMS v11.0
 - Update kiwitcms-tenants from 1.8.0 to 1.11.0
 
-### v10.5-mt (05 January 2022)
+### v10.5.1-mt (05 January 2022)
 
 - Based on Kiwi TCMS v10.5
 - Update django-python3-ldap from 0.13.0 to 0.13.1
