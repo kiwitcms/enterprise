@@ -86,7 +86,7 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
-### v11.1-mt (02 January 2022)
+### v11.1-mt (02 February 2022)
 
 - Based on Kiwi TCMS v11.1
 - Update kiwitcms-github-app from 1.3.2 to 1.3.3
