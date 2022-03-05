@@ -17,5 +17,9 @@ RUN rm -rf /venv/lib64/python3.8/site-packages/tcms/node_modules/c3/htdocs/ \
            /venv/lib64/python3.8/site-packages/tcms/node_modules/bootstrap-touchspin/demo/ \
            /venv/lib64/python3.8/site-packages/django_tenants/templates/admin/index.html
 
+# create missing source-map files. Not critical for UI functionality, see:
+# https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Use_a_source_map
+RUN touch /venv/lib64/python3.8/site-packages/tcms/node_modules/bootstrap-slider/dependencies/js/jquery.min.map
+
 # collect static files again
 RUN /Kiwi/manage.py collectstatic --clear --link --noinput
