@@ -25,7 +25,7 @@ KIWI_VERSION = f"{__version__}-Enterprise"
 
 # provides filename versioning
 STATICFILES_STORAGE = \
-    'tcms_enterprise.storage.ManifestStaticFilesStorage'
+    'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'tcms_enterprise.root_urls'
 
