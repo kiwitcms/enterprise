@@ -18,7 +18,12 @@ jobs:
       - run: python3 --version
       # fail if not using Python 3
       - run: python3 --version | grep "3\."
-      - run: pip install twine
+      - run: |
+          sudo apt-get update
+          sudo apt-get install libkrb5-dev libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+          pip3 install -U pip setuptools wheel
+          pip3 install -r devel.txt
+
       - run: |
           git clone https://github.com/kiwitcms/Kiwi
           make -C Kiwi/ docker-image
