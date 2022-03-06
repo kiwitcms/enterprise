@@ -33,10 +33,6 @@ docker-image: build build-gssapi build-xmlsec
 	docker build -t quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) .
 	docker tag quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) quay.io/kiwitcms/enterprise:latest
 
-	# tag the regular version so we can provide versioned images to enterprise customers
-	# so they can upgrade from kiwitcms/kiwi:latest before migrating to kiwitcms-enteprise
-	docker tag kiwitcms/kiwi:latest quay.io/kiwitcms/version:$(KIWI_VERSION)
-
 
 .PHONY: flake8
 flake8:
