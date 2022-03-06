@@ -1,0 +1,26 @@
+name: changelog
+
+on:
+  pull_request:
+    paths:
+      - 'setup.**'
+      - 'README.**'
+
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: check-source-branch-and-modified-files
+      run: |
+        echo "INFO: source branch is: ${{ github.head_ref }}"
+
+        # if this PR modifies README.md or setup.py file it needs to come from a branch
+        # that follows the pattern 'prepare/vX.Y' b/c we want to run some extra jobs for such branches!
+        if [[ ! "${{ github.head_ref }}" =~ "^prepare/v.+$" ]]; then
+            echo "FAIL: Modifications to README.md or setup.py are only accepted from 'prepate/vX.Y' branches!"
+            echo "INFO: Otherwise aarch64 jobs in Circle CI will not be executed."
+            exit 1
+        fi
