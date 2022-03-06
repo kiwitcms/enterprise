@@ -5,8 +5,8 @@ ENTERPRISE_VERSION=$(KIWI_VERSION)-mt
 .PHONY: build
 build:
 	sudo rm -rf dist/ build/ *.egg-info/
-	python setup.py sdist
-	python setup.py bdist_wheel
+	python3 setup.py sdist
+	python3 setup.py bdist_wheel
 	twine check dist/*
 
 
