@@ -19,6 +19,10 @@ jobs:
       # fail if not using Python 3
       - run: python3 --version | grep "3\."
       - run: pip install twine
+      - run: |
+          git clone https://github.com/kiwitcms/Kiwi
+          make -C Kiwi/ docker-image
+
       - run: make docker-image
 
 # Invoke jobs via workflows
