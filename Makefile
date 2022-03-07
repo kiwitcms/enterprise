@@ -39,6 +39,22 @@ docker-image: build build-gssapi build-xmlsec
 	docker tag quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) quay.io/kiwitcms/enterprise:latest
 
 
+.PHONY: docker-manifest
+docker-manifest:
+	# versioned manifest
+	docker manifest create \
+	    quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) \
+	    quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-x86_64 \
+	    quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-aarch64
+	docker manifest push quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION)
+	# latest manifest
+	docker manifest create \
+	    quay.io/kiwitcms/enterprise:latest \
+	    quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-x86_64 \
+	    quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-aarch64
+	docker manifest push quay.io/kiwitcms/enterprise:latest
+
+
 .PHONY: flake8
 flake8:
 	@flake8 --exclude=.git *.py tcms_enterprise tcms_settings_dir
