@@ -35,12 +35,13 @@ jobs:
         run: |
             VERSION=$(make echo-version)
 
+            echo "${{ secrets.QUAY_PUSH_TOKEN }}" | docker login -u="${{ secrets.QUAY_PUSH_USERNAME }}" --password-stdin quay.io
+
             make docker-image
             docker tag quay.io/kiwitcms/enterprise:$VERSION quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
 
             echo "+++++ Docker images +++++"
             docker images
 
-            echo "${{ secrets.QUAY_PUSH_TOKEN }}" | docker login -u="${{ secrets.QUAY_PUSH_USERNAME }}" --password-stdin quay.io
             docker push quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
             docker logout quay.io

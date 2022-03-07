@@ -28,7 +28,12 @@ jobs:
           git clone https://github.com/kiwitcms/Kiwi
           make -C Kiwi/ docker-image
 
-      - run: make docker-image
+      - run: |
+          echo "$QUAY_PUSH_TOKEN" | docker login -u="$QUAY_PUSH_USERNAME" --password-stdin quay.io
+
+          make docker-image
+
+          docker logout quay.io
 
   aarch64-tag-and-push-docker-image:
     machine:
