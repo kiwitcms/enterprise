@@ -26,6 +26,11 @@ jobs:
           pip install -U pip setuptools wheel
           pip install -r devel.txt
 
+      - name: Build intermediary kiwitcms/kiwi image
+        run: |
+          git clone https://github.com/kiwitcms/Kiwi
+          make -C Kiwi/ docker-image
+
       - name: Build & push docker images for ${{ github.event.ref }}
         run: |
             VERSION=$(make echo-version)
