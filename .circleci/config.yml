@@ -30,6 +30,28 @@ jobs:
 
       - run: make docker-image
 
+  aarch64-tag-and-push-docker-image:
+    machine:
+      # https://circleci.com/docs/2.0/configuration-reference/#available-machine-images
+      image: ubuntu-2004:202111-02
+    resource_class: arm.medium
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    steps:
+      - checkout
+      - run: |
+            # images already built by previous step, see workflow requires:
+
+            VERSION=$(make echo-version)
+            docker tag quay.io/kiwitcms/enterprise:$VERSION quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
+
+            echo "+++++ Docker images +++++"
+            docker images
+
+            echo "$QUAY_PUSH_TOKEN" | docker login -u="$QUAY_PUSH_USERNAME" --password-stdin quay.io
+            docker push quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
+            docker logout quay.io
+
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -38,3 +60,23 @@ workflows:
       matches: { pattern: "^prepare/v.+$", value: << pipeline.git.branch >> }
     jobs:
       - aarch64-build-docker-image
+
+  aarch64-docker-release:
+    jobs:
+      - aarch64-build-docker-image:
+          filters:
+            tags:
+              only: /^v.+$/
+            branches:
+              ignore: /.*/
+
+      - aarch64-tag-and-push-docker-image:
+          requires:
+            - aarch64-build-docker-image
+          context:
+            - docker-repository-secrets
+          filters:
+            tags:
+              only: /^v.+$/
+            branches:
+              ignore: /.*/

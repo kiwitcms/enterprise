@@ -2,6 +2,11 @@
 KIWI_VERSION=11.1
 ENTERPRISE_VERSION=$(KIWI_VERSION)-mt
 
+.PHONY: echo-version
+echo-version:
+	@echo $(ENTERPRISE_VERSION)
+
+
 .PHONY: build
 build:
 	sudo rm -rf dist/ build/ *.egg-info/
