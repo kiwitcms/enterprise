@@ -1,4 +1,5 @@
-FROM kiwitcms/kiwi
+ARG KIWI_VERSION=latest
+FROM quay.io/kiwitcms/version:$KIWI_VERSION
 
 USER 0
 RUN microdnf --nodocs install krb5-libs xmlsec1 xmlsec1-openssl && \

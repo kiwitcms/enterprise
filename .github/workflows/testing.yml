@@ -39,9 +39,19 @@ jobs:
         git clone https://github.com/kiwitcms/Kiwi
         make -C Kiwi/ docker-image
 
+    - name: Login to Quay.io
+      if: matrix.command == 'docker-image'
+      run: |
+        echo "${{ secrets.QUAY_PUSH_TOKEN }}" | docker login -u="${{ secrets.QUAY_PUSH_USERNAME }}" --password-stdin quay.io
+
     - name: make ${{ matrix.command }}
       run: |
         make ${{ matrix.command }}
+
+    - name: Logout of Quay.io
+      if: matrix.command == 'docker-image'
+      run: |
+        docker logout quay.io
 
     - name: Setup - start and configure Keycloak server
       if: matrix.command == 'docker-image'

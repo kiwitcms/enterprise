@@ -1,6 +1,5 @@
-# *WARNING:* don't forget to update version in setup.py
-KIWI_VERSION=11.1
-ENTERPRISE_VERSION=$(KIWI_VERSION)-mt
+KIWI_VERSION=$(shell python3 setup.py --version)
+ENTERPRISE_VERSION=$(KIWI_VERSION)-mt-EXPERIMENT
 
 .PHONY: echo-version
 echo-version:
@@ -35,7 +34,7 @@ build-xmlsec:
 .PHONY: docker-image
 docker-image: build build-gssapi build-xmlsec
 	# everything else below is Enterprise + multi-tenant
-	docker build -t quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) .
+	docker build --build-arg KIWI_VERSION=$(KIWI_VERSION) -t quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) .
 	docker tag quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) quay.io/kiwitcms/enterprise:latest
 
 
