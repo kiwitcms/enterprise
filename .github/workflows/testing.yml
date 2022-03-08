@@ -32,13 +32,6 @@ jobs:
         pip install -U pip setuptools wheel
         pip install -r devel.txt
 
-    # only until a new upstream version with 3.8 support is released
-    - name: Build intermediary kiwitcms/kiwi image
-      if: matrix.command == 'docker-image'
-      run: |
-        git clone https://github.com/kiwitcms/Kiwi
-        make -C Kiwi/ docker-image
-
     - name: Login to Quay.io
       if: matrix.command == 'docker-image'
       run: |
