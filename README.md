@@ -86,6 +86,24 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v11.2-mt (09 March 2022)
+
+- Based on Kiwi TCMS v11.2
+- Update django-ses from 2.4.0 to 2.6.0
+- Update python3-saml from 1.13.0 to 1.14.0
+- Revert "Use django.contrib.staticfiles.storage from Django==3.2.12".
+  Instead use the implementation from latest Django version. Closes
+  [Issue #140](https://github.com/kiwitcms/enterprise/issues/140)
+- Start building kiwitcms/enterprise on aarch64
+- Add changelog check & docker release automation
+- Add test for PSA login URLs on login page. References
+  [Issue #83](https://github.com/kiwitcms/enterprise/issues/83)
+- Add SAML & Azure AD logo images
+- Update GitHub Actions
+- Hard-code testing with Keycloak 16.1.1 to workaround significant differences
+  with Keycloak v17 container
+
+
 ### v11.1-mt (02 February 2022)
 
 - Based on Kiwi TCMS v11.1
