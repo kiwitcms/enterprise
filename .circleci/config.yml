@@ -25,10 +25,6 @@ jobs:
           pip3 install -r devel.txt
 
       - run: |
-          git clone https://github.com/kiwitcms/Kiwi
-          make -C Kiwi/ docker-image
-
-      - run: |
           echo "$QUAY_PUSH_TOKEN" | docker login -u="$QUAY_PUSH_USERNAME" --password-stdin quay.io
 
           make docker-image
