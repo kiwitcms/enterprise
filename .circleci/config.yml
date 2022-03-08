@@ -74,8 +74,6 @@ workflows:
       - aarch64-tag-and-push-docker-image:
           requires:
             - aarch64-build-docker-image
-          context:
-            - docker-repository-secrets
           filters:
             tags:
               only: /^v.+$/
