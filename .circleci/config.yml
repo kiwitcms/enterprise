@@ -31,7 +31,7 @@ jobs:
 
           docker logout quay.io
 
-  aarch64-tag-and-push-docker-image:
+  aarch64-build-and-push-docker-image:
     machine:
       # https://circleci.com/docs/2.0/configuration-reference/#available-machine-images
       image: ubuntu-2004:202111-02
@@ -40,18 +40,29 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
+      - run: uname -a
+      - run: python3 --version
+      # fail if not using Python 3
+      - run: python3 --version | grep "3\."
       - run: |
-            # images already built by previous step, see workflow requires:
+          sudo apt-get update
+          sudo apt-get install libkrb5-dev libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+          pip3 install -U pip setuptools wheel
+          pip3 install -r devel.txt
 
-            VERSION=$(make echo-version)
-            docker tag quay.io/kiwitcms/enterprise:$VERSION quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
+      - run: |
+          echo "$QUAY_PUSH_TOKEN" | docker login -u="$QUAY_PUSH_USERNAME" --password-stdin quay.io
 
-            echo "+++++ Docker images +++++"
-            docker images
+          make docker-image
 
-            echo "$QUAY_PUSH_TOKEN" | docker login -u="$QUAY_PUSH_USERNAME" --password-stdin quay.io
-            docker push quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
-            docker logout quay.io
+          VERSION=$(make echo-version)
+          docker tag quay.io/kiwitcms/enterprise:$VERSION quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
+
+          echo "+++++ Docker images +++++"
+          docker images
+
+          docker push quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
+          docker logout quay.io
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -64,16 +75,7 @@ workflows:
 
   aarch64-docker-release:
     jobs:
-      - aarch64-build-docker-image:
-          filters:
-            tags:
-              only: /^v.+$/
-            branches:
-              ignore: /.*/
-
-      - aarch64-tag-and-push-docker-image:
-          requires:
-            - aarch64-build-docker-image
+      - aarch64-build-and-push-docker-image:
           filters:
             tags:
               only: /^v.+$/
