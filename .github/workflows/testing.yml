@@ -84,7 +84,7 @@ jobs:
 
     - name: Archive page.html
       if: matrix.command == 'docker-image'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: page.html
         path: page.html
@@ -162,7 +162,7 @@ jobs:
 
     - name: Archive Keycloak JSON files
       if: matrix.command == 'docker-image'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: kc-json-files
         path: ./*.json
