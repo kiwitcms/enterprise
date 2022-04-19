@@ -4,7 +4,8 @@ import os
 # enable additional authentication backends
 # so we can perform some sanity testing
 
-AUTHENTICATION_BACKENDS = [
+
+for backend in (
     'social_core.backends.fedora.FedoraOpenId',
     'social_core.backends.github.GithubAppAuth',
     'social_core.backends.github.GithubOAuth2',
@@ -14,10 +15,9 @@ AUTHENTICATION_BACKENDS = [
     'social_auth_kerberos.backend.KerberosAuth',
 
     'django_python3_ldap.auth.LDAPBackend',
-
-    'django.contrib.auth.backends.ModelBackend',
-    'guardian.backends.ObjectPermissionBackend',
-]
+):
+    if backend not in AUTHENTICATION_BACKENDS:       # noqa: F821
+        AUTHENTICATION_BACKENDS.insert(0, backend)   # noqa: F821
 
 
 if 'django_python3_ldap' not in INSTALLED_APPS:   # noqa: F821
