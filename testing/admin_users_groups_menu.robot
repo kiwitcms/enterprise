@@ -8,13 +8,13 @@ ${BROWSER}              Headless Firefox
 ${DELAY}                0
 ${LOGIN_URL}            ${SERVER}/accounts/login/
 ${DASHBOARD_URL}        ${SERVER}/
-${USER_GROUP_URL}       ${SERVER}/accounts/users-and-groups/
-${ADMIN_URL}            ${SERVER}/admin/auth/
+${USER_NAV_URL}         ${SERVER}/accounts/admin-users/
+${ADMIN_URL}            ${SERVER}/admin/auth/user/
 ${USERS_URL}            ${SERVER}/admin/tcms_tenants/tenant_authorized_users/
 
 
 *** Test Cases ***
-When Superuser Clicks Menu Is Redirected To Admin
+When Superuser Clicks User Menu Is Redirected To Admin Panel
     Open Browser    ${LOGIN_URL}    ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed    ${DELAY}
@@ -27,14 +27,14 @@ When Superuser Clicks Menu Is Redirected To Admin
     Location Should Be    ${DASHBOARD_URL}
     Title Should Be       Kiwi TCMS - Dashboard
 
-    Go To                 ${USER_GROUP_URL}
+    Go To                 ${USER_NAV_URL}
     Location Should Be    ${ADMIN_URL}
-    Title Should Be       Authentication and Authorization administration | Grappelli
+    Title Should Be       Select user to change | Grappelli
 
     [Teardown]    Close Browser
 
 
-When Regular User Clicks Menu Is Redirected To Authorized Users
+When Regular User Clicks User Menu Is Redirected To Authorized Users
     Open Browser    ${LOGIN_URL}    ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed    ${DELAY}
@@ -48,7 +48,7 @@ When Regular User Clicks Menu Is Redirected To Authorized Users
     Location Should Be    ${DASHBOARD_URL}
     Title Should Be       Kiwi TCMS - Dashboard
 
-    Go To                 ${USER_GROUP_URL}
+    Go To                 ${USER_NAV_URL}
     Location Should Be    ${USERS_URL}
     Title Should Be       Select tenant-user relationship to change | Grappelli
 
