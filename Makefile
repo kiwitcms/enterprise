@@ -1,5 +1,5 @@
 KIWI_VERSION=$(shell python3 setup.py --version)
-ENTERPRISE_VERSION=$(KIWI_VERSION)-mt
+ENTERPRISE_VERSION=11.3.1-mt
 
 .PHONY: echo-version
 echo-version:
