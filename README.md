@@ -86,6 +86,13 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v11.3.1-mt (27 April 2022)
+
+- Based on Kiwi TCMS v11.3
+- Update kiwitcms-tenants from 2.1.0 to 2.1.1 to fix a bug in
+  tenant groups admin page
+
+
 ### v11.3-mt (27 April 2022)
 
 - Based on Kiwi TCMS v11.3
