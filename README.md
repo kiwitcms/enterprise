@@ -86,6 +86,17 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v11.4-mt (03 Aug 2022)
+
+- Based on Kiwi TCMS v11.4
+- Update django-python3-ldap from 0.13.1 to 0.15.2
+- Update django-ses from 3.0.1 to 3.1.0
+- Update dj-database-url from 0.5.0 to 1.0.0
+- Add more icons for extra GitHub login backends
+- Add images for various Google login backends
+
+
+
 ### v11.3.1-mt (27 April 2022)
 
 - Based on Kiwi TCMS v11.3
