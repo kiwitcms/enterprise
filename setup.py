@@ -25,7 +25,7 @@ def get_install_requires(path):
 
 setup(
     name='kiwitcms-enterprise',
-    version='11.4',
+    version='11.5',
     description='Kiwi TCMS Enterprise Edition',
     long_description=get_long_description(),
     long_description_content_type='text/markdown',
