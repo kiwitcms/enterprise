@@ -86,6 +86,16 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v11.5-mt (06 Sep 2022)
+
+- Based on Kiwi TCMS v11.5
+- Update django-python3-ldap from 0.15.2 to 0.15.3
+- Update django-ses from 3.1.0 to 3.1.2
+- Update kiwitcms-tenants from 2.1.1 to 2.3.0
+- Update kiwitcms-github-app from 1.3.3 to 1.4.0
+
+
+
 ### v11.4-mt (03 Aug 2022)
 
 - Based on Kiwi TCMS v11.4
