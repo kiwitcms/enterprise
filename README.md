@@ -20,6 +20,8 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
   - [kiwitcms-github-app](https://github.com/kiwitcms/github-app/) - extra integration
     with GitHub
   - [kiwitcms-tenants](https://github.com/kiwitcms/tenants/) - multi-tenant support
+  - [kiwitcms-trackers-integration](https://github.com/kiwitcms/trackers-integration/) -
+    integration with extra issue trackers
   - [raven](https://github.com/getsentry/raven-python) - automatic error logs via Sentry
   - [social-auth-app-django](https://github.com/python-social-auth/social-app-django) -
     extra [authentication backends](http://python-social-auth.readthedocs.io/en/latest/backends/index.html#supported-backends)

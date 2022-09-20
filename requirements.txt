@@ -3,6 +3,7 @@ django-ses==3.1.2
 dj-database-url==1.0.0
 kiwitcms-github-app==1.4.0
 kiwitcms-tenants==2.3.1
+kiwitcms-trackers-integration==0.2.0
 raven==6.10.0
 social-auth-app-django==5.0.0
 social-auth-kerberos==0.2.4
