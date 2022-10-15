@@ -1,7 +1,7 @@
-FROM quay.io/centos/centos:stream8
+FROM quay.io/centos/centos:stream9
 
-RUN sed -i "s/enabled=0/enabled=1/" /etc/yum.repos.d/CentOS-Stream-PowerTools.repo && \
-    dnf -y install gcc python38-devel xmlsec1-devel xmlsec1-openssl-devel libtool-ltdl-devel && \
+RUN sed -i "s/enabled=0/enabled=1/" /etc/yum.repos.d/centos.repo && \
+    dnf -y install gcc python3-devel xmlsec1-devel xmlsec1-openssl-devel libtool-ltdl-devel && \
     dnf -y update
 
 ENV PATH /venv/bin:${PATH} \

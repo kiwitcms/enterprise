@@ -1,7 +1,7 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal
+FROM registry.access.redhat.com/ubi9-minimal
 
-RUN microdnf install gcc krb5-devel python38-devel && \
-    microdnf update
+RUN microdnf -y install gcc krb5-devel python3-devel && \
+    microdnf -y update
 
 ENV PATH /venv/bin:${PATH} \
     VIRTUAL_ENV /venv

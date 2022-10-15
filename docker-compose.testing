@@ -28,7 +28,7 @@ services:
             - openldap_server
         restart: always
         volumes:
-            - ./test_settings.py:/venv/lib64/python3.8/site-packages/tcms_settings_dir/test_settings.py:z,ro
+            - ./test_settings.py:/venv/lib64/python3.9/site-packages/tcms_settings_dir/test_settings.py:z,ro
         environment:
             KIWI_TENANTS_DOMAIN: testing.example.bg
             DATABASE_URL: postgres://dummy_usr:dummy_s3cr3t@db:5432/dummy_db

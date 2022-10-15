@@ -16,7 +16,7 @@ build:
 
 .PHONY: build-gssapi
 build-gssapi:
-	docker pull registry.access.redhat.com/ubi8/ubi-minimal
+	docker pull registry.access.redhat.com/ubi9-minimal
 	docker build -t kiwitcms/gssapi-buildroot -f Dockerfile.gssapi .
 	docker run --rm --security-opt label=disable \
 	    -v `pwd`/dist/:/host kiwitcms/gssapi-buildroot /bin/bash -c 'cp /dist/*.whl /host/'
@@ -24,7 +24,7 @@ build-gssapi:
 
 .PHONY: build-xmlsec
 build-xmlsec:
-	docker pull quay.io/centos/centos:stream8
+	docker pull quay.io/centos/centos:stream9
 	docker build -t kiwitcms/xmlsec-buildroot -f Dockerfile.xmlsec .
 	docker run --rm --security-opt label=disable \
 	    -v `pwd`/dist/:/host kiwitcms/xmlsec-buildroot /bin/bash -c 'cp /dist/*.whl /host/'

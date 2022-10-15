@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: [3.8]
+        python-version: [3.9]
         command: [flake8, pylint, docker-image]
 
     steps:
@@ -80,8 +80,8 @@ jobs:
       if: matrix.command == 'docker-image'
       run: |
         # need to monkey-patch createsuperuser.py b/c it rejects input when not using a TTY
-        docker exec -i web sed -i "s/raise NotRunningInTTYException/pass/" /venv/lib64/python3.8/site-packages/django/contrib/auth/management/commands/createsuperuser.py
-        docker exec -i web sed -i "s/getpass.getpass/input/" /venv/lib64/python3.8/site-packages/django/contrib/auth/management/commands/createsuperuser.py
+        docker exec -i web sed -i "s/raise NotRunningInTTYException/pass/" /venv/lib64/python3.9/site-packages/django/contrib/auth/management/commands/createsuperuser.py
+        docker exec -i web sed -i "s/getpass.getpass/input/" /venv/lib64/python3.9/site-packages/django/contrib/auth/management/commands/createsuperuser.py
         echo -e "super-root\nroot@example.com\nsecret\nsecret\ntesting.example.bg\n" | docker exec -i web /Kiwi/manage.py initial_setup
 
     - name: Sanity test - download login page
