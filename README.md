@@ -88,6 +88,20 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v11.6-mt (08 Nov 2022)
+
+- Based on Kiwi TCMS v11.6
+- Update containers for RHEL 9, CentOS Stream 9 and Python 3.9
+- Update actions/checkout from 2 to 3
+- Update django-ses from 3.1.2 to 3.2.2
+- Update kiwitcms-tenants from 2.3.1 to 2.3.2
+- Update kiwitcms-trackers-integration from 0.2.0 to 0.3.0.
+  Supports integration with OpenProject and Mantis BT. Closes
+  `Issue #2203 <https://github.com/kiwitcms/Kiwi/issues/2203>`_ and
+  `Issue #879 <https://github.com/kiwitcms/Kiwi/issues/879>`_
+
+
+
 ### v11.5.1-mt (10 Sep 2022)
 
 - Update kiwitcms-tenants from 2.3.0 to 2.3.1
