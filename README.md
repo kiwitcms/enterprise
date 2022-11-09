@@ -97,8 +97,8 @@ Changelog
 - Update kiwitcms-tenants from 2.3.1 to 2.3.2
 - Update kiwitcms-trackers-integration from 0.2.0 to 0.3.0.
   Supports integration with OpenProject and Mantis BT. Closes
-  `Issue #2203 <https://github.com/kiwitcms/Kiwi/issues/2203>`_ and
-  `Issue #879 <https://github.com/kiwitcms/Kiwi/issues/879>`_
+  [Issue #2203](<https://github.com/kiwitcms/Kiwi/issues/2203>) and
+  [Issue #879](<https://github.com/kiwitcms/Kiwi/issues/879>)
 
 
 
