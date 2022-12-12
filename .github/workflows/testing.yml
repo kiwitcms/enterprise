@@ -131,8 +131,8 @@ jobs:
 
         # import users from the local config file and query the LDAP server
         sudo apt-get install ldap-utils
-        ldapadd -x -h $LDAP_ADDRESS -p 389 -D cn=Manager,dc=example,dc=com -w admin -f testing/ldap.ldif
-        ldapsearch -x -LLL -h $LDAP_ADDRESS -p 389 -b dc=example,dc=com objectClass=person
+        ldapadd -x -H ldap://$LDAP_ADDRESS:389 -D cn=Manager,dc=example,dc=com -w admin -f testing/ldap.ldif
+        ldapsearch -x -LLL -H ldap://$LDAP_ADDRESS:389 -b dc=example,dc=com objectClass=person
 
         # Now install RobotFramework so we can drive the browser automatically
         pip install robotframework robotframework-seleniumlibrary
