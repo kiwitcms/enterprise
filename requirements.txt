@@ -1,4 +1,4 @@
-django-python3-ldap==0.15.3
+django-python3-ldap==0.15.4
 django-ses==3.3.0
 dj-database-url==1.2.0
 kiwitcms-github-app==1.4.0
