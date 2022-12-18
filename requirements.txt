@@ -2,7 +2,7 @@ django-python3-ldap==0.15.3
 django-ses==3.3.0
 dj-database-url==1.2.0
 kiwitcms-github-app==1.4.0
-kiwitcms-tenants==2.3.2
+kiwitcms-tenants==2.4.0
 kiwitcms-trackers-integration==0.3.0
 raven==6.10.0
 social-auth-app-django==5.0.0
