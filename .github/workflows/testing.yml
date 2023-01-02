@@ -75,7 +75,7 @@ jobs:
         # need to monkey-patch createsuperuser.py b/c it rejects input when not using a TTY
         docker exec -i web sed -i "s/raise NotRunningInTTYException/pass/" /venv/lib64/python3.9/site-packages/django/contrib/auth/management/commands/createsuperuser.py
         docker exec -i web sed -i "s/getpass.getpass/input/" /venv/lib64/python3.9/site-packages/django/contrib/auth/management/commands/createsuperuser.py
-        echo -e "super-root\nroot@example.com\nsecret\nsecret\ntesting.example.bg\n" | docker exec -i web /Kiwi/manage.py initial_setup
+        echo -e "super-root\nroot@example.com\nsecret-2a9a34cd-e51d-4039-b709-b45f629a5595\nsecret-2a9a34cd-e51d-4039-b709-b45f629a5595\ntesting.example.bg\n" | docker exec -i web /Kiwi/manage.py initial_setup
 
     - name: Sanity test - download login page
       if: matrix.command == 'docker-image'

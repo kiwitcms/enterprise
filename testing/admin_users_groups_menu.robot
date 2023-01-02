@@ -21,7 +21,7 @@ When Superuser Clicks User Menu Is Redirected To Admin Panel
     Title Should Be    Kiwi TCMS - Login
 
     Input Text    inputUsername    super-root
-    Input Text    inputPassword    secret
+    Input Text    inputPassword    secret-2a9a34cd-e51d-4039-b709-b45f629a5595
     Click Button  Log in
 
     Location Should Be    ${DASHBOARD_URL}
