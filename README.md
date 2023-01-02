@@ -88,6 +88,20 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v11.7-mt (03 Jan 2023)
+
+- Based on Kiwi TCMS v11.7
+- Update dj-database-url from 1.0.0 to 1.2.0
+- Update django-python3-ldap from 0.15.3 to 0.15.4
+- Update django-ses from 3.2.2 to 3.3.0
+- Update kiwitcms-tenants from 2.3.2 to 2.4.0 to
+  allow customization of tenant logo in navigation
+- Update python3-saml from 1.14.0 to 1.15.0
+- Add CodeQL workflow for GitHub code scanning
+- Adjust ldap commands for Ubuntu 22.04.1 during testing in CI
+
+
+
 ### v11.6-mt (08 Nov 2022)
 
 - Based on Kiwi TCMS v11.6
