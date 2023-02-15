@@ -41,7 +41,7 @@ docker-image: build build-gssapi build-xmlsec
 .PHONY: docker-manifest
 docker-manifest:
 	# versioned manifest
-	docker manifest rm quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) || echo \
+	docker manifest rm quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) || echo
 	docker manifest create \
 	    quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) \
 	    quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-x86_64 \
@@ -49,7 +49,7 @@ docker-manifest:
 	docker manifest push quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION)
 
 	# latest manifest
-	docker manifest rm quay.io/kiwitcms/enterprise:latest || echo \
+	docker manifest rm quay.io/kiwitcms/enterprise:latest || echo
 	docker manifest create \
 	    quay.io/kiwitcms/enterprise:latest \
 	    quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-x86_64 \
