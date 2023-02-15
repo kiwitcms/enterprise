@@ -88,6 +88,14 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v12.0-mt (15 Feb 2023)
+
+- Based on Kiwi TCMS v12.0
+- Update kiwitcms-github-app from 1.4.0 to 1.4.1
+- Update kiwitcms-tenants from 2.4.0 to 2.5.0
+
+
+
 ### v11.7-mt (03 Jan 2023)
 
 - Based on Kiwi TCMS v11.7
