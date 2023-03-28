@@ -77,6 +77,11 @@ jobs:
         docker exec -i web sed -i "s/getpass.getpass/input/" /venv/lib64/python3.9/site-packages/django/contrib/auth/management/commands/createsuperuser.py
         echo -e "super-root\nroot@example.com\nsecret-2a9a34cd-e51d-4039-b709-b45f629a5595\nsecret-2a9a34cd-e51d-4039-b709-b45f629a5595\ntesting.example.bg\n" | docker exec -i web /Kiwi/manage.py initial_setup
 
+    - name: Sanity test - missing migrations
+      if: matrix.command == 'docker-image'
+      run: |
+        docker exec -i web /Kiwi/manage.py makemigrations --check
+
     - name: Sanity test - download login page
       if: matrix.command == 'docker-image'
       run: |
