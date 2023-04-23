@@ -88,6 +88,12 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v12.2-mt (23 Apr 2023)
+
+- Based on Kiwi TCMS v12.2
+- Update social-auth-app-django from 5.0.0 to 5.2.0
+
+
 ### v12.1-mt (29 Mar 2023)
 
 - Based on Kiwi TCMS v12.1
