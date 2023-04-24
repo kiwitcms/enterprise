@@ -6,6 +6,8 @@ on:
       - 'setup.**'
       - 'README.**'
 
+permissions: read-all
+
 jobs:
   acceptance:
     runs-on: ubuntu-latest
