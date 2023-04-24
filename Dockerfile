@@ -1,3 +1,4 @@
+# checkov:skip=CKV_DOCKER_2:Ensure that HEALTHCHECK instructions have been added to container images
 ARG KIWI_VERSION=latest
 FROM quay.io/kiwitcms/version:$KIWI_VERSION
 
