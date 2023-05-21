@@ -88,6 +88,16 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v12.3-mt (22 May 2023)
+
+- Based on Kiwi TCMS v12.3
+- Update dj-database-url from 1.3.0 to 2.0.0
+- Update django-ses from 3.3.0 to 3.5.0
+- Update kiwitcms-tenants from 2.5.0 to 2.5.1
+- Explicitly set permissions to read-all
+- Enable checkov linter
+
+
 ### v12.2-mt (23 Apr 2023)
 
 - Based on Kiwi TCMS v12.2
