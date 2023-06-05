@@ -88,6 +88,12 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v12.4-mt (06 Jun 2023)
+
+- Based on Kiwi TCMS v12.4
+- Update kiwitcms-trackers-integration from 0.4.0 to 0.5.0
+
+
 ### v12.3-mt (22 May 2023)
 
 - Based on Kiwi TCMS v12.3
