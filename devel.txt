@@ -6,4 +6,6 @@ pylint-django
 textdistance
 twine
 readme_renderer[md]
+robotframework
+robotframework-seleniumlibrary
 wheel
