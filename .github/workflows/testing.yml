@@ -142,7 +142,6 @@ jobs:
         ldapsearch -x -LLL -H ldap://$LDAP_ADDRESS:389 -b dc=example,dc=com objectClass=person
 
         # Now install RobotFramework so we can drive the browser automatically
-        pip install robotframework robotframework-seleniumlibrary
         if [ -z `which firefox` ]; then
             sudo apt-get install firefox
         fi
