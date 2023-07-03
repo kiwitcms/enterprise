@@ -17,6 +17,8 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
   - [django-ses](https://github.com/django-ses/django-ses) - Amazon SES email backend
   - [dj-database-url](https://github.com/jacobian/dj-database-url) - DB configuration
     via `DATABASE_URL`
+  - [django-prometheus](https://github.com/korfuri/django-prometheus) - Export Django
+    monitoring metrics for Prometheus.io
   - [kiwitcms-github-app](https://github.com/kiwitcms/github-app/) - extra integration
     with GitHub
   - [kiwitcms-tenants](https://github.com/kiwitcms/tenants/) - multi-tenant support
