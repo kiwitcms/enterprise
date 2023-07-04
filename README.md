@@ -90,6 +90,15 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+
+### v12.5-mt (04 Jul 2023)
+
+- Based on Kiwi TCMS v12.5
+- Update django-python3-ldap from 0.15.4 to 0.15.5
+- Install django-prometheus inside container
+- Pin Selenium to 4.9.1 b/c of failures with 4.10.0
+
+
 ### v12.4-mt (06 Jun 2023)
 
 - Based on Kiwi TCMS v12.4
