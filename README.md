@@ -90,6 +90,12 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v12.6.1-mt (31 Aug 2023)
+
+- Based on Kiwi TCMS v12.6.1
+- Update dj-database-url from 2.0.0 to 2.1.0
+
+
 
 ### v12.5-mt (04 Jul 2023)
 
