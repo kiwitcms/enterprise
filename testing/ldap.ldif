@@ -1,6 +1,7 @@
-dn: ou=People,dc=example,dc=com
-ou: People
-objectClass: organizationalUnit
+# b/c will be created when OpenLDAP initializes
+# dn: ou=People,dc=example,dc=com
+# ou: People
+# objectClass: organizationalUnit
 
 dn: uid=ldap_atodorov,ou=People,dc=example,dc=com
 cn: ldap_atodorov
