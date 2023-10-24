@@ -2,7 +2,7 @@
 
 flake8
 kiwitcms
-pylint-django
+pylint-django==2.5.3
 textdistance
 twine
 readme_renderer[md]
