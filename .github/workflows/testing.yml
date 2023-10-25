@@ -179,8 +179,23 @@ jobs:
         name: kc-json-files
         path: ./*.json
 
+    - name: Collect docker logs
+      if: always() && matrix.command == 'docker-image'
+      run: |
+        docker logs keycloak_server > keyclock_server.log
+        docker logs openldap_server > openldap_server.log
+        docker logs web > kiwitcms.log
+        docker logs db > database.log
+
+    - name: Upload logs
+      if: always() && matrix.command == 'docker-image'
+      uses: actions/upload-artifact@v3
+      with:
+        name: docker-logs
+        path: ./*.log
+
     - name: Sanity test - shut down the docker image
-      if: matrix.command == 'docker-image'
+      if: always() && matrix.command == 'docker-image'
       run: |
         docker kill keycloak_server
         docker-compose -f docker-compose.testing down
