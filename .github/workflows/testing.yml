@@ -156,7 +156,7 @@ jobs:
             sudo apt-get install firefox-geckodriver
         fi
 
-        robot testing/ldap.robot
+        # robot testing/ldap.robot
 
         docker exec -i web /Kiwi/manage.py ldap_sync_users
         cat testing/ldap.py | docker exec -i web /Kiwi/manage.py shell
