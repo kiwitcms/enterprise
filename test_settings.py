@@ -28,6 +28,21 @@ LDAP_AUTH_URL = "ldap://openldap_server:389"
 LDAP_AUTH_USE_TLS = True
 LDAP_AUTH_SEARCH_BASE = "ou=People,dc=example,dc=com"
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django_python3_ldap": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+    },
+}
 
 SOCIAL_AUTH_KEYCLOAK_KEY = 'kiwitcms-web-app'
 SOCIAL_AUTH_KEYCLOAK_SECRET = os.environ["KC_CLIENT_SECRET"]
