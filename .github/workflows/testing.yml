@@ -60,7 +60,7 @@ jobs:
       if: matrix.command == 'docker-image'
       run: |
         git clone https://github.com/kiwitcms/openldap.git
-        pushd openldap/ && git checkout openldap-2.4.41 && SKIP_SQUASH=1 make build && popd
+        pushd openldap/ && docker build -t kiwitcms/openldap-fedora34 -f images/Dockerfile . && popd
 
     - name: Sanity test - boot the docker image
       if: matrix.command == 'docker-image'
