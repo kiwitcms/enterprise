@@ -3,7 +3,7 @@ version: '2'
 services:
     openldap_server:
         container_name: openldap_server
-        image: openshift/openldap-2441-centos7
+        image: lokesh904/openldap-fedora34
         restart: always
         ports:
             - 389:389
