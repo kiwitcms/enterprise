@@ -95,21 +95,21 @@ Changelog
 - Based on Kiwi TCMS v12.7
 - Update kiwitcms-tenants from 2.5.1 to 2.5.2
 - Update kiwitcms-trackers-integration from 0.5.0 to 0.6.0
-    
+
     Provides functionality for personal API tokens. Accessible via
     PLUGINS -> Personal API tokens menu!
-    
+
     WARNING: in order for users to be able to define personal API tokens
     for 3rd party bug-trackers they will need to be assigned permissions.
-    
+
     Database administrators should consider granting the following
     permissions::
-        
+
         tracker_integrations | api token | Can add api token
         tracker_integrations | api token | Can change api token
         tracker_integrations | api token | Can delete api token
         tracker_integrations | api token | Can view api token
-    
+
     either individually per-user basis or via groups!
 
 - Update python3-saml from 1.15.0 to 1.16.0
