@@ -3,12 +3,12 @@
 # checkov:skip=CKV_DOCKER_7:Ensure the base image uses a non latest version tag
 FROM registry.access.redhat.com/ubi9-minimal
 
-RUN microdnf -y install gcc krb5-devel python3-devel && \
+RUN microdnf -y install gcc krb5-devel python3.11-devel && \
     microdnf -y update
 
 ENV PATH /venv/bin:${PATH} \
     VIRTUAL_ENV /venv
 
-RUN python3 -m venv /venv
+RUN python3.11 -m venv /venv
 RUN pip3 install --no-cache-dir --upgrade pip wheel
 RUN pip3 wheel --no-deps --wheel-dir /dist gssapi
