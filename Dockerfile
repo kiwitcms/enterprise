@@ -14,16 +14,16 @@ RUN pip install --no-cache-dir --find-links /Kiwi/dist/ /Kiwi/dist/kiwitcms_ente
 # woraround broken CSS which will break collectstatic
 # because they refer to non-existing ../fonts/glyphicons-halflings-regular.eot (no fonts/ directory)
 # remove django_tenants/templates/admin/index.html b/c it is ugly and b/c we use grapelli
-RUN rm -rf /venv/lib64/python3.9/site-packages/tcms/node_modules/c3/htdocs/ \
-           /venv/lib64/python3.9/site-packages/tcms/node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker-standalone.css \
-           /venv/lib64/python3.9/site-packages/tcms/node_modules/bootstrap-touchspin/demo/ \
-           /venv/lib64/python3.9/site-packages/django_tenants/templates/admin/index.html
+RUN rm -rf /venv/lib64/python3.11/site-packages/tcms/node_modules/c3/htdocs/ \
+           /venv/lib64/python3.11/site-packages/tcms/node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker-standalone.css \
+           /venv/lib64/python3.11/site-packages/tcms/node_modules/bootstrap-touchspin/demo/ \
+           /venv/lib64/python3.11/site-packages/django_tenants/templates/admin/index.html
 
 # create missing source-map files. Not critical for UI functionality, see:
 # https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Use_a_source_map
-RUN touch /venv/lib64/python3.9/site-packages/tcms/node_modules/bootstrap-slider/dependencies/js/jquery.min.map \
-          /venv/lib64/python3.9/site-packages/tcms/node_modules/pdfmake/build/FileSaver.min.js.map \
-          /venv/lib64/python3.9/site-packages/tcms/node_modules/pdfmake/build/main.cjs.map
+RUN touch /venv/lib64/python3.11/site-packages/tcms/node_modules/bootstrap-slider/dependencies/js/jquery.min.map \
+          /venv/lib64/python3.11/site-packages/tcms/node_modules/pdfmake/build/FileSaver.min.js.map \
+          /venv/lib64/python3.11/site-packages/tcms/node_modules/pdfmake/build/main.cjs.map
 
 # collect static files again
 RUN /Kiwi/manage.py collectstatic --clear --link --noinput
