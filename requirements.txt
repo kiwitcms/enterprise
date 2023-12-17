@@ -7,5 +7,5 @@ kiwitcms-tenants==2.5.2
 kiwitcms-trackers-integration==0.6.0
 raven==6.10.0
 social-auth-app-django==5.4.0
-social-auth-kerberos==0.2.4
+social-auth-kerberos==0.3.0
 python3-saml==1.16.0
