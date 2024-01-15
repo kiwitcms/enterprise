@@ -113,9 +113,11 @@ jobs:
         cat page.html | grep "or Continue With"
 
         # social backends are listed
-        for ICON in static.d/images/social_auth/backends/*.png; do
-            BACKEND=`basename $ICON | sed 's/.png//'`
-
+        # for ICON in tcms_enterprise/static/images/social_auth/backends/*.png; do
+        #    BACKEND=`basename $ICON | sed 's/.png//'`
+        # check only the backends enabled in test_settings.py b/c the directory above
+        # contains more images than backends which can be enabled during testing
+        for BACKEND in kerberos keycloak gitlab github github-app fedora; do
             cat page.html | grep "/login/$BACKEND/"
             cat page.html | grep "<img src='/static/images/social_auth/backends/$BACKEND.*.png'"
         done
