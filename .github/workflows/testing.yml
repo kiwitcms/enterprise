@@ -105,6 +105,7 @@ jobs:
         cat page.html | grep "Version.*-Enterprise"
 
         # plugins are listed
+        cat page.html | grep 'href="/admin/trackers_integration/apitoken/'
         cat page.html | grep 'href="/kiwitcms_tenants/'
         cat page.html | grep 'href="/kiwitcms_github_app/'
 
