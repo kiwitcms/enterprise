@@ -2,7 +2,7 @@ django-prometheus==2.3.1
 django-python3-ldap==0.15.5
 django-ses==3.5.2
 dj-database-url==2.1.0
-kiwitcms-github-app==1.5.1
+kiwitcms-github-app==1.6.0
 kiwitcms-tenants==2.6.0
 kiwitcms-trackers-integration==0.7.0
 raven==6.10.0
