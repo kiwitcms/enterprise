@@ -12,14 +12,14 @@ services:
 
     db:
         container_name: db
-        image: centos/postgresql-12-centos7
+        image: postgres:latest
         restart: always
         volumes:
-            - db_data:/var/lib/pgsql/data
+            - db_data:/var/lib/postgresql/data
         environment:
-            POSTGRESQL_DATABASE: dummy_db
-            POSTGRESQL_USER: dummy_usr
-            POSTGRESQL_PASSWORD: dummy_s3cr3t
+            POSTGRES_DB: dummy_db
+            POSTGRES_USER: dummy_usr
+            POSTGRES_PASSWORD: dummy_s3cr3t
 
     web:
         container_name: web
