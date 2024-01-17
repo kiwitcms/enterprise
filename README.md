@@ -90,6 +90,20 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v13.0-mt (17 Jan 2024)
+
+- Based on Kiwi TCMS v13.0
+- Update container runtime from Python 3.9 to Python 3.11
+- Update django-ses from 3.5.0 to 3.5.2
+- Update kiwitcms-github-app from 1.5.1 to 1.6.0
+- Update kiwitcms-tenants from 2.5.2 to 2.6.0
+- Update kiwitcms-trackers-integration from 0.6.0 to 0.7.0
+- Update social-auth-kerberos from 0.2.4 to 0.3.0
+- Start testing with upstream Postgres container image
+- Assert that Personal API Tokens is listed in PLUGINS menu
+- Adjust search path for images during test
+
+
 ### v12.7-mt (25 Nov 2023)
 
 - Based on Kiwi TCMS v12.7
