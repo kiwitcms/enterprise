@@ -3,7 +3,23 @@ ARG KIWI_VERSION=latest
 FROM quay.io/kiwitcms/version:$KIWI_VERSION
 
 USER 0
+RUN curl https://openresty.org/package/rhel/openresty2.repo > /etc/yum.repos.d/openresty2.repo
+# WARNING: in case there are permission issues with the newly created directories
+# see: https://github.com/openresty/docker-openresty/issues/119
 RUN microdnf -y --nodocs install krb5-libs xmlsec1 xmlsec1-openssl && \
+    microdnf -y remove "nginx-*" && microdnf -y --nodocs install openresty && \
+    mkdir /etc/nginx                                  && \
+    mkdir -p /usr/share/nginx/modules/                && \
+    mkdir /usr/local/openresty/nginx/client_body_temp && \
+    mkdir /usr/local/openresty/nginx/fastcgi_temp     && \
+    mkdir /usr/local/openresty/nginx/proxy_temp       && \
+    mkdir /usr/local/openresty/nginx/scgi_temp        && \
+    mkdir /usr/local/openresty/nginx/uwsgi_temp       && \
+    ln -s /usr/bin/openresty /usr/sbin/nginx          && \
+    ln -s /usr/local/openresty/nginx/conf/mime.types   /etc/nginx/mime.types   && \
+    ln -s /usr/local/openresty/nginx/conf/uwsgi_params /etc/nginx/uwsgi_params && \
+    /usr/lib/systemd/systemd-update-helper remove-system-units openresty.service && \
+    microdnf -y --nodocs update && \
     microdnf clean all
 
 HEALTHCHECK CMD [ -d /proc/$(cat /tmp/nginx.pid) ] && [ -d /proc/$(cat /tmp/kiwitcms.pid) ]
