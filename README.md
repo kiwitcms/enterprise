@@ -13,6 +13,8 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
 * Based on `kiwitcms/kiwi` Docker image
 * **Compatible only with PostgreSQL !!!**
 * Versioned static files
+* Web server: [OpenResty](https://openresty.org) with embedded
+  [Lua](https://github.com/openresty/lua-nginx-module) support
 * Add-ons:
   - [django-ses](https://github.com/django-ses/django-ses) - Amazon SES email backend
   - [dj-database-url](https://github.com/jacobian/dj-database-url) - DB configuration
