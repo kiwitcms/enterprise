@@ -38,6 +38,11 @@ docker-image: build build-gssapi build-xmlsec
 	docker tag quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) quay.io/kiwitcms/enterprise:latest
 
 
+.PHONY: test-docker-image
+test-docker-image: docker-image
+	./testing/runner.sh
+
+
 .PHONY: docker-manifest
 docker-manifest:
 	# versioned manifest

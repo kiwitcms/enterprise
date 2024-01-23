@@ -17,7 +17,7 @@ jobs:
       fail-fast: true
       matrix:
         python-version: [3.11]
-        command: [flake8, pylint, docker-image]
+        command: [flake8, pylint, test-docker-image]
 
     steps:
     - name: Docker version info
@@ -42,8 +42,17 @@ jobs:
         pip install -U pip setuptools wheel
         pip install -r devel.txt
 
+        # used in test scripts
+        sudo apt-get install ldap-utils
+        if [ -z `which firefox` ]; then
+            sudo apt-get install firefox
+        fi
+        if [ -z `which geckodriver` ]; then
+            sudo apt-get install firefox-geckodriver
+        fi
+
     - name: Login to Quay.io
-      if: matrix.command == 'docker-image'
+      if: matrix.command == 'test-docker-image'
       run: |
         echo "${{ secrets.QUAY_PUSH_TOKEN }}" | docker login -u="${{ secrets.QUAY_PUSH_USERNAME }}" --password-stdin quay.io
 
@@ -52,140 +61,16 @@ jobs:
         make ${{ matrix.command }}
 
     - name: Logout of Quay.io
-      if: matrix.command == 'docker-image'
+      if: ${{ always() && matrix.command == 'test-docker-image' }}
       run: |
         docker logout quay.io
 
-    - name: Setup - start and configure Keycloak server
-      if: matrix.command == 'docker-image'
-      run: |
-        ./testing/start_keycloak.sh
-        echo "**** DEBUG, /tmp/kc.env ****"
-        cat /tmp/kc.env
-        echo "**** END DEBUG ****"
-
-    - name: Sanity test - boot the docker image
-      if: matrix.command == 'docker-image'
-      run: |
-        docker-compose -f docker-compose.testing up -d
-        sleep 5
-
-        IP_ADDRESS=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web`
-        echo "--- testing.example.bg: $IP_ADDRESS --"
-        sudo sh -c "echo '$IP_ADDRESS    testing.example.bg     empty.testing.example.bg' >> /etc/hosts"
-
-        KC_ADDRESS=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' keycloak_server`
-        echo "--- kc.example.bg: $KC_ADDRESS --"
-        # Kiwi TCMS container needs to know how to resolve the Keycloak server address
-        docker exec -u 0 -i web /bin/bash -c "echo '$KC_ADDRESS    kc.example.bg' >> /etc/hosts"
-
-    - name: Sanity test - initial configuration
-      if: matrix.command == 'docker-image'
-      run: |
-        # need to monkey-patch createsuperuser.py b/c it rejects input when not using a TTY
-        docker exec -i web sed -i "s/raise NotRunningInTTYException/pass/" /venv/lib64/python3.11/site-packages/django/contrib/auth/management/commands/createsuperuser.py
-        docker exec -i web sed -i "s/getpass.getpass/input/" /venv/lib64/python3.11/site-packages/django/contrib/auth/management/commands/createsuperuser.py
-        echo -e "super-root\nroot@example.com\nsecret-2a9a34cd-e51d-4039-b709-b45f629a5595\nsecret-2a9a34cd-e51d-4039-b709-b45f629a5595\ntesting.example.bg\n" | docker exec -i web /Kiwi/manage.py initial_setup
-
-    - name: Sanity test - missing migrations
-      if: matrix.command == 'docker-image'
-      run: |
-        docker exec -i web /Kiwi/manage.py makemigrations --check
-
-    - name: Sanity test - download login page
-      if: matrix.command == 'docker-image'
-      run: |
-        curl -k -L -o page.html https://testing.example.bg:8443/
-
-    - name: Archive page.html
-      if: matrix.command == 'docker-image'
+    - name: Upload testing artifacts
+      if: always() && matrix.command == 'test-docker-image'
       uses: actions/upload-artifact@v3
       with:
-        name: page.html
-        path: page.html
-
-    - name: Sanity test - check page.html
-      if: matrix.command == 'docker-image'
-      run: |
-        set -x
-
-        # version is Enterprise
-        cat page.html | grep "Version.*-Enterprise"
-
-        # plugins are listed
-        cat page.html | grep 'href="/admin/trackers_integration/apitoken/'
-        cat page.html | grep 'href="/kiwitcms_tenants/'
-        cat page.html | grep 'href="/kiwitcms_github_app/'
-
-        # template override for social icons
-        cat page.html | grep "or Continue With"
-
-        # social backends are listed
-        # for ICON in tcms_enterprise/static/images/social_auth/backends/*.png; do
-        #    BACKEND=`basename $ICON | sed 's/.png//'`
-        # check only the backends enabled in test_settings.py b/c the directory above
-        # contains more images than backends which can be enabled during testing
-        for BACKEND in kerberos keycloak gitlab github github-app fedora; do
-            cat page.html | grep "/login/$BACKEND/"
-            cat page.html | grep "<img src='/static/images/social_auth/backends/$BACKEND.*.png'"
-        done
-
-        # social icons are present
-        for URL in `cat page.html | grep "/static/images/social_auth/backends/" | cut -d= -f2 | cut -d"'" -f2`; do
-            echo "Verify image $URL is present"
-            curl -k -f -o /dev/null https://testing.example.bg:8443/$URL
-        done
-
-        # social icons point to correct backend login URL, even with port
-        for BACKEND in `cat page.html | grep "/static/images/social_auth/backends/" | cut -d= -f2 | cut -d"'" -f2 | cut -f6 -d/ | cut -f1 -d.`; do
-            echo "Verify $BACKEND login is present"
-            cat page.html | grep "https://testing.example.bg/login/$BACKEND/?next=/"
-        done
-
-    - name: Sanity test - LDAP login and sync
-      if: matrix.command == 'docker-image'
-      run: |
-        LDAP_ADDRESS=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' openldap_server`
-
-        # import users from the local config file and query the LDAP server
-        sudo apt-get install ldap-utils
-        ldapadd -x -H ldap://$LDAP_ADDRESS:389 -D cn=Manager,dc=example,dc=com -w admin -f testing/ldap.ldif
-        ldapsearch -x -LLL -H ldap://$LDAP_ADDRESS:389 -b dc=example,dc=com objectClass=person
-
-        # Now install RobotFramework so we can drive the browser automatically
-        if [ -z `which firefox` ]; then
-            sudo apt-get install firefox
-        fi
-
-        if [ -z `which geckodriver` ]; then
-            sudo apt-get install firefox-geckodriver
-        fi
-
-        robot testing/ldap.robot
-
-        docker exec -i web /Kiwi/manage.py ldap_sync_users
-        cat testing/ldap.py | docker exec -i web /Kiwi/manage.py shell
-
-    - name: Sanity test - ADMIN -> Users and Groups menu
-      if: matrix.command == 'docker-image'
-      run: |
-        cat testing/configure_tenant_users.py | docker exec -i web /Kiwi/manage.py shell
-        robot testing/admin_users_groups_menu.robot
-
-    - name: Sanity test - Keycloak login
-      if: matrix.command == 'docker-image'
-      run: |
-        robot testing/keycloak.robot
-
-    - name: Archive Keycloak JSON files
-      if: matrix.command == 'docker-image'
-      uses: actions/upload-artifact@v3
-      with:
-        name: kc-json-files
-        path: ./*.json
-
-    - name: Sanity test - shut down the docker image
-      if: matrix.command == 'docker-image'
-      run: |
-        docker kill keycloak_server
-        docker-compose -f docker-compose.testing down
+        name: testing-artifacts
+        path: |
+          ./*.json
+          ./*.html
+          ./*.log
