@@ -91,6 +91,11 @@ rlJournalStart
         rlRun -t -c "cat testing/ldap.py | docker exec -i web /Kiwi/manage.py shell"
     rlPhaseEnd
 
+    rlPhaseStartTest "Container restart"
+        rlRun -t -c "docker-compose -f docker-compose.testing restart"
+        assert_up_and_running
+    rlPhaseEnd
+
     rlPhaseStartTest "Sanity test - ADMIN -> Users and Groups menu"
         # WARNING: reuses username/password from the LDAP test above !!!
         rlRun -t -c "cat testing/configure_tenant_users.py | docker exec -i web /Kiwi/manage.py shell"
