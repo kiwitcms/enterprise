@@ -25,6 +25,7 @@ echo "**** END DEBUG ****"
 echo "**** DONE STARTING KEYCLOAK ****"
 
 # execute test scripts
+./testing/test_upstream_nginx_config.sh
 ./testing/test_docker.sh
 
 
