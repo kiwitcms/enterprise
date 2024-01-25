@@ -43,7 +43,7 @@ jobs:
         pip install -r devel.txt
 
         # used in test scripts
-        sudo apt-get install ldap-utils
+        sudo apt-get install ldap-utils wrk
         if [ -z `which firefox` ]; then
             sudo apt-get install firefox
         fi
@@ -74,3 +74,5 @@ jobs:
           ./*.json
           ./*.html
           ./*.log
+          ./wrk-logs-*/
+          ./*docker.log
