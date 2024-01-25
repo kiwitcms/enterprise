@@ -18,12 +18,17 @@ RUN microdnf -y --nodocs install krb5-libs xmlsec1 xmlsec1-openssl && \
     ln -s /usr/bin/openresty /usr/sbin/nginx          && \
     ln -s /usr/local/openresty/nginx/conf/mime.types   /etc/nginx/mime.types   && \
     ln -s /usr/local/openresty/nginx/conf/uwsgi_params /etc/nginx/uwsgi_params && \
+    ln -sf /Kiwi/etc/nginx.conf /usr/local/openresty/nginx/conf/nginx.conf     && \
+    ln -sf /Kiwi/etc/nginx.conf /usr/local/openresty/nginx/conf/nginx.conf.default && \
     /usr/lib/systemd/systemd-update-helper remove-system-units openresty.service && \
     microdnf -y --nodocs update && \
     microdnf clean all
 
 HEALTHCHECK CMD [ -d /proc/$(cat /tmp/nginx.pid) ] && [ -d /proc/$(cat /tmp/kiwitcms.pid) ]
 USER 1001
+
+# override OpenResty's configuration
+COPY ./etc/nginx.openresty /Kiwi/etc/nginx.conf
 
 COPY ./dist/ /Kiwi/dist/
 RUN pip install --no-cache-dir --find-links /Kiwi/dist/ /Kiwi/dist/kiwitcms_enterprise*.whl
