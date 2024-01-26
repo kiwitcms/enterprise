@@ -29,6 +29,7 @@ USER 1001
 
 # override OpenResty's configuration
 COPY ./etc/nginx.openresty /Kiwi/etc/nginx.conf
+COPY ./etc/*.lua /Kiwi/etc/
 
 COPY ./dist/ /Kiwi/dist/
 RUN pip install --no-cache-dir --find-links /Kiwi/dist/ /Kiwi/dist/kiwitcms_enterprise*.whl

@@ -13,6 +13,15 @@ events {
     worker_connections 1024;
 }
 
+env NGX_AUTHENTICATED_RATE;
+env NGX_AUTHENTICATED_BURST;
+env NGX_ERRORS_RATE;
+env NGX_ERRORS_BURST;
+env NGX_STATIC_RATE;
+env NGX_STATIC_BURST;
+env NGX_UPLOADS_RATE;
+env NGX_UPLOADS_BURST;
+
 http {
     log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
                       '$status $body_bytes_sent "$http_referer" '
@@ -55,8 +64,14 @@ http {
         default "";
         ~^/accounts/ $binary_remote_addr;
     }
-    limit_req_zone $limit_key zone=ten-per-sec:10m rate=10r/s;
+    limit_req_zone $limit_key zone=limit-for-login-pages:10m rate=10r/s;
     limit_req_status 429;
+
+    # similar to limit_req_zone definitions but in Lua
+    lua_shared_dict limit_storage_authenticated 10m;
+    lua_shared_dict limit_storage_errors 10m;
+    lua_shared_dict limit_storage_static 10m;
+    lua_shared_dict limit_storage_uploads 10m;
 
     upstream kiwitcms {
         server unix:///tmp/kiwitcms.sock;
@@ -91,6 +106,9 @@ http {
         }
 
         location /uploads/  {
+            set $rate_limit_config_key "uploads";
+            access_by_lua_file /Kiwi/etc/rate-limit.lua;
+
             # prevent browser from possibly interpreting untrusted files
             types        { }
             default_type text/plain;
@@ -99,14 +117,29 @@ http {
         }
 
         location /static/ {
+            set $rate_limit_config_key "static";
+            access_by_lua_file /Kiwi/etc/rate-limit.lua;
+
             alias /Kiwi/static/;
         }
 
         location / {
+            limit_req zone=limit-for-login-pages burst=2 nodelay;
+
+            set $rate_limit_config_key "authenticated";
+            access_by_lua_file /Kiwi/etc/rate-limit.lua;
+
             include     /etc/nginx/uwsgi_params;
             uwsgi_pass  kiwitcms;
+            uwsgi_intercept_errors on;
 
-            limit_req zone=ten-per-sec burst=20 nodelay;
+            # redirect for rate limiting; responds with 429, skip 429 itself
+            error_page 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 418 421 422 423 424 426 428 431 451 500 501 502 503 504 505 506 507 508 510 511 @error_handler;
+        }
+
+        location @error_handler {
+            set $rate_limit_config_key "errors";
+            access_by_lua_file /Kiwi/etc/rate-limit.lua;
         }
     }
 }

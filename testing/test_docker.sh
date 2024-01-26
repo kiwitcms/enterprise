@@ -179,29 +179,63 @@ rlJournalStart
 
     rlPhaseStartTest "Requests to /accounts/register/ are rate limited"
         COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/accounts/register/" "$WRK_DIR" "register-account-page")
-        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS"
+        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
         rlAssertGreaterOrEqual ">= 10 r/s" "$COMPLETED_REQUESTS" 100
         rlAssertLesserOrEqual  "<= 20 r/s" "$COMPLETED_REQUESTS" 200
     rlPhaseEnd
 
     rlPhaseStartTest "Requests to /accounts/login/ are rate limited"
         COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/accounts/login/" "$WRK_DIR" "login-page")
-        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS"
+        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
         rlAssertGreaterOrEqual ">= 10 r/s" "$COMPLETED_REQUESTS" 100
         rlAssertLesserOrEqual  "<= 20 r/s" "$COMPLETED_REQUESTS" 200
     rlPhaseEnd
 
     rlPhaseStartTest "Requests to /accounts/passwordreset/ are rate limited"
         COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/accounts/passwordreset/" "$WRK_DIR" "password-reset-page")
-        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS"
+        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
         rlAssertGreaterOrEqual ">= 10 r/s" "$COMPLETED_REQUESTS" 100
         rlAssertLesserOrEqual  "<= 20 r/s" "$COMPLETED_REQUESTS" 200
     rlPhaseEnd
 
-    rlPhaseStartTest "Requests for static files are NOT rate limited"
+    rlPhaseStartTest "Requests to missing pages (404) are rate limited"
+        sleep 90 # chill
+        COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/not/available.html" "$WRK_DIR" "404")
+        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
+        rlAssertGreaterOrEqual ">= 1 r/m" "$COMPLETED_REQUESTS" 1
+        # Note: running wrk with 4 connections in parallel
+        rlAssertLesserOrEqual  "<= 2 r/m" "$COMPLETED_REQUESTS" 4
+    rlPhaseEnd
+
+    rlPhaseStartTest "Requests to random pages (404) are rate limited"
+        sleep 90 # chill
+        WRK_FILE="$WRK_DIR/random-404.log"
+        START_TIME=$(date +%s)
+        for i in `seq 1000`; do
+            curl --silent -k -D- $HTTPS/random-file-$i.html >> $WRK_FILE
+        done
+        END_TIME=$(date +%s)
+
+        COMPLETED_REQUESTS=$(grep "HTTP/1.1 404" "$WRK_FILE" | wc -l)
+        ELAPSED_TIME=$(($END_TIME - $START_TIME))
+
+        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in $ELAPSED_TIME seconds"
+        rlAssertGreaterOrEqual ">= 1 r/m" "$COMPLETED_REQUESTS" 1
+        rlAssertLesserOrEqual  "<= 2 r/m" "$COMPLETED_REQUESTS" $(($(($ELAPSED_TIME / 60)) + 2))
+    rlPhaseEnd
+
+    rlPhaseStartTest "Requests for static files are rate limited"
         COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/static/images/kiwi_h20.png" "$WRK_DIR" "static-image")
-        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS"
-        rlAssertGreaterOrEqual ">= 1000 r/s" "$COMPLETED_REQUESTS" 10000
+        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
+        rlAssertGreaterOrEqual ">= 300 r/s" "$COMPLETED_REQUESTS" 3000
+        rlAssertLesserOrEqual  "<= 400 r/s" "$COMPLETED_REQUESTS" 4000
+    rlPhaseEnd
+
+    rlPhaseStartTest "Requests for uploaded files are rate limited"
+        COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/uploads/attachments/auth_user/2/ldap.py" "$WRK_DIR" "uploaded-file")
+        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
+        rlAssertGreaterOrEqual ">= 10 r/s" "$COMPLETED_REQUESTS" 100
+        rlAssertLesserOrEqual  "<= 20 r/s" "$COMPLETED_REQUESTS" 200
     rlPhaseEnd
 
     rlPhaseStartTest "Requests for /favicon.ico are NOT rate limited"
@@ -212,18 +246,18 @@ rlJournalStart
 
     rlPhaseStartTest "Requests for robots.txt are NOT rate limited"
         COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/robots.txt" "$WRK_DIR" "robots-txt")
-        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS"
+        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
         rlAssertGreaterOrEqual ">= 1000 r/s" "$COMPLETED_REQUESTS" 10000
     rlPhaseEnd
 
-    rlPhaseStartTest "Authenticated requests to / are NOT rate limited"
+    rlPhaseStartTest "Authenticated requests under / are rate limited"
         # login and create the cookies file
         get_dashboard "$HTTPS"
 
         SESSION_ID=$(grep sessionid /tmp/login-cookies.txt | cut -f 7)
         COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/" "$WRK_DIR" "dashboard" "Cookie: sessionid=$SESSION_ID")
-        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS"
-        rlAssertGreaterOrEqual ">= 50 r/s" "$COMPLETED_REQUESTS" 500
+        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
+        rlAssertGreaterOrEqual ">= 200 r/s" "$COMPLETED_REQUESTS" 2000
     rlPhaseEnd
 
     rlPhaseStartCleanup

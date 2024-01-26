@@ -13,7 +13,7 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
 * Based on `kiwitcms/kiwi` Docker image
 * **Compatible only with PostgreSQL !!!**
 * Versioned static files
-* Web server: [OpenResty](https://openresty.org) with embedded
+* NGINX replaced by [OpenResty](https://openresty.org) with embedded
   [Lua](https://github.com/openresty/lua-nginx-module) support
 * Add-ons:
   - [django-ses](https://github.com/django-ses/django-ses) - Amazon SES email backend
@@ -33,6 +33,15 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
     MIT Kerberos authentication backend
   - [django-python3-ldap](https://github.com/etianen/django-python3-ldap) -
     LDAP authentication backend
+* Supported environment variables, configurable on the container:
+  - ``NGX_AUTHENTICATED_RATE``  - req/sec for authenticated URLs
+  - ``NGX_AUTHENTICATED_BURST`` - burst rate for authenticated URLs
+  - ``NGX_ERRORS_RATE``  - req/sec for URLs resulting in 4xx, 5xx errors
+  - ``NGX_ERRORS_BURST`` - burst rate for URLs resulting in 4xx, 5xx errors
+  - ``NGX_STATIC_RATE``  - req/sec for static files
+  - ``NGX_STATIC_BURST`` - burst rate for static files
+  - ``NGX_UPLOADS_RATE`` - req/sec for uploaded files
+  - ``NGX_UPLOADS_BURST``- burst rate for uploaded files
 
 
 While the software itself is open source we do not provide public
