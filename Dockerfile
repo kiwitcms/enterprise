@@ -6,6 +6,7 @@ USER 0
 RUN microdnf -y --nodocs install krb5-libs xmlsec1 xmlsec1-openssl && \
     microdnf clean all
 
+HEALTHCHECK CMD [ -d /proc/$(cat /tmp/nginx.pid) ] && [ -d /proc/$(cat /tmp/kiwitcms.pid) ]
 USER 1001
 
 COPY ./dist/ /Kiwi/dist/
