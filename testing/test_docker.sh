@@ -91,8 +91,17 @@ rlJournalStart
         rlRun -t -c "cat testing/ldap.py | docker exec -i web /Kiwi/manage.py shell"
     rlPhaseEnd
 
+    rlPhaseStartTest "Sanity test - container is healthy"
+        STATE=$(docker inspect web | jq -r ".[].State.Health.Status")
+        rlAssertEquals "container state is healthy" "$STATE" "healthy"
+    rlPhaseEnd
+
     rlPhaseStartTest "Container restart"
         rlRun -t -c "docker-compose -f docker-compose.testing restart"
+
+        STATE=$(docker inspect web | jq -r ".[].State.Health.Status")
+        rlAssertEquals "container state is healthy" "$STATE" "starting"
+
         assert_up_and_running
     rlPhaseEnd
 
