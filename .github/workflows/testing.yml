@@ -83,3 +83,5 @@ jobs:
           ./*.log
           ./wrk-logs-*/
           ./*docker.log
+          ./*cookies*
+          ./test*.txt

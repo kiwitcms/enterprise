@@ -10,17 +10,17 @@ chmod go+rwx "$WRK_DIR"
 assert_up_and_running() {
     sleep 10
     # HTTP redirects; HTTPS displays the login page
-    rlRun -t -c "curl       -o- http://testing.example.bg:8080/  | grep '301 Moved Permanently'"
-    rlRun -t -c "curl -k -L -o- $HTTPS/ | grep 'Welcome to Kiwi TCMS'"
+    rlRun -t -c "curl       -o- --referer assert_up_and_running http://testing.example.bg:8080/  | grep '301 Moved Permanently'"
+    rlRun -t -c "curl -k -L -o- --referer assert_up_and_running $HTTPS/ | grep 'Welcome to Kiwi TCMS'"
 }
 
 get_dashboard() {
-    rlRun -t -c "curl -k -L -o- -c /tmp/testcookies.txt $1/"
-    CSRF_TOKEN=$(grep csrftoken /tmp/testcookies.txt | cut -f 7)
-    rlRun -t -c "curl -e $1/accounts/login/ -d username=ldap_atodorov -d password=h3llo-w0rld \
-        -d csrfmiddlewaretoken=$CSRF_TOKEN -k -L -i -o /tmp/testdata.txt \
-        -b /tmp/testcookies.txt -c /tmp/login-cookies.txt $1/accounts/login/"
-    rlAssertGrep "<title>Kiwi TCMS - Dashboard</title>" /tmp/testdata.txt
+    rlRun -t -c "curl -k -L -o- --referer get_dashboard -c ./testcookies.txt $1/"
+    CSRF_TOKEN=$(grep csrftoken ./testcookies.txt | cut -f 7)
+    rlRun -t -c "curl --referer $1/accounts/login/ -d username=ldap_atodorov -d password=h3llo-w0rld \
+        -d csrfmiddlewaretoken=$CSRF_TOKEN -k -L -i -o ./testdata.txt \
+        -b ./testcookies.txt -c ./login-cookies.txt $1/accounts/login/"
+    rlAssertGrep "<title>Kiwi TCMS - Dashboard</title>" ./testdata.txt
 }
 
 
@@ -28,7 +28,7 @@ exec_wrk() {
     URL=$1
     LOGS_DIR=$2
     LOG_BASENAME=$3
-    EXTRA_HEADERS=${4:-"X-Dummy-Header: 1"}
+    EXTRA_HEADERS=${4:-"Referer: wrk-for-$LOG_BASENAME"}
 
     WRK_FILE="$LOGS_DIR/$LOG_BASENAME.log"
 
