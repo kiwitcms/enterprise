@@ -234,8 +234,10 @@ rlJournalStart
     rlPhaseStartTest "Requests for uploaded files are rate limited"
         COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/uploads/attachments/auth_user/2/ldap.py" "$WRK_DIR" "uploaded-file")
         rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
-        rlAssertGreaterOrEqual ">= 10 r/s" "$COMPLETED_REQUESTS" 100
-        rlAssertLesserOrEqual  "<= 20 r/s" "$COMPLETED_REQUESTS" 200
+
+        # WARNING: the defaults are overriden in docker-compose.testing
+        rlAssertGreaterOrEqual ">= 55 r/s" "$COMPLETED_REQUESTS" 550
+        rlAssertLesserOrEqual  "<= 75 r/s" "$COMPLETED_REQUESTS" 750
     rlPhaseEnd
 
     rlPhaseStartTest "Requests for /favicon.ico are NOT rate limited"
