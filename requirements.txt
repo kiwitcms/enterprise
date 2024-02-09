@@ -1,4 +1,17 @@
 certbot==2.9.0
+certbot-dns-cloudflare==2.9.0
+certbot-dns-digitalocean==2.9.0
+certbot-dns-dnsimple==2.9.0
+certbot-dns-dnsmadeeasy==2.9.0
+certbot-dns-gehirn==2.9.0
+certbot-dns-google==2.9.0
+certbot-dns-linode==2.9.0
+certbot-dns-luadns==2.9.0
+certbot-dns-nsone==2.9.0
+certbot-dns-ovh==2.9.0
+certbot-dns-rfc2136==2.9.0
+certbot-dns-route53==2.9.0
+certbot-dns-sakuracloud==2.9.0
 django-prometheus==2.3.1
 django-python3-ldap==0.15.5
 django-ses==3.5.2
