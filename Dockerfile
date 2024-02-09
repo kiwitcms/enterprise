@@ -6,7 +6,7 @@ USER 0
 RUN curl https://openresty.org/package/rhel/openresty2.repo > /etc/yum.repos.d/openresty2.repo
 # WARNING: in case there are permission issues with the newly created directories
 # see: https://github.com/openresty/docker-openresty/issues/119
-RUN microdnf -y --nodocs install augeas-libs krb5-libs xmlsec1 xmlsec1-openssl && \
+RUN microdnf -y --nodocs install augeas-libs krb5-libs psmisc xmlsec1 xmlsec1-openssl && \
     microdnf -y remove "nginx-*" && microdnf -y --nodocs install openresty && \
     mkdir /etc/nginx                                  && \
     mkdir -p /usr/share/nginx/modules/                && \
@@ -31,10 +31,13 @@ USER 1001
 COPY ./etc/nginx.openresty /Kiwi/etc/nginx.conf
 COPY ./etc/*.lua /Kiwi/etc/
 
+# other admin utilities
+COPY ./bin/* /Kiwi/bin/
+
 COPY ./dist/ /Kiwi/dist/
 RUN pip install --no-cache-dir --find-links /Kiwi/dist/ /Kiwi/dist/kiwitcms_enterprise*.whl
 
-# woraround broken CSS which will break collectstatic
+# workaround broken CSS which will break collectstatic
 # because they refer to non-existing ../fonts/glyphicons-halflings-regular.eot (no fonts/ directory)
 # remove django_tenants/templates/admin/index.html b/c it is ugly and b/c we use grapelli
 RUN rm -rf /venv/lib64/python3.11/site-packages/tcms/node_modules/c3/htdocs/ \
