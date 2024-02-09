@@ -33,6 +33,7 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
     MIT Kerberos authentication backend
   - [django-python3-ldap](https://github.com/etianen/django-python3-ldap) -
     LDAP authentication backend
+  - [Let's Encrypt certbot](https://certbot.eff.org/)
 * Supported environment variables, configurable on the container:
   - ``NGX_AUTHENTICATED_RATE``  - req/sec for authenticated URLs
   - ``NGX_AUTHENTICATED_BURST`` - burst rate for authenticated URLs
@@ -64,12 +65,28 @@ Initial configuration
     docker exec -it web /Kiwi/manage.py initial_setup
     ```
 
-   **NOTE:** the domain value for `initial_setup` is either the same or one-level up from
+   **NOTE:** the domain value provided during `initial_setup` should be the same or one-level up from
    the value of `KIWI_TENANTS_DOMAIN`.
 
 For more information see
 https://kiwitcms.readthedocs.io/en/latest/installing_docker.html#initial-configuration-of-running-container
 and https://github.com/kiwitcms/tenants/#first-boot-configuration
+
+3. For initial configuration of Let's Encrypt SSL certificates execute the command:
+
+    ```
+    docker exec -it -u0 web /Kiwi/bin/lets-encrypt <secondary-fqdn> <tertiary-fqdn> <etc>
+    ```
+
+   - the value of `KIWI_TENANTS_DOMAIN` will be the primary domain on the SSL certificate
+   - additional domain names may be specified as arguments
+   - **WARNINGS:**:
+       - true
+         [wildcard certificates](https://letsencrypt.org/docs/faq/#does-let-s-encrypt-issue-wildcard-certificates)
+         are only possible via certbot's DNS plugins while this script uses `--webroot`
+       - for full control you may want to execute the `certbot` command directly
+       - you need to bind-mount `/etc/letsencrypt/` and `/Kiwi/ssl/` inside the container
+         if you want the Let's Encrypt certificates to persist a restart
 
 
 Hacking and customization
