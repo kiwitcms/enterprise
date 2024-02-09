@@ -6,7 +6,7 @@ USER 0
 RUN curl https://openresty.org/package/rhel/openresty2.repo > /etc/yum.repos.d/openresty2.repo
 # WARNING: in case there are permission issues with the newly created directories
 # see: https://github.com/openresty/docker-openresty/issues/119
-RUN microdnf -y --nodocs install krb5-libs xmlsec1 xmlsec1-openssl && \
+RUN microdnf -y --nodocs install augeas-libs krb5-libs xmlsec1 xmlsec1-openssl && \
     microdnf -y remove "nginx-*" && microdnf -y --nodocs install openresty && \
     mkdir /etc/nginx                                  && \
     mkdir -p /usr/share/nginx/modules/                && \
