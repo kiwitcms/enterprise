@@ -1,0 +1,42 @@
+#!/bin/bash
+
+##
+## Copyright (c) 2024 Alexander Todorov <atodorov@otb.bg>
+## Licensed under the GPL-3.0: https://www.gnu.org/licenses/gpl-3.0.txt
+##
+## Helper script for initial Let's Encrypt SSL configuration.
+##
+## Execute it as:
+## docker exec -it -u0 web /Kiwi/bin/lets-encrypt
+##
+
+
+if [ $(whoami) != "root" ]; then
+    echo "ERROR: execute this script as root!"
+    exit 1
+fi
+
+if [ -z "$KIWI_TENANTS_DOMAIN" ]; then
+    echo "ERROR: the environment variable KIWI_TENANTS_DOMAIN is not configured"
+    echo "INFO: this will be the primary domain in your SSL certificate"
+    exit 2
+fi
+
+DOMAINS="-d $KIWI_TENANTS_DOMAIN"
+for ARGUMENT in $@; do
+    DOMAINS="$DOMAINS -d $ARGUMENT"
+done
+
+echo "INFO: Configuring certificate for the following domains:"
+echo "$DOMAINS"
+
+# certificates stored under /etc/letsencrypt/live/$KIWI_TENANTS_DOMAIN/
+certbot -v certonly $DOMAINS --webroot --webroot-path /Kiwi/static/
+
+# adjust file ownership b/c nginx doesn't run as root
+chown -R 1001:root /etc/letsencrypt
+ln -sf /etc/letsencrypt/live/$KIWI_TENANTS_DOMAIN/fullchain.pem /Kiwi/ssl/localhost.crt
+ln -sf /etc/letsencrypt/live/$KIWI_TENANTS_DOMAIN/privkey.pem /Kiwi/ssl/localhost.key
+
+# restart webserver
+killall -HUP nginx
