@@ -105,6 +105,10 @@ http {
             alias /Kiwi/static/robots.txt;
         }
 
+        location /.well-known/ {
+            alias /Kiwi/static/.well-known/;
+        }
+
         location /uploads/  {
             set $rate_limit_config_key "uploads";
             access_by_lua_file /Kiwi/etc/rate-limit.lua;
