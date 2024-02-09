@@ -34,6 +34,7 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
   - [django-python3-ldap](https://github.com/etianen/django-python3-ldap) -
     LDAP authentication backend
   - [Let's Encrypt certbot](https://certbot.eff.org/)
+  - [certbot-dns](https://eff-certbot.readthedocs.io/en/latest/using.html#dns-plugins) plugins
 * Supported environment variables, configurable on the container:
   - ``NGX_AUTHENTICATED_RATE``  - req/sec for authenticated URLs
   - ``NGX_AUTHENTICATED_BURST`` - burst rate for authenticated URLs
