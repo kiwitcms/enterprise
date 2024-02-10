@@ -26,7 +26,7 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
   - [kiwitcms-tenants](https://github.com/kiwitcms/tenants/) - multi-tenant support
   - [kiwitcms-trackers-integration](https://github.com/kiwitcms/trackers-integration/) -
     integration with extra issue trackers
-  - [raven](https://github.com/getsentry/raven-python) - automatic error logs via Sentry
+  - [sentry-sdk](https://docs.sentry.io/platforms/python/integrations/django/) - automatic error reporting with Sentry
   - [social-auth-app-django](https://github.com/python-social-auth/social-app-django) -
     extra [authentication backends](http://python-social-auth.readthedocs.io/en/latest/backends/index.html#supported-backends)
   - [social-auth-kerberos](https://github.com/kiwitcms/python-social-auth-kerberos/) -

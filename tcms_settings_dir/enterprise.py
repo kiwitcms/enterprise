@@ -1,7 +1,6 @@
 # pylint: disable=undefined-variable
 
-import os
-import raven
+import sentry_sdk
 import dj_database_url
 
 from django.utils.translation import gettext_lazy as _
@@ -28,9 +27,6 @@ STATICFILES_STORAGE = \
     'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'tcms_enterprise.root_urls'
-
-if 'raven.contrib.django.raven_compat' not in INSTALLED_APPS:   # noqa: F821
-    INSTALLED_APPS.append('raven.contrib.django.raven_compat')  # noqa: F821
 
 if 'social_django' not in INSTALLED_APPS:   # noqa: F821
     INSTALLED_APPS.append('social_django')  # noqa: F821
@@ -62,18 +58,13 @@ SOCIAL_AUTH_PIPELINE = [
 ]
 SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 
-try:
-    _git_sha = raven.fetch_git_sha(os.path.abspath(os.pardir))
-    RAVEN_VERSION = f"{KIWI_VERSION}-{_git_sha}"
-except raven.exceptions.InvalidGitRepository:
-    RAVEN_VERSION = KIWI_VERSION
 
-# configuration for Sentry. For now only backend errors are sent to Sentry
-# by default all reports go to Mr. Senko
-RAVEN_CONFIG = {
-    'dsn': 'https://e9a370eba7bd41fe8faead29552f12d7:1417b740821a45ef8fe3ae68ea9bfc8b@sentry.io/277775',  # noqa: E501, pylint: disable=line-too-long
-    'release': RAVEN_VERSION,
-}
+# configuration for Sentry. By default all reports go to Kiwi TCMS
+sentry_sdk.init(
+    dsn="https://e9a370eba7bd41fe8faead29552f12d7@o126041.ingest.sentry.io/277775",  # noqa: E501, pylint: disable=line-too-long
+    enable_tracing=True,
+    release=KIWI_VERSION,
+)
 
 
 # make sure users from LDAP are assigned default settings
