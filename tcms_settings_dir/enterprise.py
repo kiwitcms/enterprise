@@ -69,3 +69,10 @@ sentry_sdk.init(
 
 # make sure users from LDAP are assigned default settings
 LDAP_AUTH_SYNC_USER_RELATIONS = 'tcms_enterprise.ldap.sync_user_relations'
+
+# WARNING: these require a correct, non-self-signed SSL certificate
+# Strict-Transport-Security header settings
+# https://docs.djangoproject.com/en/4.2/ref/settings/#secure-hsts-include-subdomains
+# https://docs.djangoproject.com/en/4.2/ref/settings/#secure-hsts-seconds
+SECURE_HSTS_SECONDS = 60 * 24 * 365
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
