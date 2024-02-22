@@ -64,7 +64,8 @@ PLAUSIBLE_DOMAIN = "kiwitcms-enterprise"
 # configuration for Sentry. By default all reports go to Kiwi TCMS
 sentry_sdk.init(
     dsn="https://e9a370eba7bd41fe8faead29552f12d7@o126041.ingest.sentry.io/277775",  # noqa: E501, pylint: disable=line-too-long
-    enable_tracing=True,
+    # no performace monitoring b/c we hit quota limits
+    enable_tracing=False,
     release=KIWI_VERSION,
 )
 
