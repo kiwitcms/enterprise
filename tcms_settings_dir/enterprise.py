@@ -58,6 +58,8 @@ SOCIAL_AUTH_PIPELINE = [
 ]
 SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 
+# https://plausible.io/kiwitcms-enterprise
+PLAUSIBLE_DOMAIN = "kiwitcms-enterprise"
 
 # configuration for Sentry. By default all reports go to Kiwi TCMS
 sentry_sdk.init(
