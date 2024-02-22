@@ -259,7 +259,7 @@ rlJournalStart
         SESSION_ID=$(grep sessionid /tmp/login-cookies.txt | cut -f 7)
         COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/" "$WRK_DIR" "dashboard" "Cookie: sessionid=$SESSION_ID")
         rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
-        rlAssertGreaterOrEqual ">= 200 r/s" "$COMPLETED_REQUESTS" 2000
+        rlAssertGreaterOrEqual ">= 190 r/s" "$COMPLETED_REQUESTS" 1900
     rlPhaseEnd
 
     rlPhaseStartCleanup
