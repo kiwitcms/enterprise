@@ -119,6 +119,26 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v13.1-mt (26 Feb 2024)
+
+- Based on Kiwi TCMS v13.1
+- Replace NGINX with OpenResty with built-in support for Lua scripting
+- Implement request limits configurable via environment variables
+- Initial integration with Let's Encrypt. Closes
+  [Issue #253](https://github.com/kiwitcms/enterprise/issues/253)
+
+  **WARNINGS:**:
+    - true
+      [wildcard certificates](https://letsencrypt.org/docs/faq/#does-let-s-encrypt-issue-wildcard-certificates)
+       are only possible via certbot's DNS plugins while current integration uses `--webroot`
+    - you need to bind-mount `/etc/letsencrypt/` and `/Kiwi/ssl/` inside the container
+      if you want the Let's Encrypt certificates to persist a restart
+
+- Replace ``raven`` with ``sentry-sdk``
+- Override ``HEALTHCHECK`` command
+- Add more tests for container and http functionality
+
+
 ### v13.0-mt (17 Jan 2024)
 
 - Based on Kiwi TCMS v13.0
