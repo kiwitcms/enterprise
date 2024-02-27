@@ -119,6 +119,12 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v13.1.1-mt (27 Feb 2024)
+
+- Based on Kiwi TCMS v13.1.1
+- Fix a bug introduced in v13.1
+
+
 ### v13.1-mt (26 Feb 2024)
 
 - Based on Kiwi TCMS v13.1
