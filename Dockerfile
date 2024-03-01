@@ -9,12 +9,10 @@ RUN curl https://openresty.org/package/rhel/openresty2.repo > /etc/yum.repos.d/o
 RUN microdnf -y --nodocs install augeas-libs krb5-libs psmisc xmlsec1 xmlsec1-openssl && \
     microdnf -y remove "nginx-*" && microdnf -y --nodocs install openresty && \
     mkdir /etc/nginx                                  && \
+    mkdir --mode 770 /var/lib/nginx                   && \
+    mkdir --mode 770 /var/lib/nginx/tmp               && \
+    chown -R 1001:root /var/lib/nginx                 && \
     mkdir -p /usr/share/nginx/modules/                && \
-    mkdir /usr/local/openresty/nginx/client_body_temp && \
-    mkdir /usr/local/openresty/nginx/fastcgi_temp     && \
-    mkdir /usr/local/openresty/nginx/proxy_temp       && \
-    mkdir /usr/local/openresty/nginx/scgi_temp        && \
-    mkdir /usr/local/openresty/nginx/uwsgi_temp       && \
     ln -s /usr/bin/openresty /usr/sbin/nginx          && \
     ln -s /usr/local/openresty/nginx/conf/mime.types   /etc/nginx/mime.types   && \
     ln -s /usr/local/openresty/nginx/conf/uwsgi_params /etc/nginx/uwsgi_params && \
