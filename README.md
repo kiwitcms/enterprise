@@ -119,6 +119,12 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v13.1.1-mt-20240302 (02 Mar 2024)
+
+- Fix for 404 errors when uploading files caused by
+  different default configuration between OpenResty and NGINX
+
+
 ### v13.1.1-mt (27 Feb 2024)
 
 - Based on Kiwi TCMS v13.1.1
