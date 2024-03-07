@@ -143,6 +143,19 @@ rlJournalStart
         rlRun -t -c "robot testing/admin_users_groups_menu.robot"
     rlPhaseEnd
 
+    rlPhaseStartTest "Can upload attachments via browser UI"
+        # WARNING: reuses username/password from the LDAP test above !!!
+
+        ARCH=$(uname -m)
+        if [ "$ARCH" == "x86_64" ]; then
+            # can upload file
+            rlRun -t -c "robot testing/test_upload_file.robot"
+
+            # verify file is there
+            rlRun -t -c "curl -k -D- --silent $HTTPS/uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt | grep '200 OK'"
+        fi
+    rlPhaseEnd
+
     rlPhaseStartTest "Sanity test - Keycloak login"
         rlRun -t -c "robot testing/keycloak.robot"
     rlPhaseEnd
