@@ -5,7 +5,7 @@ certbot-dns-dnsimple==2.9.0
 certbot-dns-dnsmadeeasy==2.9.0
 certbot-dns-gehirn==2.9.0
 certbot-dns-google==2.9.0
-certbot-dns-linode==2.9.0
+certbot-dns-linode==2.10.0
 certbot-dns-luadns==2.9.0
 certbot-dns-nsone==2.9.0
 certbot-dns-ovh==2.9.0
