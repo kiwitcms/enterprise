@@ -1,6 +1,6 @@
 certbot==2.9.0
 certbot-dns-cloudflare==2.9.0
-certbot-dns-digitalocean==2.9.0
+certbot-dns-digitalocean==2.10.0
 certbot-dns-dnsimple==2.9.0
 certbot-dns-dnsmadeeasy==2.9.0
 certbot-dns-gehirn==2.9.0
