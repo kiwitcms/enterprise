@@ -47,3 +47,8 @@ volumes:
     kiwi_ssl:
     kiwi_uploads:
     kiwi_letsencrypt:
+
+networks:
+  default:
+    name: enterprise_default
+    external: true
