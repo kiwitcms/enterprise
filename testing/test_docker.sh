@@ -43,7 +43,7 @@ exec_wrk() {
 
 rlJournalStart
     rlPhaseStartTest "Sanity test - boot the docker image"
-        rlRun -t -c "docker-compose -f docker-compose.testing up -d"
+        rlRun -t -c "docker compose -f docker-compose.testing up -d"
         sleep 5
 
         IP_ADDRESS=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web)
@@ -129,7 +129,7 @@ rlJournalStart
     rlPhaseEnd
 
     rlPhaseStartTest "Container restart"
-        rlRun -t -c "docker-compose -f docker-compose.testing restart"
+        rlRun -t -c "docker compose -f docker-compose.testing restart"
 
         STATE=$(docker inspect web | jq -r ".[].State.Health.Status")
         rlAssertEquals "container state is healthy" "$STATE" "starting"
@@ -277,8 +277,8 @@ rlJournalStart
 
     rlPhaseStartCleanup
         rlRun -t -c "docker kill keycloak_server"
-        rlRun -t -c "docker-compose -f docker-compose.testing logs --no-color > docker.log"
-        rlRun -t -c "docker-compose -f docker-compose.testing down"
+        rlRun -t -c "docker compose -f docker-compose.testing logs --no-color > docker.log"
+        rlRun -t -c "docker compose -f docker-compose.testing down"
         if [ -n "$ImageOS" ]; then
             rlRun -t -c "docker volume rm enterprise_db_data"
         fi
