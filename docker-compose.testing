@@ -34,6 +34,9 @@ services:
             # IMPORTANT: ^^^ not needed for Production deployments!
             # only used for testing via GitHub CI
         restart: always
+        ports:
+            - 80:8080
+            - 443:8443
         volumes:
             - ./test_settings.py:/venv/lib64/python3.11/site-packages/tcms_settings_dir/test_settings.py:z,ro
             # IMPORTANT: ^^^ Remove or substitute your own settings overrides for Production deployments, see
