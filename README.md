@@ -36,15 +36,22 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
   - [Let's Encrypt certbot](https://certbot.eff.org/)
   - [certbot-dns](https://eff-certbot.readthedocs.io/en/latest/using.html#dns-plugins) plugins
 * Supported environment variables, configurable on the container:
-  - ``NGX_AUTHENTICATED_RATE``  - req/sec for authenticated URLs
-  - ``NGX_AUTHENTICATED_BURST`` - burst rate for authenticated URLs
-  - ``NGX_ERRORS_RATE``  - req/sec for URLs resulting in 4xx, 5xx errors
-  - ``NGX_ERRORS_BURST`` - burst rate for URLs resulting in 4xx, 5xx errors
-  - ``NGX_STATIC_RATE``  - req/sec for static files
-  - ``NGX_STATIC_BURST`` - burst rate for static files
-  - ``NGX_UPLOADS_RATE`` - req/sec for uploaded files
-  - ``NGX_UPLOADS_BURST``- burst rate for uploaded files
-
+  - ``NGX_AUTHENTICATED_RATE``  - req/sec for authenticated URLs; **default 300 r/s**,
+    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
+  - ``NGX_AUTHENTICATED_BURST`` - burst rate for authenticated URLs; **default 100**,
+    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
+  - ``NGX_ERRORS_RATE``  - req/sec for URLs resulting in 4xx, 5xx errors; **default 1 r/m**,
+    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
+  - ``NGX_ERRORS_BURST`` - burst rate for URLs resulting in 4xx, 5xx errors; **default 1**,
+    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
+  - ``NGX_STATIC_RATE``  - req/sec for static files; **default 300 r/s**,
+    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
+  - ``NGX_STATIC_BURST`` - burst rate for static files; **default 100**,
+    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
+  - ``NGX_UPLOADS_RATE`` - req/sec for uploaded files; **default 10 r/s**,
+    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
+  - ``NGX_UPLOADS_BURST``- burst rate for uploaded files; **default 10**,
+    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
 
 While the software itself is open source we do not provide public
 access to the resulting `kiwitcms/enterprise` container image.
