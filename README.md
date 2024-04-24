@@ -36,6 +36,12 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
   - [Let's Encrypt certbot](https://certbot.eff.org/)
   - [certbot-dns](https://eff-certbot.readthedocs.io/en/latest/using.html#dns-plugins) plugins
 * Supported environment variables, configurable on the container:
+  - `DATABASE_URL` - short-hand database connection configuration, according to this
+    [this URL schema](https://github.com/jazzband/dj-database-url#url-schema); Replaces individual
+    database configuration via settings override, see
+    [example](https://github.com/kiwitcms/enterprise/blob/master/docker-compose.testing)
+  - `KIWI_TENANTS_DOMAIN` - FQDN for the multi-tenant configuration, e.g. *tcms.my-company.org*,
+    see [kiwitcms-tenants](https://github.com/kiwitcms/tenants/#dns-configuration) for more info
   - `NGX_AUTHENTICATED_RATE`  - req/sec for authenticated URLs; **default 300 r/s**,
     see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
   - `NGX_AUTHENTICATED_BURST` - burst rate for authenticated URLs; **default 100**,
