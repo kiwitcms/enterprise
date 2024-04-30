@@ -17,7 +17,7 @@ django-python3-ldap==0.15.6
 django-ses==4.0.0
 dj-database-url==2.1.0
 kiwitcms-github-app==1.6.0
-kiwitcms-tenants==2.8.1
+kiwitcms-tenants==2.8.2
 kiwitcms-trackers-integration==0.7.0
 sentry-sdk[django]==2.0.1
 social-auth-app-django==5.4.1
