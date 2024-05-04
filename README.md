@@ -132,6 +132,19 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v13.2-mt (04 May 2024)
+
+- Update certbot from 2.9.0 to 2.10.0
+- Upgrade certbot-dns-* plugins from 2.9.0 to 2.10.0
+- Update django-python3-ldap from 0.15.5 to 0.15.6
+- Update django-ses from 3.5.2 to 4.0.0
+- Update kiwitcms-tenants from 2.6.0 to 2.8.3
+- Update sentry-sdk from 1.40.5 to 2.0.1
+- Update social-auth-app-django from 5.4.0 to 5.4.1
+- Update documentation related to production deployments
+- Add test for file uploads via browser UI
+
+
 ### v13.1.1-mt-20240302 (02 Mar 2024)
 
 - Fix for 404 errors when uploading files caused by
