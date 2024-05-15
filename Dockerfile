@@ -50,5 +50,7 @@ RUN touch /venv/lib64/python3.11/site-packages/tcms/node_modules/bootstrap-slide
           /venv/lib64/python3.11/site-packages/tcms/node_modules/pdfmake/build/main.cjs.map
 
 # collect static files again
-RUN /Kiwi/manage.py collectstatic --clear --link --noinput && \
+RUN cp /Kiwi/static/ca.crt /Kiwi/ssl/ && \
+    /Kiwi/manage.py collectstatic --clear --link --noinput && \
+    mv /Kiwi/ssl/ca.crt /Kiwi/static/ && \
     mkdir -p /Kiwi/static/.well-known/acme-challenge/
