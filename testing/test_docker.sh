@@ -71,8 +71,12 @@ rlJournalStart
         rlRun -t -c "docker exec -i web /Kiwi/manage.py makemigrations --check"
     rlPhaseEnd
 
+    rlPhaseStartTest "Sanity test - download CA.crt for self-signed SSL"
+        rlRun -t -c "curl -k --fail -o- $HTTPS/static/ca.crt"
+    rlPhaseEnd
+
     rlPhaseStartTest "Sanity test - download login page"
-        rlRun -t -c "curl -k -L -o page.html https://testing.example.bg:8443/"
+        rlRun -t -c "curl -k -L -o page.html $HTTPS/"
     rlPhaseEnd
 
     rlPhaseStartTest "Sanity test - check page.html"
@@ -100,7 +104,7 @@ rlJournalStart
         # social icons are present
         for URL in `cat page.html | grep "/static/images/social_auth/backends/" | cut -d= -f2 | cut -d"'" -f2`; do
             rlLogInfo "Verify image $URL is present"
-            rlRun -t -c "curl -k -f -o /dev/null https://testing.example.bg:8443/$URL"
+            rlRun -t -c "curl -k -f -o /dev/null $HTTPS/$URL"
         done
 
         # social icons point to correct backend login URL, even with port
