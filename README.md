@@ -132,6 +132,14 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v13.3-mt (20 May 2024)
+
+- Based on Kiwi TCMS v13.3
+- Update kiwitcms-github-app from 1.6.0 to 1.7.0
+- Update sentry-sdk from 2.0.1 to 2.2.0
+- Preserve `/static/ca.crt` file inside the container
+
+
 ### v13.2-mt (04 May 2024)
 
 - Update certbot from 2.9.0 to 2.10.0
