@@ -1,3 +1,8 @@
+# Copyright (c) 2017-2024 Alexander Todorov <atodorov@otb.bg>
+#
+# Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
+# https://www.gnu.org/licenses/agpl-3.0.html
+
 # checkov:skip=CKV_DOCKER_2:Ensure that HEALTHCHECK instructions have been added to container images
 ARG KIWI_VERSION=latest
 FROM quay.io/kiwitcms/version:$KIWI_VERSION

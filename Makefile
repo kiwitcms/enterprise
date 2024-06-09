@@ -1,3 +1,8 @@
+# Copyright (c) 2017-2024 Alexander Todorov <atodorov@otb.bg>
+#
+# Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
+# https://www.gnu.org/licenses/agpl-3.0.html
+
 KIWI_VERSION=$(shell python3 setup.py --version)
 ENTERPRISE_VERSION=$(KIWI_VERSION)-mt
 
