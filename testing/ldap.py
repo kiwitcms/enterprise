@@ -1,3 +1,8 @@
+# Copyright (c) 2020-2021 Alexander Todorov <atodorov@otb.bg>
+#
+# Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
+# https://www.gnu.org/licenses/agpl-3.0.html
+
 """
     Should be called after superuser has been created!
     Verifies that `ldap_sync_users` does its job.

@@ -1,5 +1,7 @@
-# For more information on configuration, see:
-#   * Official English Documentation: http://nginx.org/en/docs/
+# Copyright (c) 2024 Alexander Todorov <atodorov@otb.bg>
+#
+# Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
+# https://www.gnu.org/licenses/agpl-3.0.html
 
 daemon on;
 worker_processes auto;

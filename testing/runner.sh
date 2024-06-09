@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Copyright (c) 2024 Alexander Todorov <atodorov@otb.bg>
+#
+# Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
+# https://www.gnu.org/licenses/agpl-3.0.html
+
 # Note: execute this file from the project root directory
 
 # setup
