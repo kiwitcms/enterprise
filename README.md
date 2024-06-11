@@ -15,6 +15,15 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
 * Versioned static files
 * NGINX replaced by [OpenResty](https://openresty.org) with embedded
   [Lua](https://github.com/openresty/lua-nginx-module) support
+* Render Mermaid.js diagrams in Markdown fenced code blocks as PNG. Example
+    ```
+        See an example flowchart below:
+
+        ```mermaid
+        flowchart LR
+            Start --> Stop
+        ```
+    ```
 * Add-ons:
   - [django-ses](https://github.com/django-ses/django-ses) - Amazon SES email backend
   - [dj-database-url](https://github.com/jacobian/dj-database-url) - DB configuration
