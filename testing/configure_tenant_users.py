@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2021-2024 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -36,4 +36,9 @@ TestPlan.objects.create(
     product_version=version,
     type=PlanType.objects.first(),
     author=get_user_model().objects.last(),
+    text="""Kiwi TCMS Enterprise can render Mermaid.js diagrams, see:
+```mermaid
+flowchart LR
+    Start --> Stop
+```"""
 )

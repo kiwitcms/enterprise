@@ -284,6 +284,12 @@ rlJournalStart
         rlAssertGreaterOrEqual ">= 40 r/s" "$COMPLETED_REQUESTS" 400
     rlPhaseEnd
 
+    rlPhaseStartTest "Should render Mermaid.JS diagrams"
+        rlRun -t -c "curl -L -k -b ./login-cookies.txt -o plan.html $HTTPS/plan/1/ 2>/dev/null"
+        rlAssertGrep "https://mermaid.ink/img/" plan.html
+        rlAssertNotGrep "flowchart LR" plan.html
+    rlPhaseEnd
+
     rlPhaseStartCleanup
         rlRun -t -c "docker kill keycloak_server"
         rlRun -t -c "docker compose -f docker-compose.testing logs --no-color > docker.log"
