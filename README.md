@@ -141,6 +141,22 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v13.4-mt (12 Jun 2024)
+
+- Based on Kiwi TCMS v13.4
+- Relicense this source code under GNU Affero General Public License v3 or later
+- Prior versions are still licensed under GNU General Public License v3
+- Support Mermaid.js syntax in Markdown fenced code blocks. Closes
+  [Issue #3116](https://github.com/kiwitcms/Kiwi/issues/3116)
+- Update certbot from 2.10.0 to 2.11.0
+- Update certbot-dns-* plugins from 2.10.0 to 2.11.0
+- Update django-ses from 4.0.0 to 4.1.0
+- Update dj-database-url from 2.1.0 to 2.2.0
+- Update kiwitcms-github-app from 1.7.0 to 2.0.0
+- Update kiwitcms-tenants from 2.8.3 to 3.0.0
+- Update sentry-sdk from 2.2.0 to 2.5.1
+
+
 ### v13.3-mt (20 May 2024)
 
 - Based on Kiwi TCMS v13.3
