@@ -18,7 +18,7 @@ django-ses==4.1.0
 dj-database-url==2.2.0
 kiwitcms-github-app==2.0.0
 kiwitcms-tenants==3.0.0
-kiwitcms-trackers-integration==0.7.0
+kiwitcms-trackers-integration==1.0.0
 sentry-sdk[django]==2.5.1
 social-auth-app-django==5.4.1
 social-auth-kerberos==0.3.0
