@@ -31,7 +31,7 @@ if 'django_python3_ldap' not in INSTALLED_APPS:   # noqa: F821
 
 LDAP_AUTH_URL = "ldap://openldap_server:389"
 LDAP_AUTH_USE_TLS = True
-LDAP_AUTH_SEARCH_BASE = "ou=People,dc=example,dc=com"
+LDAP_AUTH_SEARCH_BASE = "ou=People,dc=kiwitcms,dc=com"
 
 
 SOCIAL_AUTH_KEYCLOAK_KEY = 'kiwitcms-web-app'
