@@ -13,7 +13,7 @@ certbot-dns-rfc2136==2.11.0
 certbot-dns-route53==2.11.0
 certbot-dns-sakuracloud==2.11.0
 django-prometheus==2.3.1
-django-python3-ldap==0.15.6
+django-python3-ldap==0.15.7
 django-ses==4.1.0
 dj-database-url==2.2.0
 kiwitcms-github-app==2.0.0
