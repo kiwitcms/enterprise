@@ -141,6 +141,17 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v13.5-mt (07 Aug 2024)
+
+- Based on Kiwi TCMS v13.5
+- Update django-python3-ldap from 0.15.6 to 0.15.8
+- Update kiwitcms-github-app from 2.0.0 to 2.0.1
+- Update kiwitcms-tenants from 3.0.0 to 3.1.0
+- Update kiwitcms-trackers-integration from 0.7.0 to 1.0.0
+- Update sentry-sdk from 2.5.1 to 2.12.0
+- Update social-auth-app-django from 5.4.1 to 5.4.2
+
+
 ### v13.4-mt (12 Jun 2024)
 
 - Based on Kiwi TCMS v13.4
