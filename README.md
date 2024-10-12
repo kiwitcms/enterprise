@@ -141,6 +141,16 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v13.6-mt (12 Oct 2024)
+
+- Based on Kiwi TCMS v13.6
+- Update django-ses from 4.1.0 to 4.2.0
+- Update kiwitcms-tenants from 3.1.0 to 3.2.1
+- Update sentry-sdk from 2.12.0 to 2.16.0
+- Update value for `Content-Security-Policy` header to match
+  upstream Kiwi TCMS
+
+
 ### v13.5-mt (07 Aug 2024)
 
 - Based on Kiwi TCMS v13.5
