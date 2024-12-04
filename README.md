@@ -141,6 +141,17 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v13.7-mt (04 Dec 2024)
+
+- Based on Kiwi TCMS v13.7
+- Add dependency on ``dict-hash`` package
+- Update django-ses from 4.2.0 to 4.3.0
+- Update dj-database-url from 2.2.0 to 2.3.0
+- Update certbot from 2.11.0 to 3.0.1
+- Update certbot-dns-* plugins from 2.11.0 to 3.0.1
+- Update sentry-sdk from 2.16.0 to 2.19.0
+
+
 ### v13.6-mt (12 Oct 2024)
 
 - Based on Kiwi TCMS v13.6
