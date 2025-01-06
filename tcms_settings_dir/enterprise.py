@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2024 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2020-2025 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -28,8 +28,9 @@ if LEGAL_MENU_ITEM not in HELP_MENU_ITEMS:   # noqa: F821
 KIWI_VERSION = f"{__version__}-Enterprise"
 
 # provides filename versioning
-STATICFILES_STORAGE = \
-    'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+STORAGES["staticfiles"][  # noqa: F821
+    "BACKEND"
+] = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
 ROOT_URLCONF = 'tcms_enterprise.root_urls'
 
