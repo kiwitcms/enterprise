@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2024-2025 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -19,7 +19,7 @@ ${TEST_PLAN_URL}        ${SERVER}/plan/1/
 *** Test Cases ***
 Uploading file works via file upload
     Open Browser    ${LOGIN_URL}    ${BROWSER}
-    Maximize Browser Window
+    Set Window Size     3024    1890
     Set Selenium Speed    ${DELAY}
     Title Should Be    Kiwi TCMS - Login
 
