@@ -67,6 +67,9 @@ SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 # https://plausible.io/kiwitcms-enterprise
 PLAUSIBLE_DOMAIN = "kiwitcms-enterprise"
 
+# https://app.scarf.sh/analytics/kiwitcms?pixelId=e9299ee8-1145-4c49-94fc-689f629f0de2
+SCARF_PIXEL_ID = "e9299ee8-1145-4c49-94fc-689f629f0de2"
+
 # configuration for Sentry. By default all reports go to Kiwi TCMS
 sentry_sdk.init(
     dsn="https://e9a370eba7bd41fe8faead29552f12d7@o126041.ingest.sentry.io/277775",  # noqa: E501, pylint: disable=line-too-long
