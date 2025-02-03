@@ -41,3 +41,6 @@ SOCIAL_AUTH_KEYCLOAK_AUTHORIZATION_URL = \
     "http://kc.example.bg:8080/auth/realms/kiwi/protocol/openid-connect/auth"
 SOCIAL_AUTH_KEYCLOAK_ACCESS_TOKEN_URL = \
     "http://kc.example.bg:8080/auth/realms/kiwi/protocol/openid-connect/token"
+
+
+ANONYMOUS_ANALYTICS = False
