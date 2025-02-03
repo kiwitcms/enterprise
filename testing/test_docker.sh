@@ -186,7 +186,7 @@ rlJournalStart
     rlPhaseEnd
 
     rlPhaseStartTest "Should send Content-Security-Policy header"
-        rlRun -t -c "curl -k -D- $HTTPS 2>/dev/null | grep $'Content-Security-Policy: script-src \'self\' cdn.crowdin.com \*.ethicalads.io plausible.io static.scarf.sh;'"
+        rlRun -t -c "curl -k -D- $HTTPS 2>/dev/null | grep $'Content-Security-Policy: script-src \'self\' cdn.crowdin.com \*.ethicalads.io plausible.io;'"
     rlPhaseEnd
 
     rlPhaseStartTest "Should send uploads with exactly 1 'Content-Type: text/plain' header"
