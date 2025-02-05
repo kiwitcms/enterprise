@@ -141,6 +141,17 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v14.0-mt (05 Feb 2025)
+
+- Based on Kiwi TCMS v14.0
+- Remove dependency on ``dict-hash`` package
+- Update certbot-* from 3.0.1 to 3.1.0
+- Update django-ses from 4.3.0 to 4.4.0
+- Update sentry-sdk from 2.19.0 to 2.20.0
+- Update kiwitcms-tenants from 3.2.1 to 4.0.0
+- Replace deprecated ``STATICFILES_STORAGE`` setting
+
+
 ### v13.7-mt (04 Dec 2024)
 
 - Based on Kiwi TCMS v13.7
