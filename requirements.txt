@@ -8,7 +8,7 @@ certbot-dns-google==3.1.0
 certbot-dns-linode==3.1.0
 certbot-dns-luadns==3.1.0
 certbot-dns-nsone==3.1.0
-certbot-dns-ovh==3.1.0
+certbot-dns-ovh==3.2.0
 certbot-dns-rfc2136==3.1.0
 certbot-dns-route53==3.1.0
 certbot-dns-sakuracloud==3.1.0
