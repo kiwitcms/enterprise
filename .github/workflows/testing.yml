@@ -76,19 +76,19 @@ jobs:
           EOF
           sudo apt-get install firefox firefox-geckodriver
 
-    - name: Login to Quay.io
+    - name: Login to Private Container Registry
       if: matrix.command == 'test-docker-image'
       run: |
-        echo "${{ secrets.QUAY_PUSH_TOKEN }}" | docker login -u="${{ secrets.QUAY_PUSH_USERNAME }}" --password-stdin quay.io
+        echo "${{ secrets.QUAY_PUSH_TOKEN }}" | docker login -u="${{ secrets.QUAY_PUSH_USERNAME }}" --password-stdin hub.kiwitcms.eu
 
     - name: make ${{ matrix.command }}
       run: |
         make ${{ matrix.command }}
 
-    - name: Logout of Quay.io
+    - name: Logout of Private Container Registry
       if: ${{ always() && matrix.command == 'test-docker-image' }}
       run: |
-        docker logout quay.io
+        docker logout hub.kiwitcms.eu
 
     - name: Upload testing artifacts
       if: always() && matrix.command == 'test-docker-image'

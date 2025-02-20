@@ -39,8 +39,7 @@ build-xmlsec:
 .PHONY: docker-image
 docker-image: build build-gssapi build-xmlsec
 	# everything else below is Enterprise + multi-tenant
-	docker build --build-arg KIWI_VERSION=$(KIWI_VERSION) -t quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) .
-	docker tag quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) quay.io/kiwitcms/enterprise:latest
+	docker build --build-arg KIWI_VERSION=$(KIWI_VERSION) -t hub.kiwitcms.eu/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-$(shell uname -m) .
 
 
 .PHONY: test-docker-image
