@@ -120,7 +120,7 @@ existing image as a baseline and incorporate all of your changes on top of it. F
 create a `Dockerfile` like so:
 
 ```
-FROM quay.io/kiwitcms/enterprise
+FROM hub.kiwitcms.eu/kiwitcms/enterprise
 
 # your own changes go here
 ```

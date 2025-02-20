@@ -5,7 +5,7 @@
 
 # checkov:skip=CKV_DOCKER_2:Ensure that HEALTHCHECK instructions have been added to container images
 ARG KIWI_VERSION=latest
-FROM quay.io/kiwitcms/version:$KIWI_VERSION
+FROM hub.kiwitcms.eu/kiwitcms/version:$KIWI_VERSION
 
 USER 0
 RUN curl https://openresty.org/package/rhel/openresty2.repo > /etc/yum.repos.d/openresty2.repo

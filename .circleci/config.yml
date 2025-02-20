@@ -25,11 +25,14 @@ jobs:
           pip3 install -r devel.txt
 
       - run: |
-          echo "$QUAY_PUSH_TOKEN" | docker login -u="$QUAY_PUSH_USERNAME" --password-stdin quay.io
+          echo "$QUAY_PUSH_TOKEN" | docker login -u="$QUAY_PUSH_USERNAME" --password-stdin hub.kiwitcms.eu
 
           make docker-image
 
-          docker logout quay.io
+          echo "+++++ Docker images +++++"
+          docker images
+
+          docker logout hub.kiwitcms.eu
 
   aarch64-build-and-push-docker-image:
     machine:
@@ -52,17 +55,20 @@ jobs:
 
       - run: |
           echo "$QUAY_PUSH_TOKEN" | docker login -u="$QUAY_PUSH_USERNAME" --password-stdin quay.io
+          echo "$QUAY_PUSH_TOKEN" | docker login -u="$QUAY_PUSH_USERNAME" --password-stdin hub.kiwitcms.eu
 
           make docker-image
 
           VERSION=$(make echo-version)
-          docker tag quay.io/kiwitcms/enterprise:$VERSION quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
+          # retag for private container registry
+          docker tag hub.kiwitcms.eu/kiwitcms/enterprise:$VERSION-$(uname -m) quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
 
           echo "+++++ Docker images +++++"
           docker images
 
           docker push quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
           docker logout quay.io
+          docker logout hub.kiwitcms.eu
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows

@@ -27,7 +27,7 @@ services:
 
     web:
         container_name: web
-        image: quay.io/kiwitcms/enterprise:latest
+        image: hub.kiwitcms.eu/kiwitcms/enterprise:latest
         # IMPORTANT: ^^^ for Production deployments pin to a specific version number, see
         # https://kiwitcms.org/containers/
         depends_on:
