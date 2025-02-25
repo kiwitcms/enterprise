@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2024-2025 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -8,6 +8,8 @@
 import base64
 import markdown
 
+from django.conf import settings
+
 
 def mermaid2url(src_code):
     """
@@ -16,7 +18,7 @@ def mermaid2url(src_code):
     """
     as_base64 = base64.b64encode(src_code.encode("utf8"))
     as_base64 = as_base64.decode("ascii")
-    return f"https://mermaid.ink/img/{as_base64}?type=png"
+    return f"{settings.MERMAID_RENDERER_URL}/{as_base64}?type=png"
 
 
 class MermaidPreprocessor(markdown.preprocessors.Preprocessor):
