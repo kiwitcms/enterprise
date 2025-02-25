@@ -15,7 +15,8 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
 * Versioned static files
 * NGINX replaced by [OpenResty](https://openresty.org) with embedded
   [Lua](https://github.com/openresty/lua-nginx-module) support
-* Render Mermaid.js diagrams in Markdown fenced code blocks as PNG. Example
+* Render Mermaid.js diagrams in Markdown fenced code blocks as PNG.
+  Controlled via `settings.MERMAID_RENDERER_URL`. Example
     ```
         See an example flowchart below:
 
@@ -27,7 +28,7 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
 * Add-ons:
   - [django-ses](https://github.com/django-ses/django-ses) - Amazon SES email backend
   - [dj-database-url](https://github.com/jacobian/dj-database-url) - DB configuration
-    via `DATABASE_URL`
+    via the `DATABASE_URL` environment variable
   - [django-prometheus](https://github.com/korfuri/django-prometheus) - Export Django
     monitoring metrics for Prometheus.io
   - [kiwitcms-github-app](https://github.com/kiwitcms/github-app/) - extra integration
