@@ -142,6 +142,15 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v14.1-mt (10 Mar 2025)
+
+- Based on Kiwi TCMS v14.1
+- Update certbot-* from 3.1.0 to 3.2.0
+- Update sentry-sdk from 2.20.0 to 2.22.0
+- Update social-auth-app-django from 5.4.2 to 5.4.3
+- Add new setting `MERMAID_RENDERER_URL`
+
+
 ### v14.0-mt (05 Feb 2025)
 
 - Based on Kiwi TCMS v14.0
