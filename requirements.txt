@@ -4,7 +4,7 @@ certbot-dns-digitalocean==3.2.0
 certbot-dns-dnsimple==3.2.0
 certbot-dns-dnsmadeeasy==3.2.0
 certbot-dns-gehirn==3.2.0
-certbot-dns-google==3.2.0
+certbot-dns-google==3.3.0
 certbot-dns-linode==3.2.0
 certbot-dns-luadns==3.2.0
 certbot-dns-nsone==3.2.0
