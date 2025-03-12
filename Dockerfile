@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2024 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2017-2025 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -38,7 +38,11 @@ COPY ./etc/*.lua /Kiwi/etc/
 COPY ./bin/* /Kiwi/bin/
 
 COPY ./dist/ /Kiwi/dist/
-RUN pip install --no-cache-dir --find-links /Kiwi/dist/ /Kiwi/dist/kiwitcms_enterprise*.whl
+# install locally built wheels first and then download all other dependencies
+RUN pip install --no-cache-dir --only-binary :all: decorator lxml && \
+    pip install --no-cache-dir --find-links /Kiwi/dist/ --no-index /Kiwi/dist/xmlsec*.whl && \
+    pip install --no-cache-dir --find-links /Kiwi/dist/ --no-index /Kiwi/dist/gssapi*.whl && \
+    pip install --no-cache-dir --find-links /Kiwi/dist/ /Kiwi/dist/kiwitcms_enterprise*.whl
 
 # workaround broken CSS which will break collectstatic
 # because they refer to non-existing ../fonts/glyphicons-halflings-regular.eot (no fonts/ directory)
