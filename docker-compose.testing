@@ -49,6 +49,7 @@ services:
         environment:
             NGX_UPLOADS_RATE: 55
             NGX_UPLOADS_BURST: 20
+            NGX_CSP_SCRIPT_SRC: cdn.example.bg
             # IMPORTANT: ^^^ Remove or substitute your own overrides for Production deployments, see
             # https://github.com/kiwitcms/enterprise#kiwi-tcms-enterprise-edition
             KIWI_TENANTS_DOMAIN: testing.example.bg
