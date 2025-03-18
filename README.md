@@ -68,6 +68,8 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
     see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
   - `NGX_UPLOADS_BURST`- burst rate for uploaded files; **default 10**,
     see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
+  - `NGX_CSP_SCRIPT_SRC`- extra value for the `Content-Security-Policy` header `script-src`
+     directive; **default: nil**)
 
 While the software itself is open source we do not provide public
 access to the resulting `kiwitcms/enterprise` container image.

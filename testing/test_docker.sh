@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2024 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2024-2025 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -186,7 +186,8 @@ rlJournalStart
     rlPhaseEnd
 
     rlPhaseStartTest "Should send Content-Security-Policy header"
-        rlRun -t -c "curl -k -D- $HTTPS 2>/dev/null | grep $'Content-Security-Policy: script-src \'self\' cdn.crowdin.com \*.ethicalads.io plausible.io;'"
+        rlRun -t -c "curl -k -D- --referer test_scenario_csp $HTTPS 2>&1"
+        rlRun -t -c "curl -k -D- --referer test_scenario_csp $HTTPS 2>/dev/null | grep $'Content-Security-Policy: script-src \'self\' cdn.crowdin.com \*.ethicalads.io plausible.io cdn.example.bg;'"
     rlPhaseEnd
 
     rlPhaseStartTest "Should send uploads with exactly 1 'Content-Type: text/plain' header"
