@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2024 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2017-2025 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -44,6 +44,7 @@ docker-image: build build-gssapi build-xmlsec
 
 .PHONY: test-docker-image
 test-docker-image: docker-image
+	docker tag hub.kiwitcms.eu/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-$(shell uname -m) hub.kiwitcms.eu/kiwitcms/enterprise:latest
 	./testing/runner.sh
 
 
