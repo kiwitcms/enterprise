@@ -27,6 +27,7 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
     ```
 * Add-ons:
   - [django-ses](https://github.com/django-ses/django-ses) - Amazon SES email backend
+  - [django-storages](https://github.com/jschneier/django-storages) - storage backends
   - [dj-database-url](https://github.com/jacobian/dj-database-url) - DB configuration
     via the `DATABASE_URL` environment variable
   - [django-prometheus](https://github.com/korfuri/django-prometheus) - Export Django
