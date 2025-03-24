@@ -7,5 +7,5 @@ twine
 readme_renderer[md]
 robotframework
 robotframework-seleniumlibrary
-selenium==4.29.0
+selenium==4.30.0
 wheel
