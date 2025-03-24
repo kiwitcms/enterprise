@@ -20,7 +20,7 @@ dj-database-url==2.3.0
 kiwitcms-github-app==2.0.1
 kiwitcms-tenants==4.0.0
 kiwitcms-trackers-integration==1.1.0
-sentry-sdk[django]==2.23.1
+sentry-sdk[django]==2.24.0
 social-auth-app-django==5.4.3
 social-auth-kerberos==0.3.0
 python3-saml==1.16.0
