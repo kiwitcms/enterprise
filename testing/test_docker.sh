@@ -80,6 +80,10 @@ rlJournalStart
         rlRun -t -c "docker exec -i web /Kiwi/manage.py makemigrations --check"
     rlPhaseEnd
 
+    rlPhaseStartTest "Sanity test - show version"
+        rlRun -t -c "docker exec -i web /Kiwi/manage.py show_version"
+    rlPhaseEnd
+
     rlPhaseStartTest "Sanity test - download CA.crt for self-signed SSL"
         rlRun -t -c "curl -k --fail -o- $HTTPS/static/ca.crt"
     rlPhaseEnd
