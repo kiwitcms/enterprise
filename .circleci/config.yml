@@ -34,6 +34,10 @@ jobs:
 
           docker logout hub.kiwitcms.eu
 
+          VERSION=$(make echo-version)
+          docker run --name web --rm -d hub.kiwitcms.eu/kiwitcms/enterprise:$VERSION-$(uname -m)
+          make extract-static-files
+
   aarch64-build-and-push-docker-image:
     machine:
       # https://circleci.com/docs/2.0/configuration-reference/#available-machine-images

@@ -62,6 +62,10 @@ rlJournalStart
         rlRun -t -c "docker exec -u 0 -i web /bin/bash -c \"echo '$KC_ADDRESS    kc.example.bg' >> /etc/hosts\""
     rlPhaseEnd
 
+    rlPhaseStartTest "Extract and list files in /Kiwi/static/"
+        rlRun -t -c "make extract-static-files"
+    rlPhaseEnd
+
     rlPhaseStartTest "Sanity test - initial configuration"
         # need to monkey-patch createsuperuser.py b/c it rejects input when not using a TTY
         rlRun -t -c 'docker exec -i web sed -i "s/raise NotRunningInTTYException/pass/" /venv/lib64/python3.11/site-packages/django/contrib/auth/management/commands/createsuperuser.py'

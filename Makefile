@@ -48,6 +48,15 @@ test-docker-image: docker-image
 	./testing/runner.sh
 
 
+.PHONY: extract-static-files
+extract-static-files:
+	# warning: requires a running container
+	docker cp web:/Kiwi/static /var/tmp/extracted.static/
+	find /var/tmp/extracted.static/ -type l -exec rm '{}' \;
+	find /var/tmp/extracted.static/ -type f | sort
+	find /var/tmp/extracted.static/ -type f | wc -l
+
+
 .PHONY: docker-manifest
 docker-manifest:
 	# versioned manifest
