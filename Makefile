@@ -4,7 +4,7 @@
 # https://www.gnu.org/licenses/agpl-3.0.html
 
 KIWI_VERSION=$(shell python3 setup.py --version)
-ENTERPRISE_VERSION=$(KIWI_VERSION).5-mt
+ENTERPRISE_VERSION=$(KIWI_VERSION).7-mt
 
 .PHONY: echo-version
 echo-version:
