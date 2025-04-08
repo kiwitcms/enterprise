@@ -2,7 +2,7 @@ certbot==3.3.0
 certbot-dns-cloudflare==3.3.0
 certbot-dns-digitalocean==3.3.0
 certbot-dns-dnsimple==3.3.0
-certbot-dns-dnsmadeeasy==3.3.0
+certbot-dns-dnsmadeeasy==4.0.0
 certbot-dns-gehirn==3.3.0
 certbot-dns-google==3.3.0
 certbot-dns-linode==3.3.0
