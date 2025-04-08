@@ -10,7 +10,7 @@ certbot-dns-luadns==3.3.0
 certbot-dns-nsone==3.3.0
 certbot-dns-ovh==3.3.0
 certbot-dns-rfc2136==3.3.0
-certbot-dns-route53==3.3.0
+certbot-dns-route53==4.0.0
 certbot-dns-sakuracloud==3.3.0
 django-prometheus==2.3.1
 django-python3-ldap==0.15.8
