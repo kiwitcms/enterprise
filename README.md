@@ -37,6 +37,7 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
   - [kiwitcms-tenants](https://github.com/kiwitcms/tenants/) - multi-tenant support
   - [kiwitcms-trackers-integration](https://github.com/kiwitcms/trackers-integration/) -
     integration with extra issue trackers
+  - [psycopg-pool](https://www.psycopg.org/psycopg3/docs/advanced/pool.html) - support for Postgres connection pools
   - [sentry-sdk](https://docs.sentry.io/platforms/python/integrations/django/) - automatic error reporting with Sentry
   - [social-auth-app-django](https://github.com/python-social-auth/social-app-django) -
     extra [authentication backends](http://python-social-auth.readthedocs.io/en/latest/backends/index.html#supported-backends)
