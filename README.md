@@ -146,6 +146,23 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v14.2-mt (23 Apr 2025)
+
+- Based on Kiwi TCMS v14.2
+- Update certbot-* from 3.2.0 to 4.0.0
+- Update kiwitcms-github-app from 2.0.1 to 2.1.0
+- Update kiwitcms-tenants from 4.0.0 to 4.1.0
+- Update sentry-sdk from 2.22.0 to 2.26.1
+- Add django-storages[s3] as a dependency
+- Add psycopg-pool as a dependency
+- Add a `show_version` command for `manage.py`
+- Allow additional `script-src` for `Content-Security-Policy` header
+  to be specified via the `NGX_CSP_SCRIPT_SRC` environment variable
+- Workaround missing wheel packages for xmlsec v1.3.15, see
+  https://github.com/xmlsec/python-xmlsec/issues/344
+- Pin xmlsec to v1.3.14
+
+
 ### v14.1-mt (10 Mar 2025)
 
 - Based on Kiwi TCMS v14.1
