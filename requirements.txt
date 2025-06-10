@@ -1,6 +1,6 @@
 certbot==4.0.0
 certbot-dns-cloudflare==4.0.0
-certbot-dns-digitalocean==4.0.0
+certbot-dns-digitalocean==4.1.0
 certbot-dns-dnsimple==4.0.0
 certbot-dns-dnsmadeeasy==4.0.0
 certbot-dns-gehirn==4.0.0
