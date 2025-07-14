@@ -100,21 +100,23 @@ For more information see
 https://kiwitcms.readthedocs.io/en/latest/installing_docker.html#initial-configuration-of-running-container
 and https://github.com/kiwitcms/tenants/#first-boot-configuration
 
-3. For initial configuration of Let's Encrypt SSL certificates execute the command:
+3. For initial configuration or renewal of Let's Encrypt SSL certificates execute the command:
 
     ```
-    docker exec -it -u0 web /Kiwi/bin/lets-encrypt <secondary-fqdn> <tertiary-fqdn> <etc>
+    docker exec -it -u0 web /Kiwi/bin/lets-encrypt <first-addon-fqdn> <second-addon-fqdn> <etc>
     ```
 
    - the value of `KIWI_TENANTS_DOMAIN` will be the primary domain on the SSL certificate
+   - the wild-card value *.`KIWI_TENANTS_DOMAIN` will be the secondary domain on the SSL certificate
    - additional domain names may be specified as arguments
    - **WARNINGS:**:
-       - true
-         [wildcard certificates](https://letsencrypt.org/docs/faq/#does-let-s-encrypt-issue-wildcard-certificates)
-         are only possible via certbot's DNS plugins while this script uses `--webroot`
-       - for full control you may want to execute the `certbot` command directly
-       - you need to bind-mount `/etc/letsencrypt/` and `/Kiwi/ssl/` inside the container
+       - This script will ask you to configure 2 things:
+           1) The answer to ACME challenge as a DNS record
+           2) The answer to ACME challenge as a static file under /Kiwi/static/.well-known/acme-challenge/
+       - You need to bind-mount `/etc/letsencrypt/` and `/Kiwi/ssl/` inside the container
          if you want the Let's Encrypt certificates to persist a restart
+       - For full control you may want to execute the `certbot` command directly however
+         pay attention to file & directories permissions and ownership!
 
 
 Hacking and customization

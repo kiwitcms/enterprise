@@ -24,7 +24,7 @@ if [ -z "$KIWI_TENANTS_DOMAIN" ]; then
     exit 2
 fi
 
-DOMAINS="-d $KIWI_TENANTS_DOMAIN"
+DOMAINS="-d $KIWI_TENANTS_DOMAIN -d *.$KIWI_TENANTS_DOMAIN"
 for ARGUMENT in $@; do
     DOMAINS="$DOMAINS -d $ARGUMENT"
 done
@@ -33,12 +33,13 @@ echo "INFO: Configuring certificate for the following domains:"
 echo "$DOMAINS"
 
 # certificates stored under /etc/letsencrypt/live/$KIWI_TENANTS_DOMAIN/
-certbot -v certonly $DOMAINS --webroot --webroot-path /Kiwi/static/
+certbot -v certonly $DOMAINS --manual --webroot-path /Kiwi/static/
 
 # adjust file ownership b/c nginx doesn't run as root
 chown -R 1001:root /etc/letsencrypt
 ln -sf /etc/letsencrypt/live/$KIWI_TENANTS_DOMAIN/fullchain.pem /Kiwi/ssl/localhost.crt
 ln -sf /etc/letsencrypt/live/$KIWI_TENANTS_DOMAIN/privkey.pem /Kiwi/ssl/localhost.key
+chown -R 1001:root /Kiwi/ssl
 
 # restart webserver
 killall -HUP nginx
