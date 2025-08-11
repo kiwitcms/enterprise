@@ -1,6 +1,6 @@
 certbot==4.1.1
 django-prometheus==2.4.1
-django-python3-ldap==0.16.0
+django-python3-ldap==0.16.1
 django-ses==4.4.0
 django-storages[s3]==1.14.6
 dj-database-url==3.0.1
