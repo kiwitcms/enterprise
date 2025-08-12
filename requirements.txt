@@ -1,4 +1,4 @@
-certbot==4.1.1
+certbot==4.2.0
 django-prometheus==2.4.1
 django-python3-ldap==0.16.1
 django-ses==4.4.0
