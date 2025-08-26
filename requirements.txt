@@ -9,6 +9,6 @@ kiwitcms-tenants==4.1.0
 kiwitcms-trackers-integration==1.1.0
 psycopg-pool==3.2.6
 python3-saml==1.16.0
-sentry-sdk[django]==2.34.1
+sentry-sdk[django]==2.35.1
 social-auth-app-django==5.5.1
 social-auth-kerberos==0.3.0
