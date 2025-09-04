@@ -46,7 +46,6 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
   - [django-python3-ldap](https://github.com/etianen/django-python3-ldap) -
     LDAP authentication backend
   - [Let's Encrypt certbot](https://certbot.eff.org/)
-  - [certbot-dns](https://eff-certbot.readthedocs.io/en/latest/using.html#dns-plugins) plugins
 * Supported environment variables, configurable on the container:
   - `DATABASE_URL` - short-hand database connection configuration, according to this
     [this URL schema](https://github.com/jazzband/dj-database-url#url-schema); Replaces individual
