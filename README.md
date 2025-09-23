@@ -147,6 +147,17 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v15.0-mt (23 Sep 2025)
+
+- Based on Kiwi TCMS v15.0
+- Update certbot from 4.1.1 to 4.2.0 in the certbot group
+- Update django-python3-ldap from 0.15.8 to 0.16.1
+- Update kiwitcms-tenants from 4.1.0 to 4.2.0
+- Update sentry-sdk from 2.32.0 to 2.38.0
+- Remove certbot-dns-* plugins as dependencies
+- Redesign bin/lets-encrypt script for wild-card certificates
+
+
 ### v14.3-mt (03 Jul 2025)
 
 - Based on Kiwi TCMS v14.3
