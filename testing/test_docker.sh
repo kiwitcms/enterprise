@@ -92,6 +92,11 @@ rlJournalStart
         rlRun -t -c "curl -k -L -o page.html $HTTPS/"
     rlPhaseEnd
 
+    rlPhaseStartTest "Sanity test - /admin/login/ redirects to /accounts/login/"
+        rlRun -t -c "curl -k -D- -o- --referer admin_login_step $HTTPS/admin/login/ | grep 'Location: /accounts/login/'"
+        rlRun -t -c "curl -k -L  -o- --referer admin_login_step $HTTPS/admin/login/ | grep 'Kiwi TCMS - Login'"
+    rlPhaseEnd
+
     rlPhaseStartTest "Sanity test - check page.html"
         # version is Enterprise
         rlAssertGrep "Version.*-Enterprise" page.html
