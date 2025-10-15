@@ -1,4 +1,5 @@
 certbot==5.1.0
+django-csv-export-view==2.0.1
 django-prometheus==2.4.1
 django-python3-ldap==0.16.1
 django-ses==4.4.0
