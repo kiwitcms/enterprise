@@ -159,10 +159,10 @@ rlJournalStart
         assert_up_and_running
     rlPhaseEnd
 
-    rlPhaseStartTest "Sanity test - ADMIN -> Users and Groups menu"
+    rlPhaseStartTest "Sanity test - ADMIN pages"
         # WARNING: reuses username/password from the LDAP test above !!!
         rlRun -t -c "cat testing/configure_tenant_users.py | docker exec -i web /Kiwi/manage.py shell"
-        rlRun -t -c "robot testing/admin_users_groups_menu.robot"
+        rlRun -t -c "robot testing/admin.robot"
     rlPhaseEnd
 
     rlPhaseStartTest "Can upload attachments via browser UI"
