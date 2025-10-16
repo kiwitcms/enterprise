@@ -81,6 +81,13 @@ jobs:
       run: |
         echo "${{ secrets.QUAY_PUSH_TOKEN }}" | docker login -u="${{ secrets.QUAY_PUSH_USERNAME }}" --password-stdin hub.kiwitcms.eu
 
+    - name: Build intermediary kiwitcms/kiwi image
+      if: matrix.command == 'test-docker-image'
+      run: |
+          git clone https://github.com/kiwitcms/Kiwi
+          make -C Kiwi/ docker-image
+          docker tag pub.kiwitcms.eu/kiwitcms/kiwi:latest hub.kiwitcms.eu/kiwitcms/version:15.0
+
     - name: make ${{ matrix.command }}
       run: |
         make ${{ matrix.command }}
