@@ -9,5 +9,5 @@ cmarkgfm==2024.11.20
 readme_renderer[md]
 robotframework
 robotframework-seleniumlibrary
-selenium==4.36.0
+selenium==4.37.0
 wheel
