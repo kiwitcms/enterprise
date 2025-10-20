@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2024 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2021-2025 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -11,13 +11,21 @@ from django.contrib.auth import get_user_model
 from tcms.management.models import Classification, Product, Version
 from tcms.testplans.models import PlanType, TestPlan
 
-from tcms_tenants.models import Tenant
+from tcms_tenants.models import Domain, Tenant
 
 tenant = Tenant.objects.get(schema_name="empty")
 
 domain = tenant.domains.first()
 domain.domain = "empty.testing.example.bg"
 domain.save()
+
+# empty.testing.example.bg is also accessible via
+# no-login.example.bg which is bound to the no-login IP address
+Domain.objects.create(
+    domain="no-login.example.bg",
+    is_primary=False,
+    tenant=tenant,
+)
 
 for user in get_user_model().objects.all():
     tenant.authorized_users.add(user)

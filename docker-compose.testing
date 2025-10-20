@@ -57,6 +57,17 @@ services:
         env_file:
             - /tmp/kc.env
 
+    # IMPORTANT: not needed for Production deployments!
+    # Used for testing via GitHub CI
+    web_no_login:
+        extends: web
+        container_name: web_no_login
+        ports: !override
+            - 8180:8080
+            - 8143:8443
+        volumes:
+            - ./testing/password_login_disabled.py:/venv/lib64/python3.11/site-packages/tcms_settings_dir/zzz_pwd_login_disabled.py:z,ro
+
 volumes:
     db_data:
     kiwi_ssl:
