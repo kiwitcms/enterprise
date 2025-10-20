@@ -55,11 +55,16 @@ rlJournalStart
         rlLogInfo "--- testing.example.bg: $IP_ADDRESS --"
         rlRun -t -c "sudo sh -c \"echo '$IP_ADDRESS    testing.example.bg     empty.testing.example.bg' >> /etc/hosts\""
 
+        NO_LOGIN_ADDRESS=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web_no_login)
+        rlLogInfo "--- NO PWD LOGIN: $NO_LOGIN_ADDRESS --"
+        rlRun -t -c "sudo sh -c \"echo '$NO_LOGIN_ADDRESS    no-login.example.bg' >> /etc/hosts\""
+
         KC_ADDRESS=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' keycloak_server)
         rlLogInfo "--- kc.example.bg: $KC_ADDRESS --"
 
         # Kiwi TCMS container needs to know how to resolve the Keycloak server address
         rlRun -t -c "docker exec -u 0 -i web /bin/bash -c \"echo '$KC_ADDRESS    kc.example.bg' >> /etc/hosts\""
+        rlRun -t -c "docker exec -u 0 -i web_no_login /bin/bash -c \"echo '$KC_ADDRESS    kc.example.bg' >> /etc/hosts\""
     rlPhaseEnd
 
     rlPhaseStartTest "Extract and list files in /Kiwi/static/"
@@ -84,17 +89,29 @@ rlJournalStart
         rlRun -t -c "docker exec -i web /Kiwi/manage.py show_version"
     rlPhaseEnd
 
-    rlPhaseStartTest "Sanity test - download CA.crt for self-signed SSL"
-        rlRun -t -c "curl -k --fail -o- $HTTPS/static/ca.crt"
+    rlPhaseStartTest "DEBUG - show settings web"
+        rlRun -t -c "docker exec -i web /Kiwi/manage.py diffsettings"
     rlPhaseEnd
 
-    rlPhaseStartTest "Sanity test - download login page"
-        rlRun -t -c "curl -k -L -o page.html $HTTPS/"
+    rlPhaseStartTest "DEBUG - show settings web_no_login"
+        rlRun -t -c "docker exec -i web_no_login /Kiwi/manage.py diffsettings"
+    rlPhaseEnd
+
+    rlPhaseStartTest "Sanity test - download CA.crt for self-signed SSL"
+        rlRun -t -c "curl -k --fail -o- $HTTPS/static/ca.crt"
     rlPhaseEnd
 
     rlPhaseStartTest "Sanity test - /admin/login/ redirects to /accounts/login/"
         rlRun -t -c "curl -k -D- -o- --referer admin_login_step $HTTPS/admin/login/ | grep 'Location: /accounts/login/'"
         rlRun -t -c "curl -k -L  -o- --referer admin_login_step $HTTPS/admin/login/ | grep 'Kiwi TCMS - Login'"
+    rlPhaseEnd
+
+    rlPhaseStartTest "Sanity test - /accounts/passwordreset/ displays page when login enabled"
+        rlRun -t -c "curl -k -L -o- --referer password_reset_step $HTTPS/accounts/passwordreset/ | grep 'Kiwi TCMS password reset!'"
+    rlPhaseEnd
+
+    rlPhaseStartTest "Sanity test - download login page"
+        rlRun -t -c "curl -k -L -o page.html $HTTPS/"
     rlPhaseEnd
 
     rlPhaseStartTest "Sanity test - check page.html"
@@ -107,7 +124,7 @@ rlJournalStart
         rlAssertGrep 'href="/kiwitcms_github_app/' page.html
 
         # template override for social icons
-        rlAssertGrep "or Continue With" page.html
+        rlAssertGrep "Continue with" page.html
 
         # social backends are listed
         # for ICON in tcms_enterprise/static/images/social_auth/backends/*.png; do
@@ -150,19 +167,24 @@ rlJournalStart
         rlAssertEquals "container state is healthy" "$STATE" "healthy"
     rlPhaseEnd
 
-    rlPhaseStartTest "Container restart"
-        rlRun -t -c "docker compose -f docker-compose.testing restart"
-
-        STATE=$(docker inspect web | jq -r ".[].State.Health.Status")
-        rlAssertEquals "container state is healthy" "$STATE" "starting"
-
-        assert_up_and_running
-    rlPhaseEnd
-
     rlPhaseStartTest "Sanity test - ADMIN pages"
         # WARNING: reuses username/password from the LDAP test above !!!
         rlRun -t -c "cat testing/configure_tenant_users.py | docker exec -i web /Kiwi/manage.py shell"
         rlRun -t -c "robot testing/admin.robot"
+    rlPhaseEnd
+
+    # NOTE: secondary domain no-login.example.bg is configured in the previous step!
+    rlPhaseStartTest "NO LOGIN - /accounts/passwordreset/ displays 404"
+        rlRun -t -c "curl -k -D- -o- --referer no_login_password_reset https://no-login.example.bg:8443/accounts/passwordreset/ | grep '404 Not Found'"
+    rlPhaseEnd
+
+    # NOTE: we can't exercise the POST request against login & password reset pages b/c they also require cookies and/or
+    # CSRF tokens which are delivered via GET request/HTML form rendering
+    rlPhaseStartTest "NO LOGIN - /accounts/login/ does not display username/password form"
+        rlRun -t -c "curl -k -D- -o- --referer no_login_login_page https://no-login.example.bg:8443/accounts/login/ | grep '<form '" 1
+        rlRun -t -c "curl -k -D- -o- --referer no_login_login_page https://no-login.example.bg:8443/accounts/login/ | grep 'inputUsername'" 1
+        rlRun -t -c "curl -k -D- -o- --referer no_login_login_page https://no-login.example.bg:8443/accounts/login/ | grep 'inputPassword'" 1
+        rlRun -t -c "curl -k -D- -o- --referer no_login_login_page https://no-login.example.bg:8443/accounts/login/ | grep 'csrfmiddlewaretoken'" 1
     rlPhaseEnd
 
     rlPhaseStartTest "Can upload attachments via browser UI"
@@ -302,6 +324,17 @@ rlJournalStart
         rlRun -t -c "curl -L -k -b ./login-cookies.txt -o plan.html $HTTPS/plan/1/ 2>/dev/null"
         rlAssertGrep "https://mermaid.ink/img/" plan.html
         rlAssertNotGrep "flowchart LR" plan.html
+    rlPhaseEnd
+
+    # WARNING: keep this last b/c we now have multiple web containers and IP addresses
+    # will change between restarts, occasionally pointing to the no-login container instead
+    rlPhaseStartTest "Container restart"
+        rlRun -t -c "docker compose -f docker-compose.testing restart"
+
+        STATE=$(docker inspect web | jq -r ".[].State.Health.Status")
+        rlAssertEquals "container state is healthy" "$STATE" "starting"
+
+        assert_up_and_running
     rlPhaseEnd
 
     rlPhaseStartCleanup
