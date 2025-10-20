@@ -88,13 +88,17 @@ rlJournalStart
         rlRun -t -c "curl -k --fail -o- $HTTPS/static/ca.crt"
     rlPhaseEnd
 
-    rlPhaseStartTest "Sanity test - download login page"
-        rlRun -t -c "curl -k -L -o page.html $HTTPS/"
-    rlPhaseEnd
-
     rlPhaseStartTest "Sanity test - /admin/login/ redirects to /accounts/login/"
         rlRun -t -c "curl -k -D- -o- --referer admin_login_step $HTTPS/admin/login/ | grep 'Location: /accounts/login/'"
         rlRun -t -c "curl -k -L  -o- --referer admin_login_step $HTTPS/admin/login/ | grep 'Kiwi TCMS - Login'"
+    rlPhaseEnd
+
+    rlPhaseStartTest "Sanity test - /accounts/passwordreset/ displays page when login enabled"
+        rlRun -t -c "curl -k -L -o- --referer password_reset_step $HTTPS/accounts/passwordreset/ | grep 'Kiwi TCMS password reset!'"
+    rlPhaseEnd
+
+    rlPhaseStartTest "Sanity test - download login page"
+        rlRun -t -c "curl -k -L -o page.html $HTTPS/"
     rlPhaseEnd
 
     rlPhaseStartTest "Sanity test - check page.html"
@@ -107,7 +111,7 @@ rlJournalStart
         rlAssertGrep 'href="/kiwitcms_github_app/' page.html
 
         # template override for social icons
-        rlAssertGrep "or Continue With" page.html
+        rlAssertGrep "Continue with" page.html
 
         # social backends are listed
         # for ICON in tcms_enterprise/static/images/social_auth/backends/*.png; do

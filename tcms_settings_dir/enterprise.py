@@ -90,3 +90,6 @@ sentry_sdk.init(
 
 # make sure users from LDAP are assigned default settings
 LDAP_AUTH_SYNC_USER_RELATIONS = "tcms_enterprise.ldap.sync_user_relations"
+
+# set to False to disable password login functionality
+PASSWORD_LOGIN_ENABLED = True

@@ -8,14 +8,20 @@ from django.conf.urls import include
 from django.views.generic import RedirectView
 
 from tcms.urls import urlpatterns
+from tcms_enterprise import views
 
-
-urlpatterns.insert(
-    0,
-    re_path(
-        r"^admin/login/", RedirectView.as_view(url="/accounts/login/", permanent=True)
-    ),
+urlpatterns = (
+    [
+        re_path(
+            r"^admin/login/",
+            RedirectView.as_view(url="/accounts/login/", permanent=True),
+        ),
+        # override these b/c they can be disabled
+        re_path(r"^accounts/login/", views.LoginView.as_view()),
+        re_path(r"^accounts/passwordreset/", views.PasswordResetView.as_view()),
+    ]
+    + urlpatterns
+    + [
+        re_path(r"", include("social_django.urls", namespace="social")),
+    ]
 )
-urlpatterns += [
-    re_path(r"", include("social_django.urls", namespace="social")),
-]

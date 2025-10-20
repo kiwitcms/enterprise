@@ -1,7 +1,7 @@
 {% extends "registration/login.html" %}
 
 {% comment %}
-Copyright (c) 2018-2020 Alexander Todorov <atodorov@otb.bg>
+Copyright (c) 2018-2025 Alexander Todorov <atodorov@otb.bg>
 
 Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 https://www.gnu.org/licenses/agpl-3.0.html
@@ -12,10 +12,19 @@ https://www.gnu.org/licenses/agpl-3.0.html
 {% load tcms_tenants %}
 {% load enterprise_tags %}
 
+{% block login_form %}
+    {% if SETTINGS.PASSWORD_LOGIN_ENABLED %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
 {% block custom_login %}
 <div>
     <p>
-        {% trans "or Continue With" %}
+        {% if SETTINGS.PASSWORD_LOGIN_ENABLED %}
+            {% trans "or" %}
+        {% endif %}
+        {% trans "Continue with" %}
     </p>
 
     {% for backend in backends.backends %}
