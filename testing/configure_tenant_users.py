@@ -4,7 +4,7 @@
 # https://www.gnu.org/licenses/agpl-3.0.html
 
 """
-    Should be called after `ldap_sync_users`.
+Should be called after `ldap_sync_users`.
 """
 from django.contrib.auth import get_user_model
 
@@ -40,5 +40,5 @@ TestPlan.objects.create(
 ```mermaid
 flowchart LR
     Start --> Stop
-```"""
+```""",
 )

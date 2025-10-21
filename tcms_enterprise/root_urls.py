@@ -13,8 +13,7 @@ from tcms.urls import urlpatterns
 urlpatterns.insert(
     0,
     re_path(
-        r"^admin/login/",
-        RedirectView.as_view(url="/accounts/login/", permanent=True)
+        r"^admin/login/", RedirectView.as_view(url="/accounts/login/", permanent=True)
     ),
 )
 urlpatterns += [
