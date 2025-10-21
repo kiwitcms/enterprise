@@ -1,5 +1,3 @@
-version: '2'
-
 services:
     # IMPORTANT: not needed for Production deployments!
     # Used for testing via GitHub CI
