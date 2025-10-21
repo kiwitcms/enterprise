@@ -47,7 +47,7 @@ class MermaidPreprocessor(markdown.preprocessors.Preprocessor):
 class KiwiTCMSExtension(markdown.extensions.Extension):
     def extendMarkdown(self, md):
         # Insert a preprocessor before ReferencePreprocessor
-        md.preprocessors.register(MermaidPreprocessor(md), 'mermaid', 35)
+        md.preprocessors.register(MermaidPreprocessor(md), "mermaid", 35)
 
 
 def makeExtension(**kwargs):  # pylint: disable=invalid-name
