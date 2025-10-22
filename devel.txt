@@ -5,7 +5,7 @@ pylint-django
 textdistance
 twine
 # see https://github.com/theacodes/cmarkgfm/issues/84
-cmarkgfm==2024.11.20
+cmarkgfm==2025.10.20
 readme_renderer[md]
 robotframework
 robotframework-seleniumlibrary
