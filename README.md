@@ -147,6 +147,18 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v15.1-mt (24 Oct 2025)
+
+- Based on Kiwi TCMS v15.1
+- Update certbot from 4.2.0 to 5.1.0
+- Update kiwitcms-tenants from 4.2.0 to 4.3.0
+- Update sentry-sdk from 2.38.0 to 2.42.1
+- Update social-auth-app-django from 5.5.1 to 5.6.0
+- Redirect `/admin/login/` to `/accounts/login/`
+- Add 'Export as CSV' dropdown on `/admin/auth/user/` page
+- Add `PASSWORD_LOGIN_ENABLED` setting
+
+
 ### v15.0-mt (23 Sep 2025)
 
 - Based on Kiwi TCMS v15.0
