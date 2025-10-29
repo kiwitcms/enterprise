@@ -147,6 +147,12 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v15.1.1-mt (30 Oct 2025)
+
+- Based on Kiwi TCMS v15.1
+- Quick-fix: Temporary disable password reset override to avoid infinite loop
+
+
 ### v15.1-mt (24 Oct 2025)
 
 - Based on Kiwi TCMS v15.1
