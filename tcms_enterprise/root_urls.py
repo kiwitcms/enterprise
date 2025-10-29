@@ -18,7 +18,7 @@ urlpatterns = (
         ),
         # override these b/c they can be disabled
         re_path(r"^accounts/login/", views.LoginView.as_view()),
-        re_path(r"^accounts/passwordreset/", views.PasswordResetView.as_view()),
+        # re_path(r"^accounts/passwordreset/", views.PasswordResetView.as_view()),
     ]
     + urlpatterns
     + [
