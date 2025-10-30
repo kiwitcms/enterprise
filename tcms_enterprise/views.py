@@ -19,19 +19,3 @@ class LoginView(
             return super().post(request)
 
         return HttpResponseForbidden()
-
-
-class PasswordResetView(
-    views.PasswordResetView
-):  # pylint: disable=missing-permission-required
-    def get(self, request, *args, **kwargs):
-        if settings.PASSWORD_LOGIN_ENABLED:
-            return super().get(request)
-
-        return HttpResponseForbidden()
-
-    def post(self, request, *args, **kwargs):
-        if settings.PASSWORD_LOGIN_ENABLED:
-            return super().post(request)
-
-        return HttpResponseForbidden()
