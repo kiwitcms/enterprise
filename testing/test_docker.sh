@@ -174,9 +174,9 @@ rlJournalStart
     rlPhaseEnd
 
     # NOTE: secondary domain no-login.example.bg is configured in the previous step!
-    #rlPhaseStartTest "NO LOGIN - /accounts/passwordreset/ displays 404"
-    #    rlRun -t -c "curl -k -D- -o- --referer no_login_password_reset https://no-login.example.bg:8443/accounts/passwordreset/ | grep '404 Not Found'"
-    #rlPhaseEnd
+    rlPhaseStartTest "NO LOGIN - /accounts/passwordreset/ displays 404"
+        rlRun -t -c "curl -k -D- -o- --referer no_login_password_reset https://no-login.example.bg:8443/accounts/passwordreset/ | grep '404 Not Found'"
+    rlPhaseEnd
 
     # NOTE: we can't exercise the POST request against login & password reset pages b/c they also require cookies and/or
     # CSRF tokens which are delivered via GET request/HTML form rendering
