@@ -140,6 +140,13 @@ http {
             alias /Kiwi/static/;
         }
 
+        # match bogus URLs
+        location /servlet/ {
+            # https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return
+            # closes a connection without sending a response header.
+            return 444;
+        }
+
         location / {
             limit_req zone=limit-for-login-pages burst=2 nodelay;
 

@@ -320,6 +320,11 @@ rlJournalStart
         rlAssertGreaterOrEqual ">= 35 r/s" "$COMPLETED_REQUESTS" 350
     rlPhaseEnd
 
+    rlPhaseStartTest "Requests to bogus URLs are closed"
+        rlRun -t -c "curl -k -o- $HTTPS/servlet/FileReceiveServlet 2>&1 | grep 'curl: (52) Empty reply from server'"
+        rlRun -t -c "curl -k -o- $HTTPS/servlet/~baseapp/nc.message.bs.NCMessageServlet 2>&1 | grep 'curl: (52) Empty reply from server'"
+    rlPhaseEnd
+
     rlPhaseStartTest "Should render Mermaid.JS diagrams"
         rlRun -t -c "curl -L -k -b ./login-cookies.txt -o plan.html $HTTPS/plan/1/ 2>/dev/null"
         rlAssertGrep "https://mermaid.ink/img/" plan.html
