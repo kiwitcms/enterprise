@@ -173,6 +173,40 @@ rlJournalStart
         rlRun -t -c "robot testing/admin.robot"
     rlPhaseEnd
 
+    rlPhaseStartTest "Can upload attachments via browser UI"
+        # WARNING: reuses username/password from the LDAP test above !!!
+
+        ARCH=$(uname -m)
+        if [ "$ARCH" == "x86_64" ]; then
+            # can upload file
+            rlRun -t -c "robot testing/test_upload_file.robot"
+
+            # verify file is there
+            rlRun -t -c "curl -k -D- --silent $HTTPS/uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt | grep '200 OK'"
+        fi
+    rlPhaseEnd
+
+    # IMPORTANT: admin.robot and test_upload_file.robot also use the super-user account so
+    # change its password after we're done using it
+    rlPhaseStartTest "Sanity test - Password Reset Flow"
+        # DEBUG
+        rlRun "docker exec web ls -l /Kiwi/"
+        rlRun "docker exec web ls -ld /Kiwi/uploads/"
+        rlRun "docker exec web ls -l /Kiwi/uploads/"
+        rlRun "docker exec web mkdir /Kiwi/uploads/email-messages/"
+
+        # clean emails in case anything before sent a message
+        rlRun "docker exec web bash -c 'rm -f /Kiwi/uploads/email-messages/*.log'"
+
+        # WARNING: uses super-user account to change its password!!!
+        rlRun -t -c "robot testing/password-reset.robot"
+
+        # DEBUG
+        rlRun "docker exec web ls -l /Kiwi/uploads/"
+        rlRun "docker exec web ls -l /Kiwi/uploads/email-messages/"
+        rlRun "docker exec web grep -hR passwordreset/confirm  /Kiwi/uploads/email-messages/"
+    rlPhaseEnd
+
     # NOTE: secondary domain no-login.example.bg is configured in the previous step!
     rlPhaseStartTest "NO LOGIN - /accounts/passwordreset/ displays 404"
         rlRun -t -c "curl -k -D- -o- --referer no_login_password_reset https://no-login.example.bg:8443/accounts/passwordreset/ | grep '404 Not Found'"
@@ -185,19 +219,6 @@ rlJournalStart
         rlRun -t -c "curl -k -D- -o- --referer no_login_login_page https://no-login.example.bg:8443/accounts/login/ | grep 'inputUsername'" 1
         rlRun -t -c "curl -k -D- -o- --referer no_login_login_page https://no-login.example.bg:8443/accounts/login/ | grep 'inputPassword'" 1
         rlRun -t -c "curl -k -D- -o- --referer no_login_login_page https://no-login.example.bg:8443/accounts/login/ | grep 'csrfmiddlewaretoken'" 1
-    rlPhaseEnd
-
-    rlPhaseStartTest "Can upload attachments via browser UI"
-        # WARNING: reuses username/password from the LDAP test above !!!
-
-        ARCH=$(uname -m)
-        if [ "$ARCH" == "x86_64" ]; then
-            # can upload file
-            rlRun -t -c "robot testing/test_upload_file.robot"
-
-            # verify file is there
-            rlRun -t -c "curl -k -D- --silent $HTTPS/uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt | grep '200 OK'"
-        fi
     rlPhaseEnd
 
     rlPhaseStartTest "Sanity test - Keycloak login"
