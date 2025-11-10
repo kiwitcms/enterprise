@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2022 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2020-2025 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -44,3 +44,8 @@ SOCIAL_AUTH_KEYCLOAK_ACCESS_TOKEN_URL = (
 
 
 ANONYMOUS_ANALYTICS = False
+
+# used for e2e testing the password reset functionality
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = "/Kiwi/uploads/email-messages"
+USE_CAPTCHA = False
