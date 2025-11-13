@@ -17,7 +17,7 @@ services:
         # https://hub.docker.com/_/postgres
         restart: always
         volumes:
-            - db_data:/var/lib/postgresql/data
+            - db_data:/var/lib/postgresql
         environment:
             POSTGRES_DB: dummy_db
             POSTGRES_USER: dummy_usr
