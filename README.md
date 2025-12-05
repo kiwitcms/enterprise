@@ -147,6 +147,17 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v15.2-mt (06 Dec 2025)
+
+- Based on Kiwi TCMS v15.2
+- Update certbot from 5.1.0 to 5.2.1
+- Update kiwitcms-trackers-integration from 1.1.0 to 1.2.1
+- Update psycopg-pool from 3.2.6 to 3.3.0
+- Update sentry-sdk[django] from 2.42.1 to 2.47.0
+- Use a different way to override the password reset page
+- Close connection requests to bogus URLs
+
+
 ### v15.1.1-mt (30 Oct 2025)
 
 - Based on Kiwi TCMS v15.1
