@@ -4,7 +4,7 @@ django-prometheus==2.4.1
 django-python3-ldap==0.16.1
 django-ses==4.5.0
 django-storages[s3]==1.14.6
-dj-database-url==3.0.1
+dj-database-url==3.1.0
 kiwitcms-github-app==2.1.0
 kiwitcms-tenants==4.4.0
 kiwitcms-trackers-integration==1.2.1
