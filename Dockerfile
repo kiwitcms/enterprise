@@ -55,8 +55,7 @@ RUN rm -rf /venv/lib64/python3.11/site-packages/tcms/node_modules/c3/htdocs/ \
 # create missing source-map files. Not critical for UI functionality, see:
 # https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Use_a_source_map
 RUN touch /venv/lib64/python3.11/site-packages/tcms/node_modules/bootstrap-slider/dependencies/js/jquery.min.map \
-          /venv/lib64/python3.11/site-packages/tcms/node_modules/pdfmake/build/FileSaver.min.js.map \
-          /venv/lib64/python3.11/site-packages/tcms/node_modules/pdfmake/build/main.cjs.map
+          /venv/lib64/python3.11/site-packages/tcms/node_modules/pdfmake/build/module.mjs.map
 
 # collect static files again
 RUN cp /Kiwi/static/ca.crt /Kiwi/ssl/ && \
