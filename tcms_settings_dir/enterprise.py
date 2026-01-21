@@ -24,6 +24,11 @@ LEGAL_MENU_ITEM = ("http://kiwitcms.org/legal/", _("Legal information"))
 if LEGAL_MENU_ITEM not in HELP_MENU_ITEMS:  # noqa: F821
     HELP_MENU_ITEMS.append(LEGAL_MENU_ITEM)  # noqa: F821
 
+# explicit link to our Privacy Policy page
+PP_MENU_ITEM = ('http://kiwitcms.org/legal/', _('Privacy policy'))
+if PP_MENU_ITEM not in HELP_MENU_ITEMS:   # noqa: F821
+    HELP_MENU_ITEMS.append(PP_MENU_ITEM)  # noqa: F821
+
 # indicate that this is the Enterprise Edition
 KIWI_VERSION = f"{__version__}-Enterprise"
 
