@@ -19,6 +19,12 @@ DATABASES["default"].update(  # noqa: F821, pylint: disable=objects-update-used
 if DATABASES["default"]["ENGINE"].find("mysql") == -1:  # noqa: F821
     del DATABASES["default"]["OPTIONS"]  # noqa: F821
 
+# support default connection pool configuration, see
+# https://docs.djangoproject.com/en/5.2/ref/databases/#connection-pool
+# https://www.psycopg.org/psycopg3/docs/api/pool.html#psycopg_pool.ConnectionPool
+if "OPTIONS" in DATABASES["default"]:                # noqa: F821
+    DATABASES["default"]["OPTIONS"]["pool"] = True   # noqa: F821
+
 # link to legal information, see https://github.com/kiwitcms/Kiwi/issues/249
 LEGAL_MENU_ITEM = ("http://kiwitcms.org/legal/", _("Legal information"))
 if LEGAL_MENU_ITEM not in HELP_MENU_ITEMS:  # noqa: F821
