@@ -147,6 +147,19 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v15.3-mt (28 Jan 2026)
+
+- Based on Kiwi TCMS v15.3
+- Update certbot from 5.2.1 to 5.2.2
+- Update django-ses from 4.4.0 to 4.6.0
+- Update dj-database-url from 3.0.1 to 3.1.0
+- Update kiwitcms-tenants from 4.3.0 to 4.4.1
+- Update sentry-sdk[django] from 2.47.0 to 2.50.0
+- Update social-auth-app-django from 5.6.0 to 5.7.0
+- Update workaround for .map files b/c of newer pdfmake
+- Remove workaround for missing wheel packages for xmlsec
+
+
 ### v15.2-mt (06 Dec 2025)
 
 - Based on Kiwi TCMS v15.2

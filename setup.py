@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2025 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2020-2026 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -26,7 +26,7 @@ def get_install_requires(path):
 
 setup(
     name="kiwitcms-enterprise",
-    version="15.2",
+    version="15.3",
     description="Kiwi TCMS Enterprise Edition",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
