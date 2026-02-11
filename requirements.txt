@@ -1,4 +1,4 @@
-certbot==5.3.0
+certbot==5.3.1
 django-csv-export-view==2.0.1
 django-prometheus==2.4.1
 django-python3-ldap==0.16.1
