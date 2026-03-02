@@ -92,7 +92,7 @@ jobs:
 
     - name: Upload testing artifacts
       if: always() && matrix.command == 'test-docker-image'
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: testing-artifacts
         path: |
