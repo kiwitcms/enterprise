@@ -147,6 +147,15 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v15.4-mt (17 Mar 2026)
+
+- Based on Kiwi TCMS v15.4
+- Update certbot from 5.2.2 to 5.4.0
+- Update django-ses from 4.6.0 to 4.7.2
+- Update dj-database-url from 3.1.0 to 3.1.2
+- Update sentry-sdk[django] from 2.50.0 to 2.54.0
+
+
 ### v15.3-mt (28 Jan 2026)
 
 - Based on Kiwi TCMS v15.3
