@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2025 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2017-2026 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -38,8 +38,12 @@ build-xmlsec:
 
 .PHONY: docker-image
 docker-image: build build-gssapi build-xmlsec
+	test -n "$(PKG_TOKEN)" || exit 1
 	# everything else below is Enterprise + multi-tenant
-	docker build --build-arg KIWI_VERSION=$(KIWI_VERSION) -t hub.kiwitcms.eu/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-$(shell uname -m) .
+	docker build \
+	    --build-arg KIWI_VERSION=$(KIWI_VERSION) \
+	    --build-arg PKG_TOKEN=$(PKG_TOKEN) \
+	    -t hub.kiwitcms.eu/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-$(shell uname -m) .
 
 
 .PHONY: test-docker-image
@@ -87,7 +91,6 @@ pylint:
 	if [ ! -d "$(KIWI_LINT_INCLUDE_PATH)/kiwi_lint" ]; then \
 	    git clone --depth 1 https://github.com/kiwitcms/Kiwi.git $(KIWI_LINT_INCLUDE_PATH); \
 	    pip install -U -r $(KIWI_LINT_INCLUDE_PATH)/requirements/base.txt; \
-	    pip install -U -r requirements.txt; \
 	fi
 
 	PYTHONPATH=$(KIWI_LINT_INCLUDE_PATH):. \

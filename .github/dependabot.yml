@@ -1,6 +1,15 @@
 version: 2
+registries:
+  pkg-kiwitcms-eu:
+    type: python-index
+    replaces-base: false
+    url: https://pkg.kiwitcms.eu/pypi/
+    token: ${{ secrets.GEMFURY_PULL_TOKEN }}
+
 updates:
   - package-ecosystem: pip
+    registries: "*"
+    insecure-external-code-execution: allow
     directory: "/"
     groups:
       certbot:
