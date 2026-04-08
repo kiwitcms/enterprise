@@ -36,11 +36,15 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Install Python dependencies
+      env:
+        PKG_TOKEN: ${{ secrets.GEMFURY_PULL_TOKEN }}
       run: |
         sudo apt-get update
         sudo apt-get install libkrb5-dev libxml2-dev libxmlsec1-dev libxmlsec1-openssl
-        pip install -U pip setuptools wheel
-        pip install -r devel.txt
+        pip install -U pip setuptools wheel twine
+        pip install -r devel.txt \
+            --index-url https://$PKG_TOKEN@pkg.kiwitcms.eu/pypi/ \
+            --extra-index-url https://pypi.org/simple/
 
     - name: Install packages used during container testing
       if: matrix.command == 'test-docker-image'
@@ -82,6 +86,8 @@ jobs:
         echo "${{ secrets.QUAY_PUSH_TOKEN }}" | docker login -u="${{ secrets.QUAY_PUSH_USERNAME }}" --password-stdin hub.kiwitcms.eu
 
     - name: make ${{ matrix.command }}
+      env:
+        PKG_TOKEN: ${{ secrets.GEMFURY_PULL_TOKEN }}
       run: |
         make ${{ matrix.command }}
 
