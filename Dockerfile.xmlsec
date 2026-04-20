@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2025 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2021-2026 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -13,8 +13,8 @@ RUN sed -i "s/enabled=0/enabled=1/" /etc/yum.repos.d/centos.repo && \
         libxml2-devel libxslt-devel xmlsec1-devel xmlsec1-openssl-devel opensc softhsm openssl-pkcs11 && \
     dnf -y --disablerepo="*-source" --disablerepo="*-debuginfo" update
 
-ENV PATH /venv/bin:${PATH} \
-    VIRTUAL_ENV /venv
+ENV PATH=/venv/bin:${PATH} \
+    VIRTUAL_ENV=/venv
 
 RUN python3.11 -m venv /venv
 RUN pip3 install --no-cache-dir --upgrade pip wheel
