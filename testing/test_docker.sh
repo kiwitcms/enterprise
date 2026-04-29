@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2024-2025 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2024-2026 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -79,6 +79,14 @@ rlJournalStart
 
         # assert only after initial configuration has been applied
         assert_up_and_running
+    rlPhaseEnd
+
+    rlPhaseStartTest "Sanity test - DB rejects plain/text connections"
+        rlRun -t -c "cat testing/reject_non_ssl.py | docker exec -i web /Kiwi/manage.py shell"
+
+        rlRun -t -s "docker exec -i web /Kiwi/manage.py showmigrations --database plain_text" 1
+        rlAssertGrep "django.db.utils.OperationalError: connection failed:" "$rlRun_LOG"
+        rlAssertGrep "pg_hba.conf rejects connection .* no encryption" "$rlRun_LOG"
     rlPhaseEnd
 
     rlPhaseStartTest "Sanity test - missing migrations"
