@@ -1,10 +1,11 @@
-# Copyright (c) 2020-2025 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2020-2026 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
 
 # pylint: disable=undefined-variable
 import os
+import copy
 
 # enable additional authentication backends
 # so we can perform some sanity testing
@@ -49,3 +50,7 @@ ANONYMOUS_ANALYTICS = False
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = "/Kiwi/uploads/email-messages"
 USE_CAPTCHA = False
+
+# will be used for testing that plan/text DB connections are refused
+DATABASES["plain_text"] = copy.deepcopy(DATABASES["default"])  # noqa: F821
+DATABASES["plain_text"]["OPTIONS"]["sslmode"] = "disable"  # noqa: F821
