@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2025 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2020-2026 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -12,12 +12,16 @@ from django.utils.translation import gettext_lazy as _
 
 from tcms import __version__
 
-# update DB connection string from the DATABASE_URL environment variable
+
+# first: remove any options set for MariaDB/MySQL
+if DATABASES["default"]["ENGINE"].find("mysql") > -1:  # noqa: F821
+    del DATABASES["default"]["OPTIONS"]  # noqa: F821
+
+# second: update DB connection string from the DATABASE_URL environment variable
+# note: may update the OPTIONS key too
 DATABASES["default"].update(  # noqa: F821, pylint: disable=objects-update-used
     dj_database_url.config()
 )
-if DATABASES["default"]["ENGINE"].find("mysql") == -1:  # noqa: F821
-    del DATABASES["default"]["OPTIONS"]  # noqa: F821
 
 # link to legal information, see https://github.com/kiwitcms/Kiwi/issues/249
 LEGAL_MENU_ITEM = ("http://kiwitcms.org/legal/", _("Legal information"))
@@ -86,7 +90,6 @@ sentry_sdk.init(
     enable_tracing=False,
     release=KIWI_VERSION,
 )
-
 
 # make sure users from LDAP are assigned default settings
 LDAP_AUTH_SYNC_USER_RELATIONS = "tcms_enterprise.ldap.sync_user_relations"
