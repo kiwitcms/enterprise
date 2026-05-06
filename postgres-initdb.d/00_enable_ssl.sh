@@ -52,6 +52,12 @@ EOSQL
 
 echo "    **** Require SSL connections from clients"
 sed -i "s/host all all all scram-sha-256/hostssl all all all scram-sha-256/" "$PGDATA/pg_hba.conf"
+
+echo "# Explicitly allow replication over SSL" >> "$PGDATA/pg_hba.conf"
+echo "hostssl replication all all scram-sha-256" >> "$PGDATA/pg_hba.conf"
+
 echo "# Explicitly reject non-SSL connections" >> "$PGDATA/pg_hba.conf"
 echo "hostnossl all all all reject" >> "$PGDATA/pg_hba.conf"
+echo "hostnossl replication all all reject" >> "$PGDATA/pg_hba.conf"
+
 cat "$PGDATA/pg_hba.conf"
