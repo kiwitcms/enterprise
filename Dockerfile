@@ -8,35 +8,27 @@ ARG KIWI_VERSION=latest
 FROM hub.kiwitcms.eu/kiwitcms/version:$KIWI_VERSION
 
 USER 0
-RUN curl https://openresty.org/package/rhel/openresty2.repo > /etc/yum.repos.d/openresty2.repo
-# WARNING: in case there are permission issues with the newly created directories
-# see: https://github.com/openresty/docker-openresty/issues/119
 RUN microdnf -y --nodocs install augeas-libs krb5-libs psmisc xmlsec1 xmlsec1-openssl && \
-    microdnf -y remove "nginx-*" && microdnf -y --nodocs install openresty && \
-    mkdir /etc/nginx                                  && \
-    mkdir --mode 770 /var/lib/nginx                   && \
-    mkdir --mode 770 /var/lib/nginx/tmp               && \
-    chown -R 1001:root /var/lib/nginx                 && \
-    mkdir -p /usr/share/nginx/modules/                && \
-    ln -s /usr/bin/openresty /usr/sbin/nginx          && \
-    ln -s /usr/local/openresty/nginx/conf/mime.types   /etc/nginx/mime.types   && \
-    ln -s /usr/local/openresty/nginx/conf/uwsgi_params /etc/nginx/uwsgi_params && \
-    ln -sf /Kiwi/etc/nginx.conf /usr/local/openresty/nginx/conf/nginx.conf     && \
-    ln -sf /Kiwi/etc/nginx.conf /usr/local/openresty/nginx/conf/nginx.conf.default && \
-    /usr/lib/systemd/systemd-update-helper remove-system-units openresty.service && \
-    microdnf -y --nodocs update && \
     microdnf clean all
 
 HEALTHCHECK CMD [ -d /proc/$(cat /tmp/nginx.pid) ] && [ -d /proc/$(cat /tmp/kiwitcms.pid) ]
 USER 1001
 
-# override OpenResty's configuration
-COPY ./etc/nginx.openresty /Kiwi/etc/nginx.conf
-COPY ./etc/*.lua /Kiwi/etc/
+# override NGINX configuration
+CMD /Kiwi/bin/docker-entrypoint
+COPY ./etc/nginx.override /Kiwi/etc/nginx.override
+RUN ln -sf /tmp/actual.conf /Kiwi/etc/nginx.conf
+ENV NGX_AUTHENTICATED_RATE=300  \
+    NGX_AUTHENTICATED_BURST=100 \
+    NGX_STATIC_RATE=300         \
+    NGX_STATIC_BURST=100        \
+    NGX_UPLOADS_RATE=10         \
+    NGX_UPLOADS_BURST=10        \
+    NGX_ERRORS_RATE=1           \
+    NGX_ERRORS_BURST=1          \
+    NGX_CSP_SCRIPT_SRC=""
 
-# other admin utilities
 COPY ./bin/* /Kiwi/bin/
-
 COPY ./dist/ /Kiwi/dist/
 
 ARG PKG_TOKEN

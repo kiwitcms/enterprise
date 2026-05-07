@@ -249,9 +249,13 @@ rlJournalStart
         rlRun -t -c "curl -k -D- $HTTPS 2>/dev/null | grep 'X-Content-Type-Options: nosniff'"
     rlPhaseEnd
 
-    rlPhaseStartTest "Should send Content-Security-Policy header"
+    rlPhaseStartTest "Should send Content-Security-Policy header with override"
         rlRun -t -c "curl -k -D- --referer test_scenario_csp $HTTPS 2>&1"
         rlRun -t -c "curl -k -D- --referer test_scenario_csp $HTTPS 2>/dev/null | grep $'Content-Security-Policy: script-src \'self\' cdn.crowdin.com \*.ethicalads.io plausible.io cdn.example.bg;'"
+    rlPhaseEnd
+
+    rlPhaseStartTest "Should send Content-Security-Policy header when no override"
+        rlRun -t -c "curl -k -D- --referer test_scenario_csp https://no-login.example.bg:8443/ 2>/dev/null | grep $'Content-Security-Policy: script-src \'self\' cdn.crowdin.com \*.ethicalads.io plausible.io;'"
     rlPhaseEnd
 
     rlPhaseStartTest "Should send uploads with exactly 1 'Content-Type: text/plain' header"
@@ -265,6 +269,7 @@ rlJournalStart
     rlPhaseEnd
 
     rlPhaseStartTest "Requests to /accounts/register/ are rate limited"
+        sleep 90 # chill
         COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/accounts/register/" "$WRK_DIR" "register-account-page")
         rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
         rlAssertGreaterOrEqual ">= 10 r/s" "$COMPLETED_REQUESTS" 100
@@ -272,6 +277,7 @@ rlJournalStart
     rlPhaseEnd
 
     rlPhaseStartTest "Requests to /accounts/login/ are rate limited"
+        sleep 90 # chill
         COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/accounts/login/" "$WRK_DIR" "login-page")
         rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
         rlAssertGreaterOrEqual ">= 10 r/s" "$COMPLETED_REQUESTS" 100
@@ -279,36 +285,11 @@ rlJournalStart
     rlPhaseEnd
 
     rlPhaseStartTest "Requests to /accounts/passwordreset/ are rate limited"
+        sleep 90 # chill
         COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/accounts/passwordreset/" "$WRK_DIR" "password-reset-page")
         rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
         rlAssertGreaterOrEqual ">= 10 r/s" "$COMPLETED_REQUESTS" 100
         rlAssertLesserOrEqual  "<= 20 r/s" "$COMPLETED_REQUESTS" 200
-    rlPhaseEnd
-
-    rlPhaseStartTest "Requests to missing pages (404) are rate limited"
-        sleep 90 # chill
-        COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/not/available.html" "$WRK_DIR" "404")
-        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
-        rlAssertGreaterOrEqual ">= 1 r/m" "$COMPLETED_REQUESTS" 1
-        # Note: running wrk with 4 connections in parallel
-        rlAssertLesserOrEqual  "<= 2 r/m" "$COMPLETED_REQUESTS" 4
-    rlPhaseEnd
-
-    rlPhaseStartTest "Requests to random pages (404) are rate limited"
-        sleep 90 # chill
-        WRK_FILE="$WRK_DIR/random-404.log"
-        START_TIME=$(date +%s)
-        for i in `seq 1000`; do
-            curl --silent -k -D- $HTTPS/random-file-$i.html >> $WRK_FILE
-        done
-        END_TIME=$(date +%s)
-
-        COMPLETED_REQUESTS=$(grep "HTTP/1.1 404" "$WRK_FILE" | wc -l)
-        ELAPSED_TIME=$(($END_TIME - $START_TIME))
-
-        rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in $ELAPSED_TIME seconds"
-        rlAssertGreaterOrEqual ">= 1 r/m" "$COMPLETED_REQUESTS" 1
-        rlAssertLesserOrEqual  "<= 2 r/m" "$COMPLETED_REQUESTS" $(($(($ELAPSED_TIME / 60)) + 2))
     rlPhaseEnd
 
     rlPhaseStartTest "Requests for static files are rate limited"

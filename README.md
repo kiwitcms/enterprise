@@ -13,8 +13,6 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
 * Based on `kiwitcms/kiwi` Docker image
 * **Compatible only with PostgreSQL !!!**
 * Versioned static files
-* NGINX replaced by [OpenResty](https://openresty.org) with embedded
-  [Lua](https://github.com/openresty/lua-nginx-module) support
 * Render Mermaid.js diagrams in Markdown fenced code blocks as PNG.
   Controlled via `settings.MERMAID_RENDERER_URL`. Example
     ```
@@ -53,24 +51,16 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
     [example](https://github.com/kiwitcms/enterprise/blob/master/docker-compose.testing)
   - `KIWI_TENANTS_DOMAIN` - FQDN for the multi-tenant configuration, e.g. *tcms.my-company.org*,
     see [kiwitcms-tenants](https://github.com/kiwitcms/tenants/#dns-configuration) for more info
-  - `NGX_AUTHENTICATED_RATE`  - req/sec for authenticated URLs; **default 300 r/s**,
-    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
-  - `NGX_AUTHENTICATED_BURST` - burst rate for authenticated URLs; **default 100**,
-    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
-  - `NGX_ERRORS_RATE`  - req/sec for URLs resulting in 4xx, 5xx errors; **default 1 r/m**,
-    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
-  - `NGX_ERRORS_BURST` - burst rate for URLs resulting in 4xx, 5xx errors; **default 1**,
-    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
-  - `NGX_STATIC_RATE`  - req/sec for static files; **default 300 r/s**,
-    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
-  - `NGX_STATIC_BURST` - burst rate for static files; **default 100**,
-    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
-  - `NGX_UPLOADS_RATE` - req/sec for uploaded files; **default 10 r/s**,
-    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
-  - `NGX_UPLOADS_BURST`- burst rate for uploaded files; **default 10**,
-    see [etc/rate-limit.lua](https://github.com/kiwitcms/enterprise/blob/master/etc/rate-limit.lua)
+  - `NGX_AUTHENTICATED_RATE`  - req/sec for authenticated URLs; **default: 300 r/s**
+  - `NGX_AUTHENTICATED_BURST` - burst rate for authenticated URLs; **default: 100**
+  - `NGX_STATIC_RATE`  - req/sec for static files; **default: 300 r/s**
+  - `NGX_STATIC_BURST` - burst rate for static files; **default: 100**
+  - `NGX_UPLOADS_RATE` - req/sec for uploaded files; **default: 10 r/s**
+  - `NGX_UPLOADS_BURST`- burst rate for uploaded files; **default: 10**
+  - `NGX_ERRORS_RATE`  - req/sec for URLs resulting in 4xx, 5xx errors; **default: 1 r/m**
+  - `NGX_ERRORS_BURST` - burst rate for URLs resulting in 4xx, 5xx errors; **default: 1**
   - `NGX_CSP_SCRIPT_SRC`- extra value for the `Content-Security-Policy` header `script-src`
-     directive; **default: nil**)
+     directive; **default: ""**
 
 While the software itself is open source we do not provide public
 access to the resulting `kiwitcms/enterprise` container image.

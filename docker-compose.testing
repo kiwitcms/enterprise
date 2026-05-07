@@ -67,6 +67,8 @@ services:
             - 8143:8443
         volumes:
             - ./testing/password_login_disabled.py:/venv/lib64/python3.11/site-packages/tcms_settings_dir/zzz_pwd_login_disabled.py:z,ro
+        environment:
+            NGX_CSP_SCRIPT_SRC: ""
 
 volumes:
     db_data:
