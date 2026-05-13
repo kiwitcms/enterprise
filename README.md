@@ -51,6 +51,8 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
     [example](https://github.com/kiwitcms/enterprise/blob/master/docker-compose.testing)
   - `KIWI_TENANTS_DOMAIN` - FQDN for the multi-tenant configuration, e.g. *tcms.my-company.org*,
     see [kiwitcms-tenants](https://github.com/kiwitcms/tenants/#dns-configuration) for more info
+  - `NGX_DENY_INCLUDE`  - full path to a list of `deny <ip>;` directives; **default: /dev/null**.
+     **IMPORTANT:** this file is included inside NGINX configuration verbatim
   - `NGX_AUTHENTICATED_RATE`  - req/sec for authenticated URLs; **default: 300 r/s**
   - `NGX_AUTHENTICATED_BURST` - burst rate for authenticated URLs; **default: 100**
   - `NGX_STATIC_RATE`  - req/sec for static files; **default: 300 r/s**
@@ -60,7 +62,7 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
   - `NGX_ERRORS_RATE`  - req/sec for URLs resulting in 4xx, 5xx errors; **default: 1 r/m**
   - `NGX_ERRORS_BURST` - burst rate for URLs resulting in 4xx, 5xx errors; **default: 1**
   - `NGX_CSP_SCRIPT_SRC`- extra value for the `Content-Security-Policy` header `script-src`
-     directive; **default: ""**
+    directive; **default: ""**
 
 While the software itself is open source we do not provide public
 access to the resulting `kiwitcms/enterprise` container image.

@@ -26,7 +26,8 @@ ENV NGX_AUTHENTICATED_RATE=300  \
     NGX_UPLOADS_BURST=10        \
     NGX_ERRORS_RATE=1           \
     NGX_ERRORS_BURST=1          \
-    NGX_CSP_SCRIPT_SRC=""
+    NGX_CSP_SCRIPT_SRC=""       \
+    NGX_DENY_INCLUDE="/dev/null"
 
 COPY ./bin/* /Kiwi/bin/
 COPY ./dist/ /Kiwi/dist/
