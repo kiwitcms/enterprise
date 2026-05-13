@@ -13,6 +13,7 @@ if [ -n "$NGX_CSP_SCRIPT_SRC" ]; then
 fi
 
 cat /Kiwi/etc/nginx.override |
+    sed "s|\$NGX_DENY_INCLUDE|$NGX_DENY_INCLUDE|" |
     sed "s/\$NGX_AUTHENTICATED_RATE/$NGX_AUTHENTICATED_RATE/" |
     sed "s/\$NGX_AUTHENTICATED_BURST/$NGX_AUTHENTICATED_BURST/" |
     sed "s/\$NGX_STATIC_RATE/$NGX_STATIC_RATE/" |
