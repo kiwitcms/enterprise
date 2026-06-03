@@ -45,15 +45,15 @@ RUN pip install --no-cache-dir --only-binary :all: decorator lxml && \
 # workaround broken CSS which will break collectstatic
 # because they refer to non-existing ../fonts/glyphicons-halflings-regular.eot (no fonts/ directory)
 # remove django_tenants/templates/admin/index.html b/c it is ugly and b/c we use grapelli
-RUN rm -rf /venv/lib64/python3.11/site-packages/tcms/node_modules/c3/htdocs/ \
-           /venv/lib64/python3.11/site-packages/tcms/node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker-standalone.css \
-           /venv/lib64/python3.11/site-packages/tcms/node_modules/bootstrap-touchspin/demo/ \
-           /venv/lib64/python3.11/site-packages/django_tenants/templates/admin/index.html
+RUN rm -rf /venv/lib64/python3.12/site-packages/tcms/node_modules/c3/htdocs/ \
+           /venv/lib64/python3.12/site-packages/tcms/node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker-standalone.css \
+           /venv/lib64/python3.12/site-packages/tcms/node_modules/bootstrap-touchspin/demo/ \
+           /venv/lib64/python3.12/site-packages/django_tenants/templates/admin/index.html
 
 # create missing source-map files. Not critical for UI functionality, see:
 # https://developer.mozilla.org/en-US/docs/Tools/Debugger/How_to/Use_a_source_map
-RUN touch /venv/lib64/python3.11/site-packages/tcms/node_modules/bootstrap-slider/dependencies/js/jquery.min.map \
-          /venv/lib64/python3.11/site-packages/tcms/node_modules/pdfmake/build/module.mjs.map
+RUN touch /venv/lib64/python3.12/site-packages/tcms/node_modules/bootstrap-slider/dependencies/js/jquery.min.map \
+          /venv/lib64/python3.12/site-packages/tcms/node_modules/pdfmake/build/module.mjs.map
 
 # collect static files again
 RUN cp /Kiwi/static/ca.crt /Kiwi/ssl/ && \
