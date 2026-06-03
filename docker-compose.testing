@@ -25,7 +25,7 @@ services:
 
     web:
         container_name: web
-        image: hub.kiwitcms.eu/kiwitcms/enterprise:latest
+        image: hub.kiwitcms.eu/kiwitcms/enterprise:15.4-mt-x86_64
         # IMPORTANT: ^^^ for Production deployments pin to a specific version number, see
         # https://kiwitcms.org/containers/
         depends_on:
