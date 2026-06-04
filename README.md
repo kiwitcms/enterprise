@@ -139,6 +139,28 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v16.0-mt (04 Jun 2026)
+
+- Based on Kiwi TCMS v16.0
+- Update Python runtime from 3.11 to 3.12
+- Update certbot from 5.4.0 to 5.6.0
+- Update django-prometheus from 2.4.1 to 2.5.0
+- Update kiwitcms-github-app from 2.1.0 to 2.2.2
+- Update kiwitcms-tenants from 4.4.1 to 4.4.4
+- Update kiwitcms-trackers-integration from 1.2.1 to 1.3.1
+- Update psycopg-pool from 3.3.0 to 3.3.1
+- Update sentry-sdk from 2.54.0 to 2.61.1
+- Update social-auth-kerberos from 0.3.0 to 0.3.2
+- Update social-auth-app-django from 5.7.0 to 5.9.0
+- Remove OpenResty override
+- Remove requirement for setuptools<82
+- Honor container ENV variable `NGX_DENY_INCLUDE`
+- Don't use legacy syntax in Dockerfile
+- Provide sample SSL configuration for Postgres and
+  configure Kiwi TCMS to connect to it securely. Closes
+  [Issue #2413](https://github.com/kiwitcms/Kiwi/issues/2413)
+
+
 ### v15.4-mt (17 Mar 2026)
 
 - Based on Kiwi TCMS v15.4
