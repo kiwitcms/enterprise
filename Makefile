@@ -19,16 +19,8 @@ build:
 	twine check dist/*
 
 
-.PHONY: build-xmlsec
-build-xmlsec:
-	docker build -t kiwitcms/xmlsec-buildroot -f Dockerfile.xmlsec .
-	docker run --rm --security-opt label=disable \
-	    -v `pwd`/dist/:/host kiwitcms/xmlsec-buildroot /bin/bash -c 'cp /dist/*.whl /host/'
-	docker rmi kiwitcms/xmlsec-buildroot
-
-
 .PHONY: docker-image
-docker-image: build build-xmlsec
+docker-image: build
 	test -n "$(PKG_TOKEN)" || exit 1
 	# everything else below is Enterprise + multi-tenant
 	docker build \
