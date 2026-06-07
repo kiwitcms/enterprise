@@ -34,7 +34,6 @@ COPY ./dist/ /Kiwi/dist/
 
 ARG PKG_TOKEN
 RUN pip install --no-cache-dir --only-binary :all: decorator lxml && \
-    pip install --no-cache-dir --find-links /Kiwi/dist/ --no-index /Kiwi/dist/xmlsec*.whl && \
     pip install --no-cache-dir --find-links /Kiwi/dist/ \
         --index-url https://$PKG_TOKEN@pkg.kiwitcms.eu/pypi/ \
         --extra-index-url https://pypi.org/simple/ \
