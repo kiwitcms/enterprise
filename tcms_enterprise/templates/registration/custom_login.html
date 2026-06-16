@@ -1,0 +1,39 @@
+{% extends "registration/login.html" %}
+
+{% comment %}
+Copyright (c) 2018-2025 Alexander Todorov <atodorov@otb.bg>
+
+Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
+https://www.gnu.org/licenses/agpl-3.0.html
+{% endcomment %}
+
+{% load i18n %}
+{% load static %}
+{% load tcms_tenants %}
+{% load enterprise_tags %}
+
+{% block login_form %}
+    {% if SETTINGS.PASSWORD_LOGIN_ENABLED %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block custom_login %}
+<div>
+    <p>
+        {% if SETTINGS.PASSWORD_LOGIN_ENABLED %}
+            {% trans "or" %}
+        {% endif %}
+        {% trans "Continue with" %}
+    </p>
+
+    {% for backend in backends.backends %}
+    <a href='{% tenant_url request "public" %}{% url "social:begin" backend|lower %}?next={% next_url request %}'>
+        {% with "images/social_auth/backends/"|add:backend|lower|add:".png" as image_path %}
+            <img src='{% static image_path %}' alt="{{ backend|title }} login" title="{{ backend|title }} login">
+        {% endwith %}
+    </a>
+    &nbsp;
+    {% endfor %}
+</div>
+{% endblock %}

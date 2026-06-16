@@ -1,0 +1,4 @@
+include README.md LICENSE requirements.txt
+
+graft tcms_enterprise/static
+graft tcms_enterprise/templates

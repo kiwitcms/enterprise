@@ -1,0 +1,15 @@
+certbot==5.6.0
+django-csv-export-view==2.0.1
+django-prometheus==2.5.0
+django-python3-ldap==0.16.1
+django-ses==4.7.2
+django-storages[s3]==1.14.6
+dj-database-url==3.1.2
+kiwitcms-github-app==2.2.2
+kiwitcms-tenants==4.4.4
+kiwitcms-trackers-integration==1.3.1
+psycopg-pool==3.3.1
+python3-saml==1.16.0
+sentry-sdk[django]==2.61.1
+social-auth-app-django==5.9.0
+social-auth-kerberos==0.3.2

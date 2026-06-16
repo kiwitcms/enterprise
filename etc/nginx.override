@@ -1,0 +1,142 @@
+# Copyright (c) 2024-2026 Alexander Todorov <atodorov@otb.bg>
+#
+# Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
+# https://www.gnu.org/licenses/agpl-3.0.html
+
+daemon on;
+worker_processes auto;
+error_log /dev/stderr;
+pid /tmp/nginx.pid;
+
+# Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    include $NGX_DENY_INCLUDE;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $upstream_status $limit_req_status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /dev/stdout  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 4096;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    gzip on;
+    gzip_disable "msie6";
+
+    # note: this should be bigger than
+    # FILE_UPLOAD_MAX_SIZE from Kiwi TCMS which defaults to 5M.
+    client_max_body_size 10m;
+
+    # limit URI size, see
+    # https://github.com/kiwitcms/Kiwi/issues/1054
+    large_client_header_buffers 4 10k;
+
+    ssl_certificate     /Kiwi/ssl/localhost.crt;
+    ssl_certificate_key /Kiwi/ssl/localhost.key;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers off;
+
+    # default proxy settings
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+
+    map $request_uri $limit_key {
+        default "";
+        ~^/accounts/ $binary_remote_addr;
+    }
+    limit_req_zone $limit_key zone=limit-for-accounts-pages:10m rate=10r/s;
+    limit_req_zone $binary_remote_addr zone=limit-for-authenticated-pages:10m rate=$NGX_AUTHENTICATED_RATEr/s;
+    limit_req_zone $binary_remote_addr zone=limit-for-static-files:10m rate=$NGX_STATIC_RATEr/s;
+    limit_req_zone $binary_remote_addr zone=limit-for-uploaded-files:10m rate=$NGX_UPLOADS_RATEr/s;
+    limit_req_zone $binary_remote_addr zone=limit-for-errors:10m rate=$NGX_ERRORS_RATEr/m;
+    limit_req_status 429;
+
+    upstream kiwitcms {
+        server unix:///tmp/kiwitcms.sock;
+    }
+
+    # WARNING: make sure these match tcms.core.middleware.ExtraHeadersMiddleware
+    add_header Content-Security-Policy "script-src 'self' cdn.crowdin.com *.ethicalads.io plausible.io$NGX_CSP_SCRIPT_SRC;";
+
+    server {
+        listen       8080;
+        listen       [::]:8080;
+        server_name  _;
+
+        location / {
+                return 301 https://$host$request_uri;
+        }
+    }
+
+    server {
+        listen       8443 ssl;
+        listen       [::]:8443 ssl;
+        server_name  _;
+
+        location = /favicon.ico {
+            alias /Kiwi/static/images/favicon.ico;
+        }
+
+        location = /robots.txt {
+            alias /Kiwi/static/robots.txt;
+        }
+
+        location /.well-known/ {
+            alias /Kiwi/static/.well-known/;
+        }
+
+        location /uploads/  {
+            limit_req zone=limit-for-uploaded-files burst=$NGX_UPLOADS_BURST nodelay;
+
+            # prevent browser from possibly interpreting untrusted files
+            types        { }
+            default_type text/plain;
+
+            alias /Kiwi/uploads/;
+        }
+
+        location /static/ {
+            limit_req zone=limit-for-static-files burst=$NGX_STATIC_BURST nodelay;
+
+            alias /Kiwi/static/;
+        }
+
+        # match bogus URLs
+        location /servlet/ {
+            # https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return
+            # closes a connection without sending a response header.
+            return 444;
+        }
+
+        location / {
+            limit_req zone=limit-for-accounts-pages burst=2 nodelay;
+            limit_req zone=limit-for-authenticated-pages burst=$NGX_AUTHENTICATED_BURST nodelay;
+
+            include     /etc/nginx/uwsgi_params;
+            uwsgi_pass  kiwitcms;
+            uwsgi_intercept_errors on;
+
+            # redirect for rate limiting; responds with 429, skip 429 itself
+            error_page 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 418 421 422 423 424 426 428 431 451 500 501 502 503 504 505 506 507 508 510 511 @error_handler;
+        }
+
+        location @error_handler {
+            limit_req zone=limit-for-errors burst=$NGX_ERRORS_BURST nodelay;
+        }
+    }
+}

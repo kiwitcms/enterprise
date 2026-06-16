@@ -1,0 +1,19 @@
+# Copyright (c) 2021-2026 Alexander Todorov <atodorov@otb.bg>
+#
+# Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
+# https://www.gnu.org/licenses/agpl-3.0.html
+
+# checkov:skip=CKV_DOCKER_2:Ensure that HEALTHCHECK instructions have been added to container images
+# checkov:skip=CKV_DOCKER_3:Ensure that a user for the container has been created
+# checkov:skip=CKV_DOCKER_7:Ensure the base image uses a non latest version tag
+FROM registry.access.redhat.com/ubi10-minimal
+
+RUN microdnf -y install gcc krb5-devel python3.12-devel && \
+    microdnf -y update
+
+ENV PATH=/venv/bin:${PATH} \
+    VIRTUAL_ENV=/venv
+
+RUN python3.12 -m venv /venv
+RUN pip3 install --no-cache-dir --upgrade pip wheel
+RUN pip3 wheel --no-deps --wheel-dir /dist gssapi

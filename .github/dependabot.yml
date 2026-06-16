@@ -1,0 +1,29 @@
+version: 2
+registries:
+  pkg-kiwitcms-eu:
+    type: python-index
+    replaces-base: false
+    url: https://pkg.kiwitcms.eu/pypi/
+    token: ${{ secrets.GEMFURY_PULL_TOKEN }}
+
+updates:
+  - package-ecosystem: pip
+    registries: "*"
+    insecure-external-code-execution: allow
+    directory: "/"
+    groups:
+      certbot:
+        patterns:
+          - "certbot*"
+    schedule:
+      interval: daily
+      time: "03:00"
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      time: "04:00"
+    open-pull-requests-limit: 5
+    rebase-strategy: "disabled"

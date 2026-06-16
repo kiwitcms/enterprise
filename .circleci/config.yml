@@ -1,0 +1,104 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+jobs:
+  aarch64-build-docker-image:
+    machine:
+      # https://circleci.com/docs/2.0/configuration-reference/#available-machine-images
+      image: ubuntu-2204:2023.10.1
+    resource_class: arm.medium
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    environment:
+      RUNTIME_BASE: registry.access.redhat.com/ubi10-minimal:latest
+    steps:
+      - checkout
+      - run: uname -a
+      - run: python3 --version
+      # fail if not using Python 3
+      - run: python3 --version | grep "3\."
+      - run: |
+          sudo apt-get update
+          sudo apt-get install libkrb5-dev libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+          pip3 install -U pip setuptools wheel
+          pip3 install -r devel.txt \
+            --index-url https://$PKG_TOKEN@pkg.kiwitcms.eu/pypi/ \
+            --extra-index-url https://pypi.org/simple/
+
+      - run: |
+          git clone https://github.com/kiwitcms/Kiwi
+          make -C Kiwi/ docker-image
+          docker tag pub.kiwitcms.eu/kiwitcms/kiwi:latest hub.kiwitcms.eu/kiwitcms/version:16.0
+
+      - run: |
+          echo "$QUAY_PUSH_TOKEN" | docker login -u="$QUAY_PUSH_USERNAME" --password-stdin hub.kiwitcms.eu
+
+          make docker-image
+
+          echo "+++++ Docker images +++++"
+          docker images
+
+          docker logout hub.kiwitcms.eu
+
+          VERSION=$(make echo-version)
+          docker run --name web --rm -d hub.kiwitcms.eu/kiwitcms/enterprise:$VERSION-$(uname -m)
+          make extract-static-files
+
+  aarch64-build-and-push-docker-image:
+    machine:
+      # https://circleci.com/docs/2.0/configuration-reference/#available-machine-images
+      image: ubuntu-2204:2023.10.1
+    resource_class: arm.medium
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    steps:
+      - checkout
+      - run: uname -a
+      - run: python3 --version
+      # fail if not using Python 3
+      - run: python3 --version | grep "3\."
+      - run: |
+          sudo apt-get update
+          sudo apt-get install libkrb5-dev libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+          pip3 install -U pip setuptools wheel
+          pip3 install -r devel.txt \
+            --index-url https://$PKG_TOKEN@pkg.kiwitcms.eu/pypi/ \
+            --extra-index-url https://pypi.org/simple/
+
+      - run: |
+          echo "$QUAY_PUSH_TOKEN" | docker login -u="$QUAY_PUSH_USERNAME" --password-stdin quay.io
+          echo "$QUAY_PUSH_TOKEN" | docker login -u="$QUAY_PUSH_USERNAME" --password-stdin hub.kiwitcms.eu
+
+          make docker-image
+
+          VERSION=$(make echo-version)
+          # retag for private container registry
+          docker tag hub.kiwitcms.eu/kiwitcms/enterprise:$VERSION-$(uname -m) quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
+
+          echo "+++++ Docker images +++++"
+          docker images
+
+          docker push quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
+          docker logout quay.io
+          docker logout hub.kiwitcms.eu
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  aarch64-docker-build:
+    when:
+      matches: { pattern: "^prepare/v.+$", value: << pipeline.git.branch >> }
+    jobs:
+      - aarch64-build-docker-image
+
+  aarch64-docker-release:
+    jobs:
+      - aarch64-build-and-push-docker-image:
+          filters:
+            tags:
+              only: /^v.+$/
+            branches:
+              ignore: /.*/

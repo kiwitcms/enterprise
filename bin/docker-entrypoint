@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Copyright (c) 2026 Alexander Todorov <atodorov@otb.bg>
+#
+# Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
+# https://www.gnu.org/licenses/agpl-3.0.html
+
+set -eu
+
+if [ -n "$NGX_CSP_SCRIPT_SRC" ]; then
+    # if not empty prefix with a space
+    NGX_CSP_SCRIPT_SRC=" $NGX_CSP_SCRIPT_SRC"
+fi
+
+cat /Kiwi/etc/nginx.override |
+    sed "s|\$NGX_DENY_INCLUDE|$NGX_DENY_INCLUDE|" |
+    sed "s/\$NGX_AUTHENTICATED_RATE/$NGX_AUTHENTICATED_RATE/" |
+    sed "s/\$NGX_AUTHENTICATED_BURST/$NGX_AUTHENTICATED_BURST/" |
+    sed "s/\$NGX_STATIC_RATE/$NGX_STATIC_RATE/" |
+    sed "s/\$NGX_STATIC_BURST/$NGX_STATIC_BURST/" |
+    sed "s/\$NGX_UPLOADS_RATE/$NGX_UPLOADS_RATE/" |
+    sed "s/\$NGX_UPLOADS_BURST/$NGX_UPLOADS_BURST/" |
+    sed "s/\$NGX_ERRORS_RATE/$NGX_ERRORS_RATE/" |
+    sed "s/\$NGX_ERRORS_BURST/$NGX_ERRORS_BURST/" |
+    sed "s/\$NGX_CSP_SCRIPT_SRC/$NGX_CSP_SCRIPT_SRC/" > /tmp/actual.conf
+
+/httpd-foreground

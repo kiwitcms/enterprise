@@ -1,0 +1,145 @@
+name: testing
+
+on:
+  pull_request:
+    branches:
+      - "*"
+  push:
+    branches: master
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions: read-all
+
+jobs:
+  build-package:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.12]
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Build me
+        run: |
+          pip install -U pip setuptools wheel twine
+
+          make build
+
+  test_matrix:
+    name: ${{ matrix.command }} (${{ matrix.python-version}})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: [3.12]
+        command: [flake8, pylint, test-docker-image]
+
+    steps:
+    - name: Docker version info
+      run: |
+        docker --version
+        docker --help
+
+        docker compose --version
+        docker compose --help
+
+    - uses: actions/checkout@v6
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v6
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Python dependencies
+      env:
+        PKG_TOKEN: ${{ secrets.GEMFURY_PULL_TOKEN }}
+      run: |
+        sudo apt-get update
+        sudo apt-get install libkrb5-dev libxml2-dev libxmlsec1-dev libxmlsec1-openssl sscg
+        pip install -U pip setuptools wheel twine
+        pip install -r devel.txt \
+            --index-url https://$PKG_TOKEN@pkg.kiwitcms.eu/pypi/ \
+            --extra-index-url https://pypi.org/simple/
+
+    - name: Install packages used during container testing
+      if: matrix.command == 'test-docker-image'
+      run: |
+          # remove stock FF package
+          sudo snap remove firefox
+          sudo apt-get remove firefox
+
+          # used in test scripts
+          sudo apt-get install git make ldap-utils wrk
+
+          # install beakerlib from source it doesn't ship DEB packages
+          if [ ! -f "/usr/share/beakerlib/beakerlib.sh" ]; then
+              git clone https://github.com/beakerlib/beakerlib.git
+              sudo make -C beakerlib/ install
+          fi
+
+          # install Firefox and Geckodriver from Mozilla's DEB repository
+          # b/c Ubuntu 22.04 and later ships FF via snap package (a container)
+          # which causes issues with file access from RobotFramework tests
+          sudo apt-get install software-properties-common
+          sudo add-apt-repository --yes ppa:mozillateam/ppa
+
+          # prioritize the 3rd party repository
+          sudo tee /etc/apt/preferences.d/mozilla-firefox << EOF
+          Package: *
+          Pin: release o=LP-PPA-mozillateam
+          Pin-Priority: 1001
+
+          Package: firefox
+          Pin: version 1:1snap1-0ubuntu2
+          Pin-Priority: -1
+          EOF
+          sudo apt-get install firefox firefox-geckodriver
+
+    - name: Login to Private Container Registry
+      if: matrix.command == 'test-docker-image'
+      run: |
+        echo "${{ secrets.QUAY_PUSH_TOKEN }}" | docker login -u="${{ secrets.QUAY_PUSH_USERNAME }}" --password-stdin hub.kiwitcms.eu
+
+    - name: Build intermediary kiwitcms/kiwi image
+      if: matrix.command == 'test-docker-image'
+      env:
+        RUNTIME_BASE: registry.access.redhat.com/ubi10-minimal:latest
+      run: |
+          git clone https://github.com/kiwitcms/Kiwi
+          make -C Kiwi/ docker-image
+          docker tag pub.kiwitcms.eu/kiwitcms/kiwi:latest hub.kiwitcms.eu/kiwitcms/version:16.0
+
+    - name: make ${{ matrix.command }}
+      env:
+        PKG_TOKEN: ${{ secrets.GEMFURY_PULL_TOKEN }}
+      run: |
+        make ${{ matrix.command }}
+
+    - name: Logout of Private Container Registry
+      if: ${{ always() && matrix.command == 'test-docker-image' }}
+      run: |
+        docker logout hub.kiwitcms.eu
+
+    - name: Upload testing artifacts
+      if: always() && matrix.command == 'test-docker-image'
+      uses: actions/upload-artifact@v7
+      with:
+        name: testing-artifacts
+        path: |
+          ./*.json
+          ./*.html
+          ./*.log
+          ./wrk-logs-*/
+          ./*docker.log
+          ./*cookies*
+          ./test*.txt
+          ./*.png

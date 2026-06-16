@@ -1,0 +1,7 @@
+build/
+dist/
+*.egg-info/
+*.pyc
+*.json
+postgres-initdb.d/*.crt
+postgres-initdb.d/*.key
