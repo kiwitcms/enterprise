@@ -212,6 +212,7 @@ rlJournalStart
         # DEBUG
         rlRun "docker exec web ls -l /Kiwi/uploads/"
         rlRun "docker exec web ls -l /Kiwi/uploads/email-messages/"
+        rlRun "docker exec web find /Kiwi/uploads/email-messages/ -type f -exec cat {} \;"
         rlRun "docker exec web grep -hR passwordreset/confirm  /Kiwi/uploads/email-messages/"
     rlPhaseEnd
 
