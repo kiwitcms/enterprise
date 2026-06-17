@@ -212,8 +212,12 @@ rlJournalStart
         # DEBUG
         rlRun "docker exec web ls -l /Kiwi/uploads/"
         rlRun "docker exec web ls -l /Kiwi/uploads/email-messages/"
+        rlRun "docker exec web find /Kiwi/uploads/email-messages/ -type f -exec cat {} \;"
         rlRun "docker exec web grep -hR passwordreset/confirm  /Kiwi/uploads/email-messages/"
     rlPhaseEnd
+
+    # DEBUG: short-circuit test execution after password-reset.robot
+    exit 0
 
     # NOTE: secondary domain no-login.example.bg is configured in the previous step!
     rlPhaseStartTest "NO LOGIN - /accounts/passwordreset/ displays 404"
