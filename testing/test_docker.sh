@@ -207,13 +207,23 @@ rlJournalStart
         rlRun "docker exec web bash -c 'rm -f /Kiwi/uploads/email-messages/*.log'"
 
         # WARNING: uses super-user account to change its password!!!
-        rlRun -t -c "robot testing/password-reset.robot"
+        rlRun -t -c "robot testing/password-reset-request.robot"
 
         # DEBUG
         rlRun "docker exec web ls -l /Kiwi/uploads/"
         rlRun "docker exec web ls -l /Kiwi/uploads/email-messages/"
         rlRun "docker exec web find /Kiwi/uploads/email-messages/ -type f -exec cat {} \;"
-        rlRun "docker exec web grep -hR passwordreset/confirm  /Kiwi/uploads/email-messages/"
+
+        # extract, decode and grep the confirm URL
+        rlRun "docker cp web:/Kiwi/uploads/email-messages/ /tmp/email-messages/"
+        EMAIL_FILE=$(ls -1 /tmp/email-messages/*.log | head -n 1)
+        rlAssertGrep "Content-Transfer-Encoding: quoted-printable" "$EMAIL_FILE"
+
+        CONFIRM_URL=$(qprint -d $EMAIL_FILE | grep -oP 'https://testing.example.bg/accounts/passwordreset/confirm/[^/\s]+/[^/\s]+/')
+        # replace the domain because it doesn't have ports specification
+        CONFIRM_URL=$(echo $CONFIRM_URL | sed "s|https://testing.example.bg|${HTTPS}|")
+
+        rlRun -t -c "robot --variable CONFIRM_URL:${CONFIRM_URL} testing/password-reset-confirm.robot"
     rlPhaseEnd
 
     # NOTE: secondary domain no-login.example.bg is configured in the previous step!

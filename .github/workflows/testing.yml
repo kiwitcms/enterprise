@@ -78,7 +78,7 @@ jobs:
           sudo apt-get remove firefox
 
           # used in test scripts
-          sudo apt-get install git make ldap-utils wrk
+          sudo apt-get install git make ldap-utils qprint wrk
 
           # install beakerlib from source it doesn't ship DEB packages
           if [ ! -f "/usr/share/beakerlib/beakerlib.sh" ]; then
