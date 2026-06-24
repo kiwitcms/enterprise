@@ -19,6 +19,11 @@ jobs:
       # fail if not using Python 3
       - run: python3 --version | grep "3\."
       - run: |
+          sudo cp .circleci/daemon.json /etc/docker/
+          sudo systemctl restart docker
+          docker --version
+          docker info -f '{{ .DriverStatus }}'
+
           sudo apt-get update
           sudo apt-get install libkrb5-dev libxml2-dev libxmlsec1-dev libxmlsec1-openssl
           pip3 install -U pip setuptools wheel
@@ -54,6 +59,11 @@ jobs:
       # fail if not using Python 3
       - run: python3 --version | grep "3\."
       - run: |
+          sudo cp .circleci/daemon.json /etc/docker/
+          sudo systemctl restart docker
+          docker --version
+          docker info -f '{{ .DriverStatus }}'
+
           sudo apt-get update
           sudo apt-get install libkrb5-dev libxml2-dev libxmlsec1-dev libxmlsec1-openssl
           pip3 install -U pip setuptools wheel
