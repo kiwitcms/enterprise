@@ -109,15 +109,6 @@ jobs:
       run: |
         echo "${{ secrets.QUAY_PUSH_TOKEN }}" | docker login -u="${{ secrets.QUAY_PUSH_USERNAME }}" --password-stdin hub.kiwitcms.eu
 
-    - name: Build intermediary kiwitcms/kiwi image
-      if: matrix.command == 'test-docker-image'
-      env:
-        RUNTIME_BASE: registry.access.redhat.com/ubi10-minimal:latest
-      run: |
-          git clone https://github.com/kiwitcms/Kiwi
-          make -C Kiwi/ docker-image
-          docker tag pub.kiwitcms.eu/kiwitcms/kiwi:latest hub.kiwitcms.eu/kiwitcms/version:16.0
-
     - name: make ${{ matrix.command }}
       env:
         PKG_TOKEN: ${{ secrets.GEMFURY_PULL_TOKEN }}
