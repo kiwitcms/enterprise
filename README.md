@@ -139,6 +139,16 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v16.1-mt (24 Jun 2026)
+
+- Based on Kiwi TCMS v16.1
+- Compatible with Django 6
+- Update kiwitcms-github-app from 2.2.2 to 2.3.0
+- Update kiwitcms-tenants from 4.4.4 to 4.5.0
+- Update kiwitcms-trackers-integration from 1.3.1 to 1.4.0
+- Update sentry-sdk from 2.61.1 to 2.63.0
+
+
 ### v16.0-mt (04 Jun 2026)
 
 - Based on Kiwi TCMS v16.0
