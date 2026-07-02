@@ -134,24 +134,21 @@ rlJournalStart
         # template override for social icons
         rlAssertGrep "Continue with" page.html
 
-        # social backends are listed
-        # for ICON in tcms_enterprise/static/images/social_auth/backends/*.png; do
-        #    BACKEND=`basename $ICON | sed 's/.png//'`
         # check only the backends enabled in test_settings.py b/c the directory above
         # contains more images than backends which can be enabled during testing
         for BACKEND in kerberos keycloak gitlab github github-app fedora; do
             rlAssertGrep "/login/$BACKEND/" page.html
-            rlAssertGrep "<img src='/static/images/social_auth/backends/$BACKEND.*.png'" page.html
+            rlAssertGrep "<input type=\"image\" src='/static/images/social_auth/backends/$BACKEND.*.png'" page.html
         done
 
         # social icons are present
-        for URL in `cat page.html | grep "/static/images/social_auth/backends/" | cut -d= -f2 | cut -d"'" -f2`; do
+        for URL in `cat page.html | grep "/static/images/social_auth/backends/" | cut -d= -f3 | cut -d"'" -f2`; do
             rlLogInfo "Verify image $URL is present"
             rlRun -t -c "curl -k -f -o /dev/null $HTTPS/$URL"
         done
 
         # social icons point to correct backend login URL, even with port
-        for BACKEND in `cat page.html | grep "/static/images/social_auth/backends/" | cut -d= -f2 | cut -d"'" -f2 | cut -f6 -d/ | cut -f1 -d.`; do
+        for BACKEND in `cat page.html | grep "/static/images/social_auth/backends/" | cut -d= -f3 | cut -d"'" -f2 | cut -f6 -d/ | cut -f1 -d.`; do
             rlLogInfo "Verify $BACKEND login is present"
             rlAssertGrep "https://testing.example.bg/login/$BACKEND/?next=/" page.html
         done
@@ -234,10 +231,8 @@ rlJournalStart
     # NOTE: we can't exercise the POST request against login & password reset pages b/c they also require cookies and/or
     # CSRF tokens which are delivered via GET request/HTML form rendering
     rlPhaseStartTest "NO LOGIN - /accounts/login/ does not display username/password form"
-        rlRun -t -c "curl -k -D- -o- --referer no_login_login_page https://no-login.example.bg:8443/accounts/login/ | grep '<form '" 1
         rlRun -t -c "curl -k -D- -o- --referer no_login_login_page https://no-login.example.bg:8443/accounts/login/ | grep 'inputUsername'" 1
         rlRun -t -c "curl -k -D- -o- --referer no_login_login_page https://no-login.example.bg:8443/accounts/login/ | grep 'inputPassword'" 1
-        rlRun -t -c "curl -k -D- -o- --referer no_login_login_page https://no-login.example.bg:8443/accounts/login/ | grep 'csrfmiddlewaretoken'" 1
     rlPhaseEnd
 
     rlPhaseStartTest "Sanity test - Keycloak login"
