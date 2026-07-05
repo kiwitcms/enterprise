@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2021-2022 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2021-2026 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -34,7 +34,7 @@ docker exec -i keycloak_server \
     /opt/jboss/keycloak/bin/kcadm.sh create clients \
         -r kiwi -s clientId=kiwitcms-web-app -s enabled=true -s protocol=openid-connect \
         -s attributes='{"user.info.response.signature.alg": "RS256"}' \
-        -s publicClient=false -s rootUrl=https://testing.example.bg:8443 -o > kc_client.json
+        -s publicClient=false -s rootUrl=https://testing.example.bg -o > kc_client.json
 KC_CLIENT_ID=`cat kc_client.json | jq -r '.id'`
 
 docker exec -i keycloak_server \

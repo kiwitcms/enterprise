@@ -7,7 +7,7 @@
 
 . /usr/share/beakerlib/beakerlib.sh
 
-HTTPS="https://testing.example.bg:8443"
+HTTPS="https://testing.example.bg"
 
 WRK_DIR=$(mktemp -d ./wrk-logs-XXXX)
 chmod go+rwx "$WRK_DIR"
@@ -15,7 +15,7 @@ chmod go+rwx "$WRK_DIR"
 assert_up_and_running() {
     sleep 10
     # HTTP redirects; HTTPS displays the login page
-    rlRun -t -c "curl       -o- --referer assert_up_and_running http://testing.example.bg:8080/  | grep '301 Moved Permanently'"
+    rlRun -t -c "curl       -o- --referer assert_up_and_running http://testing.example.bg/  | grep '301 Moved Permanently'"
     rlRun -t -c "curl -k -L -o- --referer assert_up_and_running $HTTPS/ | grep 'Welcome to Kiwi TCMS'"
 }
 
@@ -51,7 +51,7 @@ rlJournalStart
         rlRun -t -c "docker compose -f docker-compose.testing up -d"
         sleep 5
 
-        IP_ADDRESS=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web)
+        IP_ADDRESS="127.0.0.1"
         rlLogInfo "--- testing.example.bg: $IP_ADDRESS --"
         rlRun -t -c "sudo sh -c \"echo '$IP_ADDRESS    testing.example.bg     empty.testing.example.bg' >> /etc/hosts\""
 
