@@ -1,4 +1,4 @@
-# Copyright (c) 2024-2025 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2024-2026 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -8,7 +8,7 @@ Library           OperatingSystem
 Library           SeleniumLibrary
 
 *** Variables ***
-${SERVER}               https://testing.example.bg:8443
+${SERVER}               https://testing.example.bg
 ${BROWSER}              Headless Firefox
 ${DELAY}                0
 ${LOGIN_URL}            ${SERVER}/accounts/login/

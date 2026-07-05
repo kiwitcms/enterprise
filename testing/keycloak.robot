@@ -7,7 +7,7 @@
 Library           SeleniumLibrary
 
 *** Variables ***
-${SERVER}               https://testing.example.bg:8443
+${SERVER}               https://testing.example.bg
 ${BROWSER}              Headless Firefox
 ${DELAY}                0
 ${LOGIN_URL}            ${SERVER}/login/keycloak

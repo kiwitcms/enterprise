@@ -8,7 +8,7 @@ Library           SeleniumLibrary
 
 *** Variables ***
 # "empty" tenant is created during initial_setup
-${SERVER}               https://testing.example.bg:8443
+${SERVER}               https://testing.example.bg
 ${BROWSER}              Headless Firefox
 ${DELAY}                0
 ${DASHBOARD_URL}        ${SERVER}/
