@@ -139,6 +139,17 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v16.2-mt (22 Jul 2026)
+
+- Based on Kiwi TCMS v16.2
+- Update certbot from 5.6.0 to 5.7.0
+- Update kiwitcms-tenants from 4.5.0 to 4.7.0
+- Update sentry-sdk from 2.63.0 to 2.66.0
+- Update social-auth-app-django from 5.9.0 to 6.0.0 - login views now only accept
+  POST requests!
+- Refactor social-auth login buttons to forms
+
+
 ### v16.1-mt (24 Jun 2026)
 
 - Based on Kiwi TCMS v16.1
