@@ -139,6 +139,14 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v16.2.1-mt (23 Jul 2026)
+
+- Based on Kiwi TCMS v16.2
+- Revert social-auth-app-django back to 5.9.0. Fixes
+  [Issue #4466](https://github.com/kiwitcms/Kiwi/issues/4466)
+- Update kiwitcms-tenants from 4.7.0 to 4.7.1
+
+
 ### v16.2-mt (22 Jul 2026)
 
 - Based on Kiwi TCMS v16.2
