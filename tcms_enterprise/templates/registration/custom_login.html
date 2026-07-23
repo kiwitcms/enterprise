@@ -28,15 +28,11 @@ https://www.gnu.org/licenses/agpl-3.0.html
     </p>
 
     {% for backend in backends.backends %}
-    <form
-        class="inline-display"
-        method="post"
-        action='{% tenant_url request "public" %}{% url "social:begin" backend|lower %}?next={% next_url request %}'>
-        {% csrf_token %}
+    <a href='{% tenant_url request "public" %}{% url "social:begin" backend|lower %}?next={% next_url request %}'>
         {% with "images/social_auth/backends/"|add:backend|lower|add:".png" as image_path %}
-            <input type="image" src='{% static image_path %}' alt="{{ backend|title }} login" id="{{ backend|lower }}-login">
+            <img src='{% static image_path %}' alt="{{ backend|title }} login" title="{{ backend|title }} login">
         {% endwith %}
-    </form>
+    </a>
     &nbsp;
     {% endfor %}
 </div>
