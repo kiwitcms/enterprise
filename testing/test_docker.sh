@@ -339,6 +339,10 @@ rlJournalStart
     rlPhaseStartTest "Requests to bogus URLs are closed"
         rlRun -t -c "curl -k -o- $HTTPS/servlet/FileReceiveServlet 2>&1 | grep 'curl: (52) Empty reply from server'"
         rlRun -t -c "curl -k -o- $HTTPS/servlet/~baseapp/nc.message.bs.NCMessageServlet 2>&1 | grep 'curl: (52) Empty reply from server'"
+        rlRun -t -c "curl -k -o- $HTTPS/wp-admin/ 2>&1 | grep 'curl: (52) Empty reply from server'"
+        rlRun -t -c "curl -k -o- $HTTPS/wp-admin/login.php 2>&1 | grep 'curl: (52) Empty reply from server'"
+        rlRun -t -c "curl -k -o- $HTTPS/login.php 2>&1 | grep 'curl: (52) Empty reply from server'"
+        rlRun -t -c "curl -k -o- $HTTPS/index.php/ 2>&1 | grep 'curl: (52) Empty reply from server'"
     rlPhaseEnd
 
     rlPhaseStartTest "Should render Mermaid.JS diagrams"
