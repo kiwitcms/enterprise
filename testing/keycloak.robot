@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2021-2026 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -10,7 +10,7 @@ Library           SeleniumLibrary
 ${SERVER}               https://testing.example.bg
 ${BROWSER}              Headless Firefox
 ${DELAY}                0
-${LOGIN_URL}            ${SERVER}/login/keycloak
+${LOGIN_URL}            ${SERVER}/accounts/login/
 ${DASHBOARD_URL}        ${SERVER}/
 
 
@@ -19,6 +19,9 @@ Login via Keycloak
     Open Browser    ${LOGIN_URL}    ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed    ${DELAY}
+    Title Should Be    Kiwi TCMS - Login
+
+    Click Element  id:keycloak-login
     Title Should Be    Sign in to kiwi
 
     Input Text    username    kc_atodorov
