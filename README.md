@@ -139,6 +139,13 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v16.3-mt (24 Aug 2026)
+
+- Based on Kiwi TCMS v16.3
+- Update kiwitcms-trackers-integration from 1.4.0 to 1.5.0
+- Update sentry-sdk from 2.66.0 to 2.68.0
+
+
 ### v16.2.1-mt (23 Jul 2026)
 
 - Based on Kiwi TCMS v16.2
