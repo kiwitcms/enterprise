@@ -49,7 +49,7 @@ jobs:
             docker tag hub.kiwitcms.eu/kiwitcms/enterprise:$VERSION-$(uname -m) quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
 
             echo "+++++ Docker images +++++"
-            docker images
+            docker images --digests
 
             docker push quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
             docker logout quay.io
