@@ -19,8 +19,16 @@ build:
 	twine check dist/*
 
 
+.PHONY: build-gssapi
+build-gssapi:
+	docker build -t kiwitcms/gssapi-buildroot -f Dockerfile.gssapi .
+	docker run --rm --security-opt label=disable \
+	    -v `pwd`/dist/:/host kiwitcms/gssapi-buildroot /bin/bash -c 'cp /dist/*.whl /host/'
+	docker rmi kiwitcms/gssapi-buildroot
+
+
 .PHONY: docker-image
-docker-image: build
+docker-image: build build-gssapi
 	test -n "$(PKG_TOKEN)" || exit 1
 	# everything else below is Enterprise + multi-tenant
 	docker build \
