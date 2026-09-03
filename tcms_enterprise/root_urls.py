@@ -1,4 +1,4 @@
-# Copyright (c) 2020-2025 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2020-2026 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -6,7 +6,6 @@
 from django.urls import re_path
 from django.conf import settings
 from django.conf.urls import include
-from django.views.defaults import permission_denied
 from django.views.generic import RedirectView
 
 from tcms.urls import urlpatterns
@@ -25,7 +24,9 @@ url_overrides = [
 # WARNING: overrides all password reset pages (form, done, confirm, complete)
 # b/c we're matching the beginning of the URL path !
 if not settings.PASSWORD_LOGIN_ENABLED:
-    url_overrides.append(re_path(r"^accounts/passwordreset/", permission_denied))
+    url_overrides.append(
+        re_path(r"^accounts/passwordreset/", views.PasswordResetDisabled.as_view())
+    )
 
 
 urlpatterns = (
