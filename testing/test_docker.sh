@@ -229,6 +229,8 @@ rlJournalStart
     # NOTE: secondary domain no-login.example.bg is configured in the previous step!
     rlPhaseStartTest "NO LOGIN - /accounts/passwordreset/ displays 404"
         rlRun -t -c "curl -k -D- -o- --referer no_login_password_reset https://no-login.example.bg:8443/accounts/passwordreset/ | grep '404 Not Found'"
+        rlRun -t -c "docker logs web_no_login > /tmp/no-login.log 2>&1"
+        rlAssertGrep 'GET /accounts/passwordreset/ HTTP/1.1" 404 403' /tmp/no-login.log
     rlPhaseEnd
 
     # NOTE: we can't exercise the POST request against login & password reset pages b/c they also require cookies and/or
