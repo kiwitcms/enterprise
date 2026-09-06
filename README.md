@@ -139,6 +139,15 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v16.4-mt (07 Sep 2026)
+
+- Based on Kiwi TCMS v16.4
+- Update certbot from 5.7.0 to 5.8.0
+- Update django-ses from 4.7.2 to 4.8.0
+- Update sentry-sdk from 2.68.0 to 2.68.1
+- Fix `TypeError` on `/accounts/passwordreset/` when `PASSWORD_LOGIN_ENABLED=False`
+
+
 ### v16.3-mt (24 Aug 2026)
 
 - Based on Kiwi TCMS v16.3
