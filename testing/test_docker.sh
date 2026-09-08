@@ -246,6 +246,11 @@ rlJournalStart
         rlRun -t -c "robot testing/keycloak.robot"
     rlPhaseEnd
 
+    rlPhaseStartTest "Sanity test - Keycloak login for Private Tenant"
+        rlRun -t -c "cat testing/configure_tenant_users.py | docker exec -i web /Kiwi/manage.py shell"
+        rlRun -t -c "robot testing/keycloak-login-private-tenant.robot"
+    rlPhaseEnd
+
     rlPhaseStartTest "Should send ETag header"
         rlRun -t -c "curl -k -D- $HTTPS/static/images/kiwi_h20.png 2>/dev/null | grep 'ETag'"
     rlPhaseEnd
