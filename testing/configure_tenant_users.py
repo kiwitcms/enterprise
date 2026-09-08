@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2025 Alexander Todorov <atodorov@otb.bg>
+# Copyright (c) 2021-2026 Alexander Todorov <atodorov@otb.bg>
 #
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
@@ -21,7 +21,7 @@ domain.save()
 
 # empty.testing.example.bg is also accessible via
 # no-login.example.bg which is bound to the no-login IP address
-Domain.objects.create(
+Domain.objects.get_or_create(
     domain="no-login.example.bg",
     is_primary=False,
     tenant=tenant,
@@ -38,7 +38,7 @@ product, _ = Product.objects.get_or_create(
 )
 version, _ = Version.objects.get_or_create(value="devel", product=product)
 
-TestPlan.objects.create(
+TestPlan.objects.get_or_create(
     name="Check if uploading files works",
     product=product,
     product_version=version,
