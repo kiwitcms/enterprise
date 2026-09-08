@@ -30,7 +30,7 @@ https://www.gnu.org/licenses/agpl-3.0.html
     {% for backend in backends.backends %}
     <a id="login-with-{{ backend|lower }}" href='{% tenant_url request "public" %}{% url "social:begin" backend|lower %}?next={% next_url request %}'>
         {% with "images/social_auth/backends/"|add:backend|lower|add:".png" as image_path %}
-            <img id="login-icon-{{ backend|lower }}" src='{% static image_path %}' alt="{{ backend|title }} login" title="{{ backend|title }} login">
+            <img src='{% static image_path %}' id="login-icon-{{ backend|lower }}" alt="{{ backend|title }} login" title="{{ backend|title }} login">
         {% endwith %}
     </a>
     &nbsp;
