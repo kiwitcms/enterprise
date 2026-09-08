@@ -38,7 +38,7 @@ product, _ = Product.objects.get_or_create(
 )
 version, _ = Version.objects.get_or_create(value="devel", product=product)
 
-TestPlan.objects.create(
+TestPlan.objects.get_or_create(
     name="Check if uploading files works",
     product=product,
     product_version=version,
