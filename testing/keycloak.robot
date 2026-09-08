@@ -22,7 +22,8 @@ Login via OAuth2 redirect from Kiwi TCMS login page
     Title Should Be    Kiwi TCMS - Login
 
     # click on the Keycloak image which redirects to the OAuth2 authorization endpoint
-    Click Element   css:a[href='/login/keycloak/?next=/'] img
+    Wait Until Page Contains Element    id:login-icon-keycloak
+    Click Element   id:login-icon-keycloak
 
     # we're now on the Keycloak login page
     Wait Until Location Contains    kc.example.bg:8080

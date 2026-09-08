@@ -141,7 +141,7 @@ rlJournalStart
         # contains more images than backends which can be enabled during testing
         for BACKEND in kerberos keycloak gitlab github github-app fedora; do
             rlAssertGrep "/login/$BACKEND/" page.html
-            rlAssertGrep "<img src='/static/images/social_auth/backends/$BACKEND.*.png'" page.html
+            rlAssertGrep "<img id='login-icon-$BACKEND' src='/static/images/social_auth/backends/$BACKEND.*.png'" page.html
         done
 
         # social icons are present
