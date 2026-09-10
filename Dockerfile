@@ -32,8 +32,8 @@ ENV NGX_AUTHENTICATED_RATE=300  \
 COPY ./bin/* /Kiwi/bin/
 COPY ./dist/ /Kiwi/dist/
 
-ARG PKG_TOKEN
-RUN pip install --no-cache-dir --only-binary :all: decorator lxml && \
+RUN --mount=type=secret,id=PKG_TOKEN,env=PKG_TOKEN \
+    pip install --no-cache-dir --only-binary :all: decorator lxml && \
     pip install --no-cache-dir --find-links /Kiwi/dist/ \
         --index-url https://$PKG_TOKEN@pkg.kiwitcms.eu/pypi/ \
         --extra-index-url https://pypi.org/simple/ \
