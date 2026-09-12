@@ -12,6 +12,7 @@ COPY ./etc/pki/rpm-gpg/* /etc/pki/rpm-gpg/
 COPY ./etc/yum.repos.d/* /etc/yum.repos.d/
 RUN microdnf -y --nodocs install augeas-libs fuse-libs krb5-libs psmisc restic xmlsec1 xmlsec1-openssl && \
     rpm -Uhv --excludedocs https://s3.amazonaws.com/mountpoint-s3-release/latest/$(uname -m | sed s/aarch64/arm64/)/mount-s3.rpm && \
+    microdnf -y --nodocs update && \
     microdnf clean all
 
 HEALTHCHECK CMD [ -d /proc/$(cat /tmp/nginx.pid) ] && [ -d /proc/$(cat /tmp/kiwitcms.pid) ]
