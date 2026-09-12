@@ -114,7 +114,7 @@ rlJournalStart
         rlRun -t -c "curl -k -L  -o- --referer admin_login_step $HTTPS/admin/login/ | grep 'Kiwi TCMS - Login'"
     rlPhaseEnd
 
-    rlPhaseStartTest "Sanity test - /accounts/passwordreset/ displays page when login enabled"
+    rlPhaseStartTest "Sanity test - /accounts/passwordreset/ displays page when enabled"
         rlRun -t -c "curl -k -L -o- --referer password_reset_step $HTTPS/accounts/passwordreset/ | grep 'Kiwi TCMS password reset!'"
     rlPhaseEnd
 
@@ -133,6 +133,9 @@ rlJournalStart
 
         # template override for social icons
         rlAssertGrep "Continue with" page.html
+
+        # pwd reset is enabled by default
+        rlAssertGrep "Forgot password" page.html
 
         # social backends are listed
         # for ICON in tcms_enterprise/static/images/social_auth/backends/*.png; do
@@ -227,7 +230,9 @@ rlJournalStart
     rlPhaseEnd
 
     # NOTE: secondary domain no-login.example.bg is configured in the previous step!
-    rlPhaseStartTest "NO LOGIN - /accounts/passwordreset/ displays 404"
+    rlPhaseStartTest "When PASSWORD_RESET_ENABLED is False /accounts/passwordreset/ displays 404"
+        rlRun -t -c "curl -k -D- -o- --referer no_login_login_page https://no-login.example.bg:8443/accounts/login/ | grep 'Forgot password'" 1
+
         rlRun -t -c "curl -k -D- -o- --referer no_login_password_reset https://no-login.example.bg:8443/accounts/passwordreset/ | grep '404 Not Found'"
         rlRun -t -c "docker logs web_no_login > /tmp/no-login.log 2>&1"
         rlAssertGrep 'GET /accounts/passwordreset/ HTTP/1.1" 404 403' /tmp/no-login.log

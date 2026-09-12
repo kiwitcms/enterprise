@@ -1,7 +1,7 @@
 {% extends "registration/login.html" %}
 
 {% comment %}
-Copyright (c) 2018-2025 Alexander Todorov <atodorov@otb.bg>
+Copyright (c) 2018-2026 Alexander Todorov <atodorov@otb.bg>
 
 Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 https://www.gnu.org/licenses/agpl-3.0.html
@@ -36,4 +36,10 @@ https://www.gnu.org/licenses/agpl-3.0.html
     &nbsp;
     {% endfor %}
 </div>
+{% endblock %}
+
+{% block forgot_password %}
+    {% if SETTINGS.PASSWORD_RESET_ENABLED %}
+        {{ block.super }}
+    {% endif %}
 {% endblock %}
