@@ -23,6 +23,12 @@ DATABASES["default"].update(  # noqa: F821, pylint: disable=objects-update-used
     dj_database_url.config()
 )
 
+# support default connection pool configuration, see
+# https://docs.djangoproject.com/en/5.2/ref/databases/#connection-pool
+# https://www.psycopg.org/psycopg3/docs/api/pool.html#psycopg_pool.ConnectionPool
+if "OPTIONS" in DATABASES["default"]:                # noqa: F821
+    DATABASES["default"]["OPTIONS"]["pool"] = True   # noqa: F821
+
 # link to legal information, see https://github.com/kiwitcms/Kiwi/issues/249
 LEGAL_MENU_ITEM = ("http://kiwitcms.org/legal/", _("Legal information"))
 if LEGAL_MENU_ITEM not in HELP_MENU_ITEMS:  # noqa: F821
