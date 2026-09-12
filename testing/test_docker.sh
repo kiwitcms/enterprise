@@ -251,6 +251,11 @@ rlJournalStart
         rlRun -t -c "robot testing/keycloak-login-private-tenant.robot"
     rlPhaseEnd
 
+    rlPhaseStartTest "Sanity test - mount-s3"
+        rlRun -t -c "docker exec -i web mount-s3 --version"
+        rlRun -t -c "docker exec -i web mount-s3 --help"
+    rlPhaseEnd
+
     rlPhaseStartTest "Sanity test - restic"
         rlRun -t -c "docker exec -i web restic version"
         rlRun -t -c "docker exec -i web restic --help"

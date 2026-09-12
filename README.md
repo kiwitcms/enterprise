@@ -35,6 +35,7 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
   - [kiwitcms-tenants](https://github.com/kiwitcms/tenants/) - multi-tenant support
   - [kiwitcms-trackers-integration](https://github.com/kiwitcms/trackers-integration/) -
     integration with extra issue trackers
+  - [mount-s3](https://github.com/awslabs/mountpoint-s3) - mounting an S3 bucket as a local file system
   - [psycopg-pool](https://www.psycopg.org/psycopg3/docs/advanced/pool.html) - support for Postgres connection pools
   - [restic](https://restic.readthedocs.io/) - fast and secure backup program
   - [sentry-sdk](https://docs.sentry.io/platforms/python/integrations/django/) - automatic error reporting with Sentry
