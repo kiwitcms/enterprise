@@ -252,6 +252,7 @@ rlJournalStart
     rlPhaseEnd
 
     rlPhaseStartTest "Sanity test - restic"
+        rlRun -t -c "docker exec -i web restic version"
         rlRun -t -c "docker exec -i web restic --help"
     rlPhaseEnd
 
