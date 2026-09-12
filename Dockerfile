@@ -8,7 +8,9 @@ ARG KIWI_VERSION=latest
 FROM hub.kiwitcms.eu/kiwitcms/version:$KIWI_VERSION
 
 USER 0
-RUN microdnf -y --nodocs install augeas-libs krb5-libs psmisc xmlsec1 xmlsec1-openssl && \
+COPY ./etc/pki/rpm-gpg/* /etc/pki/rpm-gpg/
+COPY ./etc/yum.repos.d/* /etc/yum.repos.d/
+RUN microdnf -y --nodocs install augeas-libs krb5-libs psmisc restic xmlsec1 xmlsec1-openssl && \
     microdnf clean all
 
 HEALTHCHECK CMD [ -d /proc/$(cat /tmp/nginx.pid) ] && [ -d /proc/$(cat /tmp/kiwitcms.pid) ]

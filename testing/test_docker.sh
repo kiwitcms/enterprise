@@ -251,6 +251,10 @@ rlJournalStart
         rlRun -t -c "robot testing/keycloak-login-private-tenant.robot"
     rlPhaseEnd
 
+    rlPhaseStartTest "Sanity test - restic"
+        rlRun -t -c "docker exec -i web restic --help"
+    rlPhaseEnd
+
     rlPhaseStartTest "Should send ETag header"
         rlRun -t -c "curl -k -D- $HTTPS/static/images/kiwi_h20.png 2>/dev/null | grep 'ETag'"
     rlPhaseEnd

@@ -24,6 +24,7 @@ docker-image: build
 	test -n "$(PKG_TOKEN)" || exit 1
 	# everything else below is Enterprise + multi-tenant
 	docker build \
+	    --progress=plain \
 	    --build-arg KIWI_VERSION=$(KIWI_VERSION) \
 	    --secret id=PKG_TOKEN,env=PKG_TOKEN \
 	    -t hub.kiwitcms.eu/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-$(shell uname -m) .

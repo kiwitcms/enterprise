@@ -36,6 +36,7 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
   - [kiwitcms-trackers-integration](https://github.com/kiwitcms/trackers-integration/) -
     integration with extra issue trackers
   - [psycopg-pool](https://www.psycopg.org/psycopg3/docs/advanced/pool.html) - support for Postgres connection pools
+  - [restic](https://restic.readthedocs.io/) - fast and secure backup program
   - [sentry-sdk](https://docs.sentry.io/platforms/python/integrations/django/) - automatic error reporting with Sentry
   - [social-auth-app-django](https://github.com/python-social-auth/social-app-django) -
     extra [authentication backends](http://python-social-auth.readthedocs.io/en/latest/backends/index.html#supported-backends)
