@@ -23,7 +23,7 @@ url_overrides = [
 
 # WARNING: overrides all password reset pages (form, done, confirm, complete)
 # b/c we're matching the beginning of the URL path !
-if not settings.PASSWORD_LOGIN_ENABLED:
+if not settings.PASSWORD_RESET_ENABLED:
     url_overrides.append(
         re_path(r"^accounts/passwordreset/", views.PasswordResetDisabled.as_view())
     )
