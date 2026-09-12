@@ -16,7 +16,7 @@ ${EMPTY_TENANT_DASHBOARD_URL}   ${EMPTY_TENANT_SERVER}/
 
 *** Test Cases ***
 Login via OAuth2 redirect from non-public tenant login page
-    Open Browser    ${EMPTY_TENANT_LOGIN_URL}    ${BROWSER}
+    Open Browser    https://testing.example.bg/accounts/login/    ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed    ${DELAY}
     Title Should Be    Kiwi TCMS - Login

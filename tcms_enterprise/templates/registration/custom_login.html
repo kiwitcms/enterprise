@@ -33,7 +33,7 @@ https://www.gnu.org/licenses/agpl-3.0.html
         method="post"
         action='{% tenant_url request "public" %}{% url "social:begin" backend|lower %}'>
         {% csrf_token %}
-        <input type="hidden" name="next" value="{% next_url request %}">
+        <input type="hidden" name="next" value="/kiwitcms_tenants/go/to/empty/">
         {% with "images/social_auth/backends/"|add:backend|lower|add:".png" as image_path %}
             <input type="image" src='{% static image_path %}' alt="{{ backend|title }} login" id="login-icon-{{ backend|lower }}">
         {% endwith %}
