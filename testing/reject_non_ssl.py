@@ -6,8 +6,8 @@
 from django.db.utils import OperationalError
 from tcms.management.models import Classification
 
+rejected = 0
 try:
-    rejected = 0
     classification, _ = Classification.objects.using("plain_text").get_or_create(
         name="core products"
     )
