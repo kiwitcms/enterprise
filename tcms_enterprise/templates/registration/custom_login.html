@@ -10,12 +10,18 @@ https://www.gnu.org/licenses/agpl-3.0.html
 {% load i18n %}
 {% load static %}
 {% load tcms_tenants %}
-{% load enterprise_tags %}
 
 {% block login_form %}
     {% if SETTINGS.PASSWORD_LOGIN_ENABLED %}
         {{ block.super }}
     {% endif %}
+{% endblock %}
+
+{% block login_form_header %}
+    <div class="form-group">
+      <label class="col-sm-2 col-md-2 control-label"></label>
+      <label class="col-sm-10 col-md-10 control-label">{{ X_Login_Destination_Name }} @ {{ X_Login_Destination_Url }}</label>
+    </div>
 {% endblock %}
 
 {% block custom_login %}
@@ -28,7 +34,7 @@ https://www.gnu.org/licenses/agpl-3.0.html
     </p>
 
     {% for backend in backends.backends %}
-    <a href='{% tenant_url request "public" %}{% url "social:begin" backend|lower %}?next={% next_url request %}'>
+    <a href='{% tenant_url request "public" %}{% url "social:begin" backend|lower %}?next={{ next }}'>
         {% with "images/social_auth/backends/"|add:backend|lower|add:".png" as image_path %}
             <img src='{% static image_path %}' alt="{{ backend|title }} login" title="{{ backend|title }} login" id="login-icon-{{ backend|lower }}">
         {% endwith %}
