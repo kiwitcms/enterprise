@@ -10,7 +10,6 @@ from django.utils.translation import gettext_lazy as _
 
 from tcms.kiwi_auth.admin import KiwiUserAdmin
 
-
 User = get_user_model()  # pylint: disable=invalid-name
 
 

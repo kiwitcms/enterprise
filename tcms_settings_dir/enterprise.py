@@ -12,7 +12,6 @@ from django.utils.translation import gettext_lazy as _
 
 from tcms import __version__
 
-
 # first: remove any options set for MariaDB/MySQL
 if DATABASES["default"]["ENGINE"].find("mysql") > -1:  # noqa: F821
     del DATABASES["default"]["OPTIONS"]  # noqa: F821

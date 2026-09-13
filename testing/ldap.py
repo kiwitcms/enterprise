@@ -7,8 +7,8 @@
 Should be called after superuser has been created!
 Verifies that `ldap_sync_users` does its job.
 """
-from django.contrib.auth import get_user_model
 
+from django.contrib.auth import get_user_model
 
 USER = get_user_model()
 
