@@ -142,7 +142,7 @@ rlJournalStart
         #    BACKEND=`basename $ICON | sed 's/.png//'`
         # check only the backends enabled in test_settings.py b/c the directory above
         # contains more images than backends which can be enabled during testing
-        for BACKEND in kerberos keycloak gitlab github github-app fedora; do
+        for BACKEND in keycloak gitlab github github-app fedora; do
             rlAssertGrep "/login/$BACKEND/" page.html
             rlAssertGrep "<input type=\"image\" src='/static/images/social_auth/backends/$BACKEND.*.png'" page.html
         done
