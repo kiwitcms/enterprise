@@ -6,6 +6,7 @@
 """
 Should be called after `ldap_sync_users`.
 """
+
 from django.contrib.auth import get_user_model
 
 from tcms.management.models import Classification, Product, Version

@@ -11,7 +11,6 @@ from django.views.generic import RedirectView
 from tcms.urls import urlpatterns
 from tcms_enterprise import views
 
-
 url_overrides = [
     re_path(
         r"^admin/login/",

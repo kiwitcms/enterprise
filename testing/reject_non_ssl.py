@@ -8,7 +8,9 @@ from tcms.management.models import Classification
 
 try:
     rejected = 0
-    classification, _ = Classification.objects.using("plain_text").get_or_create(name="core products")
+    classification, _ = Classification.objects.using("plain_text").get_or_create(
+        name="core products"
+    )
 except OperationalError:
     rejected += 1
 
