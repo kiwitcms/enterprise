@@ -41,8 +41,6 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
   - [sentry-sdk](https://docs.sentry.io/platforms/python/integrations/django/) - automatic error reporting with Sentry
   - [social-auth-app-django](https://github.com/python-social-auth/social-app-django) -
     extra [authentication backends](http://python-social-auth.readthedocs.io/en/latest/backends/index.html#supported-backends)
-  - [social-auth-kerberos](https://github.com/kiwitcms/python-social-auth-kerberos/) -
-    MIT Kerberos authentication backend
   - [django-python3-ldap](https://github.com/etianen/django-python3-ldap) -
     LDAP authentication backend
   - [Let's Encrypt certbot](https://certbot.eff.org/)

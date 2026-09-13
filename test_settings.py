@@ -17,7 +17,6 @@ for backend in (
     "social_core.backends.github.GithubOAuth2",
     "social_core.backends.gitlab.GitLabOAuth2",
     "social_core.backends.keycloak.KeycloakOAuth2",
-    "social_auth_kerberos.backend.KerberosAuth",
     "django_python3_ldap.auth.LDAPBackend",
 ):
     if backend not in AUTHENTICATION_BACKENDS:  # noqa: F821
