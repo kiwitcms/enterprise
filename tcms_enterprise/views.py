@@ -18,7 +18,7 @@ class LoginView(
 ):  # pylint: disable=missing-permission-required
     def post(self, request, *args, **kwargs):
         if settings.PASSWORD_LOGIN_ENABLED:
-            return super().post(request)
+            return super().post(request, *args, **kwargs)
 
         return HttpResponseForbidden()
 
