@@ -24,3 +24,16 @@ jobs:
         run: |
           pip install checkov
           checkov --quiet --directory .
+
+  black:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.12]
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: psf/black@26.5.1
