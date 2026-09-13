@@ -1,5 +1,6 @@
 -r requirements.txt
 
+black==26.5.1
 flake8
 pylint-django
 textdistance
