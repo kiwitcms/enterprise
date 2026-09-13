@@ -20,6 +20,7 @@ Login via OAuth2 redirect from non-public tenant login page
     Maximize Browser Window
     Set Selenium Speed    ${DELAY}
     Title Should Be    Kiwi TCMS - Login
+    Page Should Contain   Cloning Template @ ${EMPTY_TENANT_SERVER}
 
     # click on the Keycloak image which redirects to the OAuth2 authorization endpoint
     Wait Until Page Contains Element    id:login-icon-keycloak
@@ -36,5 +37,6 @@ Login via OAuth2 redirect from non-public tenant login page
     # follow redirect back to the non-public tenant dashboard
     Wait Until Location Contains        ${EMPTY_TENANT_DASHBOARD_URL}
     Title Should Be       Kiwi TCMS - Dashboard
+    Page Should Contain   Cloning Template
 
     [Teardown]    Close Browser

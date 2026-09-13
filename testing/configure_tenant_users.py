@@ -15,6 +15,8 @@ from tcms.testplans.models import PlanType, TestPlan
 from tcms_tenants.models import Domain, Tenant
 
 tenant = Tenant.objects.get(schema_name="empty")
+tenant.organization = None
+tenant.save()
 
 domain = tenant.domains.first()
 domain.domain = "empty.testing.example.bg"

@@ -20,6 +20,7 @@ Login via OAuth2 redirect from Kiwi TCMS login page
     Maximize Browser Window
     Set Selenium Speed    ${DELAY}
     Title Should Be    Kiwi TCMS - Login
+    Page Should Contain   Public tenant @ ${SERVER}
 
     # click on the Keycloak image which redirects to the OAuth2 authorization endpoint
     Wait Until Page Contains Element    id:login-icon-keycloak
@@ -36,5 +37,6 @@ Login via OAuth2 redirect from Kiwi TCMS login page
     # follow redirect back to Kiwi TCMS
     Wait Until Location Contains        ${DASHBOARD_URL}
     Title Should Be       Kiwi TCMS - Dashboard
+    Page Should Contain   Testing department
 
     [Teardown]    Close Browser

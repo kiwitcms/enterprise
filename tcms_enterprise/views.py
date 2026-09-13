@@ -7,15 +7,57 @@
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseForbidden
+from django.db.models import ObjectDoesNotExist
+from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.urls import reverse
 from django.views.generic.base import View
 
+from django_tenants.utils import get_public_schema_name
 from tcms.kiwi_auth import views
+from tcms_tenants.utils import tenant_url
 
 
 class LoginView(
     views.LoginViewWithCustomTemplate
 ):  # pylint: disable=missing-permission-required
+    def get(self, request, *args, **kwargs):
+        # reroute all Private Tenant requests through the Login@public.tenant page
+        if request.tenant.schema_name != get_public_schema_name():
+            public_tenant_url = tenant_url(request, get_public_schema_name()).rstrip(
+                "/"
+            )
+            accounts_login = reverse("tcms-login").lstrip("/")
+            next_page = reverse(
+                "tcms_tenants:redirect-to", args=[request.tenant.schema_name, ""]
+            )
+
+            return HttpResponseRedirect(
+                f"{public_tenant_url}/{accounts_login}?{self.redirect_field_name}={next_page}"
+            )
+
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        login_destination = self.request.tenant
+        next_page = context.get(self.redirect_field_name, "/")
+        if next_page.startswith("/kiwitcms_tenants/go/to/"):
+            try:
+                next_schema = next_page.rstrip("/").split("/")[-1]
+                login_destination = login_destination.__class__.objects.get(
+                    schema_name=next_schema
+                )
+            except ObjectDoesNotExist:
+                pass
+
+        context["X_Login_Destination_Name"] = login_destination.name
+        context["X_Login_Destination_Url"] = tenant_url(
+            self.request, login_destination.schema_name
+        )
+
+        return context
+
     def post(self, request, *args, **kwargs):
         if settings.PASSWORD_LOGIN_ENABLED:
             return super().post(request, *args, **kwargs)
