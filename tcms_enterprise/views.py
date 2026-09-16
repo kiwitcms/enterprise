@@ -6,15 +6,17 @@
 # https://www.gnu.org/licenses/agpl-3.0.html
 
 from django.conf import settings
+from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import ObjectDoesNotExist
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views.generic.base import View
 
 from django_tenants.utils import get_public_schema_name
 from tcms.kiwi_auth import views
-from tcms_tenants.utils import tenant_url
+from tcms_tenants.utils import can_access, tenant_url
 
 
 class LoginView(
@@ -70,3 +72,15 @@ class PasswordResetDisabled(View):  # pylint: disable=missing-permission-require
 
     def dispatch(self, request, *args, **kwargs):
         raise PermissionDenied("Permission denied")
+
+
+@method_decorator(
+    permission_required("attachments.view_attachment", raise_exception=True),
+    name="dispatch",
+)
+class ViewAttachment(views.ViewAttachment):
+    def get(self, request, path):
+        if not can_access(request.user, request.tenant):
+            raise PermissionDenied
+
+        return super().get(request, path)
