@@ -59,10 +59,14 @@ http {
         default "";
         ~^/accounts/ $binary_remote_addr;
     }
+    map $uri $limit_uploads_key {
+        default "";
+        ~^/uploads/  $binary_remote_addr;
+    }
     limit_req_zone $limit_key zone=limit-for-accounts-pages:10m rate=10r/s;
+    limit_req_zone $limit_uploads_key zone=limit-for-uploaded-files:10m rate=$NGX_UPLOADS_RATEr/s;
     limit_req_zone $binary_remote_addr zone=limit-for-authenticated-pages:10m rate=$NGX_AUTHENTICATED_RATEr/s;
     limit_req_zone $binary_remote_addr zone=limit-for-static-files:10m rate=$NGX_STATIC_RATEr/s;
-    limit_req_zone $binary_remote_addr zone=limit-for-uploaded-files:10m rate=$NGX_UPLOADS_RATEr/s;
     limit_req_zone $binary_remote_addr zone=limit-for-errors:10m rate=$NGX_ERRORS_RATEr/m;
     limit_req_status 429;
 
@@ -100,8 +104,8 @@ http {
             alias /Kiwi/static/.well-known/;
         }
 
-        location /uploads/  {
-            limit_req zone=limit-for-uploaded-files burst=$NGX_UPLOADS_BURST nodelay;
+        location /ngx-uploads/  {
+            internal;
 
             # prevent browser from possibly interpreting untrusted files
             types        { }
@@ -131,6 +135,7 @@ http {
 
         location / {
             limit_req zone=limit-for-accounts-pages burst=2 nodelay;
+            limit_req zone=limit-for-uploaded-files burst=$NGX_UPLOADS_BURST nodelay;
             limit_req zone=limit-for-authenticated-pages burst=$NGX_AUTHENTICATED_BURST nodelay;
 
             include     /etc/nginx/uwsgi_params;

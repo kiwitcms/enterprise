@@ -3,6 +3,9 @@
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
 
+import re
+from urllib.parse import urlsplit
+
 from django.urls import re_path
 from django.conf import settings
 from django.conf.urls import include
@@ -25,6 +28,17 @@ url_overrides = [
 if not settings.PASSWORD_RESET_ENABLED:
     url_overrides.append(
         re_path(r"^accounts/passwordreset/", views.PasswordResetDisabled.as_view())
+    )
+
+
+if not urlsplit(settings.MEDIA_URL).netloc:
+    # route requests to /uploads/ internally and then back to Nginx
+    prefix = re.escape(settings.MEDIA_URL.lstrip("/"))
+    url_overrides.append(
+        re_path(
+            f"^{prefix}(?P<path>.*)$",
+            views.ViewAttachment.as_view(),
+        )
     )
 
 
