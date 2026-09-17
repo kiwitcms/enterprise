@@ -139,6 +139,19 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v16.5-mt (17 Sep 2026)
+
+- Based on Kiwi TCMS v16.5
+- Add `PASSWORD_RESET_ENABLED` setting
+- Add `restic` command inside container
+- Add `mount-s3` command inside container
+- Remove the social-auth-kerberos add-on
+- Route requests to `/uploads/` internally and check for permissions
+- Redirect all login requests through `public.schema/accounts/login/`
+- Update social-auth-app-django from 5.9.0 to 6.0.1
+- Explicitly `dnf update` when building the container
+
+
 ### v16.4-mt (07 Sep 2026)
 
 - Based on Kiwi TCMS v16.4
