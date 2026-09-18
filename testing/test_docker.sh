@@ -225,7 +225,7 @@ rlJournalStart
 
         # extract, decode and grep the confirm URL
         rlRun "docker cp web:/Kiwi/uploads/email-messages/ /tmp/email-messages/"
-        EMAIL_FILE=$(ls -1 /tmp/email-messages/*.log | head -n 1)
+        EMAIL_FILE=$(find /tmp/email-messages/ -maxdepth 1 -name '*.log' | sort | head -n 1)
         rlAssertGrep "Content-Transfer-Encoding: quoted-printable" "$EMAIL_FILE"
 
         CONFIRM_URL=$(qprint -d "$EMAIL_FILE" | grep -oP 'https://testing.example.bg/accounts/passwordreset/confirm/[^/\s]+/[^/\s]+/')
