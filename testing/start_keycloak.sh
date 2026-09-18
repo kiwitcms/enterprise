@@ -19,7 +19,7 @@ sleep 10
 KC_ADDRESS=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' keycloak_server`
 
 if [ -z "$(grep kc.example.bg /etc/hosts)" ]; then
-    echo "--- kc.example.bg: $IP_ADDRESS --"
+    echo "--- kc.example.bg: $KC_ADDRESS --"
     sudo sh -c "echo '$KC_ADDRESS    kc.example.bg' >> /etc/hosts"
 fi
 
