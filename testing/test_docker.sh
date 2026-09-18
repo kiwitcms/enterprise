@@ -228,9 +228,9 @@ rlJournalStart
         EMAIL_FILE=$(ls -1 /tmp/email-messages/*.log | head -n 1)
         rlAssertGrep "Content-Transfer-Encoding: quoted-printable" "$EMAIL_FILE"
 
-        CONFIRM_URL=$(qprint -d $EMAIL_FILE | grep -oP 'https://testing.example.bg/accounts/passwordreset/confirm/[^/\s]+/[^/\s]+/')
+        CONFIRM_URL=$(qprint -d "$EMAIL_FILE" | grep -oP 'https://testing.example.bg/accounts/passwordreset/confirm/[^/\s]+/[^/\s]+/')
         # replace the domain because it doesn't have ports specification
-        CONFIRM_URL=$(echo $CONFIRM_URL | sed "s|https://testing.example.bg|${HTTPS}|")
+        CONFIRM_URL=$(echo "$CONFIRM_URL" | sed "s|https://testing.example.bg|${HTTPS}|")
 
         rlRun -t -c "robot --variable CONFIRM_URL:${CONFIRM_URL} testing/password-reset-confirm.robot"
     rlPhaseEnd
