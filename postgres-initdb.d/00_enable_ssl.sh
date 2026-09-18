@@ -20,8 +20,8 @@
 
 set -eu
 
-SSL_CERT_FILE="$(dirname $0)/database.crt"
-SSL_KEY_FILE="$(dirname $0)/database.key"
+SSL_CERT_FILE="$(dirname "$0")/database.crt"
+SSL_KEY_FILE="$(dirname "$0")/database.key"
 
 [ ! -f "$SSL_CERT_FILE" ] && exit 1
 [ ! -f "$SSL_KEY_FILE" ] && exit 1
