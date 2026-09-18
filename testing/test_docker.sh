@@ -313,7 +313,7 @@ rlJournalStart
 
     rlPhaseStartTest "GET /ngx-uploads/ returns 404"
         rlRun -t -c "curl -k -D- --silent $HTTPS/ngx-uploads/attachments/auth_user/2/ldap.py | grep '404 Not Found'"
-        rlRun -t -c "curl -k -D- -b /tmp/login-cookies.txt --silent $HTTPS/ngx-uploads/attachments/auth_user/2/ldap.py | grep '404 Not Found'"
+        rlRun -t -c "curl -k -D- -b ./login-cookies.txt --silent $HTTPS/ngx-uploads/attachments/auth_user/2/ldap.py | grep '404 Not Found'"
     rlPhaseEnd
 
     rlPhaseStartTest "Requests to /accounts/register/ are rate limited"
