@@ -151,13 +151,13 @@ rlJournalStart
         rlAssertGrep '<input type="hidden" name="next" value="/">' page.html
 
         # social icons are present
-        for URL in `cat page.html | grep "/static/images/social_auth/backends/" | cut -d= -f3 | cut -d"'" -f2`; do
+        for URL in $(cat page.html | grep "/static/images/social_auth/backends/" | cut -d= -f3 | cut -d"'" -f2); do
             rlLogInfo "Verify image $URL is present"
             rlRun -t -c "curl -k -f -o /dev/null $HTTPS/$URL"
         done
 
         # social icons point to correct backend login URL, even with port
-        for BACKEND in `cat page.html | grep "/static/images/social_auth/backends/" | cut -d= -f3 | cut -d"'" -f2 | cut -f6 -d/ | cut -f1 -d.`; do
+        for BACKEND in $(cat page.html | grep "/static/images/social_auth/backends/" | cut -d= -f3 | cut -d"'" -f2 | cut -f6 -d/ | cut -f1 -d.); do
             rlLogInfo "Verify $BACKEND login is present"
             rlAssertGrep "https://testing.example.bg/login/$BACKEND/'" page.html
         done
