@@ -20,11 +20,16 @@ assert_up_and_running() {
 }
 
 get_dashboard() {
-    rlRun -t -c "curl -k -L -o- --referer get_dashboard -c ./testcookies.txt $1/"
+    SERVER=$1
+    USERNAME=$2
+    PASSWORD=$3
+    COOKIES_FILE=$4
+
+    rlRun -t -c "curl -k -L -o- --referer get_dashboard -c ./testcookies.txt $SERVER/"
     CSRF_TOKEN=$(grep csrftoken ./testcookies.txt | cut -f 7)
-    rlRun -t -c "curl --referer $1/accounts/login/ -d username=ldap_atodorov -d password=h3llo-w0rld \
+    rlRun -t -c "curl --referer $SERVER/accounts/login/ -d username=$USERNAME -d password=$PASSWORD \
         -d csrfmiddlewaretoken=$CSRF_TOKEN -k -L -i -o ./testdata.txt \
-        -b ./testcookies.txt -c ./login-cookies.txt $1/accounts/login/"
+        -b ./testcookies.txt -c $COOKIES_FILE $SERVER/accounts/login/"
     rlAssertGrep "<title>Kiwi TCMS - Dashboard</title>" ./testdata.txt
 }
 
@@ -189,7 +194,7 @@ rlJournalStart
 
     rlPhaseStartTest "Can upload attachments via browser UI"
         # login and create the cookies file
-        get_dashboard "$HTTPS"
+        get_dashboard "$HTTPS" ldap_atodorov h3llo-w0rld ./login-cookies.txt
 
         # WARNING: reuses username/password from the LDAP test above !!!
 
