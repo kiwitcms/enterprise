@@ -297,23 +297,23 @@ rlJournalStart
 
     rlPhaseStartTest "Should send uploads with exactly 1 'Content-Type: text/plain' header"
         # copy test file externally b/c Kiwi TCMS v12.2 will prevent its upload
-        rlRun -t -c "docker exec -i web /bin/bash -c 'mkdir -p /Kiwi/uploads/attachments/auth_user/2/'"
-        rlRun -t -c "docker cp testing/ldap.py web:/Kiwi/uploads/attachments/auth_user/2/"
-        rlRun -t -c "curl -k -D- -b ./login-cookies.txt $HTTPS/uploads/attachments/auth_user/2/ldap.py 2>/dev/null | grep 'Content-Type: text/plain'"
+        rlRun -t -c "docker exec -i web /bin/bash -c 'mkdir -p /Kiwi/uploads/tenant/public/attachments/auth_user/2/'"
+        rlRun -t -c "docker cp testing/ldap.py web:/Kiwi/uploads/tenant/public/attachments/auth_user/2/"
+        rlRun -t -c "curl -k -D- -b ./login-cookies.txt $HTTPS/uploads/tenant/public/attachments/auth_user/2/ldap.py 2>/dev/null | grep 'Content-Type: text/plain'"
 
-        CT_HEADER_COUNT=$(curl -k -D- -b ./login-cookies.txt $HTTPS/uploads/attachments/auth_user/2/ldap.py 2>/dev/null | grep -c 'Content-Type:')
+        CT_HEADER_COUNT=$(curl -k -D- -b ./login-cookies.txt $HTTPS/uploads/tenant/public/attachments/auth_user/2/ldap.py 2>/dev/null | grep -c 'Content-Type:')
         rlAssertEquals "There should be only 1 Content-Type header" "$CT_HEADER_COUNT" 1
     rlPhaseEnd
 
     rlPhaseStartTest "Anonymous GET /uploads/ returns 403"
-        rlRun -t -c "curl -k -D- --silent $HTTPS/uploads/attachments/auth_user/2/ldap.py | grep '404 Not Found'"
+        rlRun -t -c "curl -k -D- --silent $HTTPS/uploads/tenant/public/attachments/auth_user/2/ldap.py | grep '404 Not Found'"
         rlRun -t -c "docker logs web > /var/tmp/docker.log 2>&1"
-        rlAssertGrep 'GET /uploads/attachments/auth_user/2/ldap.py HTTP/1.1" 404 403' /var/tmp/docker.log
+        rlAssertGrep 'GET /uploads/tenant/public/attachments/auth_user/2/ldap.py HTTP/1.1" 404 403' /var/tmp/docker.log
     rlPhaseEnd
 
     rlPhaseStartTest "GET /ngx-uploads/ returns 404"
-        rlRun -t -c "curl -k -D- --silent $HTTPS/ngx-uploads/attachments/auth_user/2/ldap.py | grep '404 Not Found'"
-        rlRun -t -c "curl -k -D- -b ./login-cookies.txt --silent $HTTPS/ngx-uploads/attachments/auth_user/2/ldap.py | grep '404 Not Found'"
+        rlRun -t -c "curl -k -D- --silent $HTTPS/ngx-uploads/tenant/public/attachments/auth_user/2/ldap.py | grep '404 Not Found'"
+        rlRun -t -c "curl -k -D- -b ./login-cookies.txt --silent $HTTPS/ngx-uploads/tenant/public/attachments/auth_user/2/ldap.py | grep '404 Not Found'"
     rlPhaseEnd
 
     rlPhaseStartTest "Requests to /accounts/register/ are rate limited"
@@ -350,7 +350,7 @@ rlJournalStart
     rlPhaseStartTest "Requests for uploaded files are rate limited"
         # Note: the cookies file is created in get_dashboard() above
         SESSION_ID=$(grep sessionid ./login-cookies.txt | cut -f 7)
-        COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/uploads/attachments/auth_user/2/ldap.py" "$WRK_DIR" "uploaded-file" "Cookie: sessionid=$SESSION_ID")
+        COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/uploads/tenant/public/attachments/auth_user/2/ldap.py" "$WRK_DIR" "uploaded-file" "Cookie: sessionid=$SESSION_ID")
         rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
 
         # WARNING: the defaults are overriden in docker-compose.testing
