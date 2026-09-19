@@ -354,6 +354,16 @@ rlJournalStart
         rlRun -t -c "curl -k -o- -b ./login-cookies.txt --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep 'Hello Robots'"
     rlPhaseEnd
 
+    rlPhaseStartTest "Authenticated GET /uploads/ from Private Tenant with unauthorized user returns 403"
+        rlRun -t -c "cat testing/unauthorized_user.py | docker exec -i web /Kiwi/manage.py shell"
+        get_dashboard "$HTTPS" unauthorized password ./unauthorized-cookies.txt
+
+        rlRun -t -c "curl -k -D- -b ./unauthorized-cookies.txt --silent $HTTPS/uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt | grep '200 OK'"
+        rlRun -t -c "curl -k -D- -b ./unauthorized-cookies.txt --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep '404 Not Found'"
+        rlRun -t -c "docker logs web > /var/tmp/docker.log 2>&1"
+        rlAssertGrep 'GET /uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt HTTP/1.1" 404 403' /var/tmp/docker.log
+    rlPhaseEnd
+
     rlPhaseStartTest "Requests to /accounts/register/ are rate limited"
         sleep 90 # chill
         COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/accounts/register/" "$WRK_DIR" "register-account-page")
