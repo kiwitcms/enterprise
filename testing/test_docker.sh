@@ -8,6 +8,7 @@
 . /usr/share/beakerlib/beakerlib.sh
 
 HTTPS="https://testing.example.bg"
+EMPTY_HTTPS="https://empty.testing.example.bg"
 
 WRK_DIR=$(mktemp -d ./wrk-logs-XXXX)
 chmod go+rwx "$WRK_DIR"
@@ -316,9 +317,41 @@ rlJournalStart
         rlAssertGrep 'GET /uploads/tenant/public/attachments/auth_user/2/ldap.py HTTP/1.1" 404 403' /var/tmp/docker.log
     rlPhaseEnd
 
+    rlPhaseStartTest "Authenticated GET /uploads/ without permissions returns 403"
+        rlRun -t -c "cat testing/regular_user.py | docker exec -i web /Kiwi/manage.py shell"
+
+        # login and create the cookies file
+        get_dashboard "$HTTPS" regular password ./regular-cookies.txt
+
+        rlRun -t -c "curl -k -D- -b ./regular-cookies.txt --silent $HTTPS/uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt | grep '404 Not Found'"
+        rlRun -t -c "docker logs web > /var/tmp/docker.log 2>&1"
+        rlAssertGrep 'GET /uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt HTTP/1.1" 404 403' /var/tmp/docker.log
+    rlPhaseEnd
+
     rlPhaseStartTest "GET /ngx-uploads/ returns 404"
         rlRun -t -c "curl -k -D- --silent $HTTPS/ngx-uploads/tenant/public/attachments/auth_user/2/ldap.py | grep '404 Not Found'"
         rlRun -t -c "curl -k -D- -b ./login-cookies.txt --silent $HTTPS/ngx-uploads/tenant/public/attachments/auth_user/2/ldap.py | grep '404 Not Found'"
+    rlPhaseEnd
+
+    rlPhaseStartTest "Anonymous GET /uploads/ from Private Tenant returns 403"
+        rlRun -t -c "docker exec -i web /bin/bash -c 'mkdir -p /Kiwi/uploads/tenant/empty/attachments/testplans_testplan/1/'"
+        rlRun -t -c "docker exec -i web /bin/bash -c 'cp /Kiwi/uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt /Kiwi/uploads/tenant/empty/attachments/testplans_testplan/1/'"
+        rlRun -t -c "curl -k -D- --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep '404 Not Found'"
+        rlRun -t -c "docker logs web > /var/tmp/docker.log 2>&1"
+        rlAssertGrep 'GET /uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt HTTP/1.1" 404 403' /var/tmp/docker.log
+    rlPhaseEnd
+
+    rlPhaseStartTest "Authenticated GET /uploads/ from Private Tenant without permissions returns 403"
+        rlRun -t -c "cat testing/configure_tenant_users.py | docker exec -i web /Kiwi/manage.py shell"
+
+        rlRun -t -c "curl -k -D- -b ./regular-cookies.txt --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep '404 Not Found'"
+        rlRun -t -c "docker logs web > /var/tmp/docker.log 2>&1"
+        rlAssertGrep 'GET /uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt HTTP/1.1" 404 403' /var/tmp/docker.log
+    rlPhaseEnd
+
+    rlPhaseStartTest "Authenticated GET /uploads/ from Private Tenant with permissions returns 200"
+        rlRun -t -c "curl -k -D- -b ./login-cookies.txt --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep '200 OK'"
+        rlRun -t -c "curl -k -o- -b ./login-cookies.txt --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep 'Hello Robots'"
     rlPhaseEnd
 
     rlPhaseStartTest "Requests to /accounts/register/ are rate limited"
