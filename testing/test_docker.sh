@@ -205,7 +205,7 @@ rlJournalStart
             rlRun -t -c "robot testing/test_upload_file.robot"
 
             # verify file is there
-            rlRun -t -c "curl -k -D- -b ./login-cookies.txt --silent $HTTPS/uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt | grep '200 OK'"
+            rlRun -t -c "curl -k -D- --referer upload_via_browser_ui -b ./login-cookies.txt --silent $HTTPS/uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt | grep '200 OK'"
         fi
     rlPhaseEnd
 
@@ -305,14 +305,14 @@ rlJournalStart
         # copy test file externally b/c Kiwi TCMS v12.2 will prevent its upload
         rlRun -t -c "docker exec -i web /bin/bash -c 'mkdir -p /Kiwi/uploads/tenant/public/attachments/auth_user/2/'"
         rlRun -t -c "docker cp testing/ldap.py web:/Kiwi/uploads/tenant/public/attachments/auth_user/2/"
-        rlRun -t -c "curl -k -D- -b ./login-cookies.txt $HTTPS/uploads/tenant/public/attachments/auth_user/2/ldap.py 2>/dev/null | grep 'Content-Type: text/plain'"
+        rlRun -t -c "curl -k -D- --referer content_type_text_plain -b ./login-cookies.txt $HTTPS/uploads/tenant/public/attachments/auth_user/2/ldap.py 2>/dev/null | grep 'Content-Type: text/plain'"
 
-        CT_HEADER_COUNT=$(curl -k -D- -b ./login-cookies.txt $HTTPS/uploads/tenant/public/attachments/auth_user/2/ldap.py 2>/dev/null | grep -c 'Content-Type:')
+        CT_HEADER_COUNT=$(curl -k -D- --referer content_type_text_plain -b ./login-cookies.txt $HTTPS/uploads/tenant/public/attachments/auth_user/2/ldap.py 2>/dev/null | grep -c 'Content-Type:')
         rlAssertEquals "There should be only 1 Content-Type header" "$CT_HEADER_COUNT" 1
     rlPhaseEnd
 
     rlPhaseStartTest "Anonymous GET /uploads/ returns 403"
-        rlRun -t -c "curl -k -D- --silent $HTTPS/uploads/tenant/public/attachments/auth_user/2/ldap.py | grep '404 Not Found'"
+        rlRun -t -c "curl -k -D- --referer anonymous_get_uploads --silent $HTTPS/uploads/tenant/public/attachments/auth_user/2/ldap.py | grep '404 Not Found'"
         rlRun -t -c "docker logs web > /var/tmp/docker.log 2>&1"
         rlAssertGrep 'GET /uploads/tenant/public/attachments/auth_user/2/ldap.py HTTP/1.1" 404 403' /var/tmp/docker.log
     rlPhaseEnd
@@ -321,7 +321,7 @@ rlJournalStart
         rlRun -t -c "cat testing/regular_user.py | docker exec -i web /Kiwi/manage.py shell"
         get_dashboard "$HTTPS" regular password ./regular-cookies.txt
 
-        rlRun -t -c "curl -k -D- -b ./regular-cookies.txt --silent $HTTPS/uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt | grep '404 Not Found'"
+        rlRun -t -c "curl -k -D- --referer uploads_without_permissions -b ./regular-cookies.txt --silent $HTTPS/uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt | grep '404 Not Found'"
         rlRun -t -c "docker logs web > /var/tmp/docker.log 2>&1"
         rlAssertGrep 'GET /uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt HTTP/1.1" 404 403' /var/tmp/docker.log
     rlPhaseEnd
@@ -334,7 +334,7 @@ rlJournalStart
     rlPhaseStartTest "Anonymous GET /uploads/ from Private Tenant returns 403"
         rlRun -t -c "docker exec -i web /bin/bash -c 'mkdir -p /Kiwi/uploads/tenant/empty/attachments/testplans_testplan/1/'"
         rlRun -t -c "docker exec -i web /bin/bash -c 'cp /Kiwi/uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt /Kiwi/uploads/tenant/empty/attachments/testplans_testplan/1/'"
-        rlRun -t -c "curl -k -D- --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep '404 Not Found'"
+        rlRun -t -c "curl -k -D- --referer anonymous_get_uploads_private_tenant --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep '404 Not Found'"
         rlRun -t -c "docker logs web > /var/tmp/docker.log 2>&1"
         rlAssertGrep 'GET /uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt HTTP/1.1" 404 403' /var/tmp/docker.log
     rlPhaseEnd
@@ -342,20 +342,20 @@ rlJournalStart
     rlPhaseStartTest "Authenticated GET /uploads/ from Private Tenant without permissions returns 403"
         rlRun -t -c "cat testing/configure_tenant_users.py | docker exec -i web /Kiwi/manage.py shell"
 
-        rlRun -t -c "curl -k -D- -b ./regular-cookies.txt --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep '404 Not Found'"
+        rlRun -t -c "curl -k -D- --referer uploads_without_permissions_private_tenant -b ./regular-cookies.txt --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep '404 Not Found'"
     rlPhaseEnd
 
     rlPhaseStartTest "Authenticated GET /uploads/ from Private Tenant with permissions returns 200"
-        rlRun -t -c "curl -k -D- -b ./login-cookies.txt --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep '200 OK'"
-        rlRun -t -c "curl -k -o- -b ./login-cookies.txt --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep 'Hello Robots'"
+        rlRun -t -c "curl -k -D- --referer uploads_with_permissions_private_tenant -b ./login-cookies.txt --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep '200 OK'"
+        rlRun -t -c "curl -k -o- --referer uploads_with_permissions_private_tenant -b ./login-cookies.txt --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep 'Hello Robots'"
     rlPhaseEnd
 
     rlPhaseStartTest "Authenticated GET /uploads/ from Private Tenant with unauthorized user returns 403"
         rlRun -t -c "cat testing/unauthorized_user.py | docker exec -i web /Kiwi/manage.py shell"
         get_dashboard "$HTTPS" unauthorized password ./unauthorized-cookies.txt
 
-        rlRun -t -c "curl -k -D- -b ./unauthorized-cookies.txt --silent $HTTPS/uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt | grep '200 OK'"
-        rlRun -t -c "curl -k -D- -b ./unauthorized-cookies.txt --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep '404 Not Found'"
+        rlRun -t -c "curl -k -D- --referer unauthorized_user_on_private_tenant -b ./unauthorized-cookies.txt --silent $HTTPS/uploads/tenant/public/attachments/testplans_testplan/1/hello-robots.txt | grep '200 OK'"
+        rlRun -t -c "curl -k -D- --referer unauthorized_user_on_private_tenant -b ./unauthorized-cookies.txt --silent $EMPTY_HTTPS/uploads/tenant/empty/attachments/testplans_testplan/1/hello-robots.txt | grep '404 Not Found'"
     rlPhaseEnd
 
     rlPhaseStartTest "Authenticated GET /uploads/ cross tenant returns 403"
