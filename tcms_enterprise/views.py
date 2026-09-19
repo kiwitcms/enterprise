@@ -80,6 +80,9 @@ class PasswordResetDisabled(View):  # pylint: disable=missing-permission-require
 )
 class ViewAttachment(views.ViewAttachment):
     def get(self, request, path):
+        if not path.startswith(f"tenant/{request.tenant.schema_name}/"):
+            raise PermissionDenied
+
         if not can_access(request.user, request.tenant):
             raise PermissionDenied
 
