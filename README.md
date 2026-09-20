@@ -139,6 +139,14 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v16.5.1-mt (20 Sep 2026)
+
+- Based on Kiwi TCMS v16.5
+- Improve checks for requests to `/uploads/`
+- Multiple fixes for issues reported by ShellCheck
+- Update sentry-sdk from 2.68.1 to 2.69.2
+
+
 ### v16.5-mt (17 Sep 2026)
 
 - Based on Kiwi TCMS v16.5
