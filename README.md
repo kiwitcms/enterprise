@@ -139,6 +139,15 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v16.6-mt (07 Oct 2026)
+
+- Based on Kiwi TCMS v16.6
+- Update kiwitcms-tenants from 4.7.1 to 4.10.0
+- Update psycopg-pool from 3.3.1 to 3.3.3
+- Update sentry-sdk from 2.69.2 to 2.71.0
+- Update social-auth-app-django from 6.0.1 to 6.1.0
+
+
 ### v16.5.1-mt (20 Sep 2026)
 
 - Based on Kiwi TCMS v16.5
