@@ -16,26 +16,26 @@ NAME_RE = re.compile(r"^[A-Za-z0-9_.-]+$")
 
 class TestBuildCatalog(SimpleTestCase):
     def test_catalog_is_not_empty(self):
-        self.assertTrue(build_catalog())
+        self.assertTrue(build_catalog(json_rpc_server))
 
     def test_names_are_valid_and_unique(self):
         seen = []
-        for tool in build_catalog():
+        for tool in build_catalog(json_rpc_server):
             self.assertRegex(tool["name"], NAME_RE)
             self.assertNotIn(tool["name"], seen)
             seen.append(tool["name"])
 
     def test_every_tool_has_a_description(self):
-        for tool in build_catalog():
+        for tool in build_catalog(json_rpc_server):
             self.assertTrue(tool["description"])
 
     def test_every_tool_has_an_object_input_schema(self):
-        for tool in build_catalog():
+        for tool in build_catalog(json_rpc_server):
             self.assertEqual(tool["inputSchema"]["type"], "object")
 
     def test_known_tool_and_schema(self):
         product_filter = None
-        for tool in build_catalog():
+        for tool in build_catalog(json_rpc_server):
             if tool["name"] == "Product.filter":
                 product_filter = tool
                 break
@@ -47,7 +47,7 @@ class TestBuildCatalog(SimpleTestCase):
 
     def test_all_api_methods_are_exposed(self):
         catalog_names = []
-        for tool in build_catalog():
+        for tool in build_catalog(json_rpc_server):
             catalog_names.append(tool["name"])
 
         json_rpc_methods = 0
@@ -64,7 +64,7 @@ class TestBuildCatalog(SimpleTestCase):
 
     def test_system_methods_are_not_exposed(self):
         names = []
-        for tool in build_catalog():
+        for tool in build_catalog(json_rpc_server):
             names.append(tool["name"])
 
         self.assertNotIn("system.listMethods", names)

@@ -5,8 +5,6 @@
 
 import inspect
 
-from tcms.rpc.views import json_rpc_server
-
 _JSON_TYPE_BY_DOC = {
     "str": "string",
     "int": "integer",
@@ -19,9 +17,9 @@ _JSON_TYPE_BY_DOC = {
 }
 
 
-def build_catalog():
+def build_catalog(server):
     catalog = []
-    for rpc_name, wrapper in sorted(json_rpc_server.procedures.items()):
+    for rpc_name, wrapper in sorted(server.procedures.items()):
         # MCP tools are invoked over JSON-RPC so procedures which are not
         # registered for that protocol (e.g. XML-RPC only) cannot be included
         if not wrapper.is_available_in_json_rpc:
