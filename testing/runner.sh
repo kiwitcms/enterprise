@@ -34,6 +34,7 @@ echo "**** DONE STARTING KEYCLOAK ****"
     --cert-key-mode=0644
 
 # execute test scripts
+./testing/test_django.sh
 ./testing/test_upstream_nginx_config.sh
 ./testing/test_docker.sh
 
