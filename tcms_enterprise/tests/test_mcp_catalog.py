@@ -52,8 +52,21 @@ class TestBuildCatalog(SimpleTestCase):
 
         json_rpc_methods = 0
         for rpc_name, wrapper in json_rpc_server.procedures.items():
-            if wrapper.is_available_in_json_rpc:
-                json_rpc_methods += 1
-                self.assertIn(rpc_name, catalog_names)
+            if not wrapper.is_available_in_json_rpc:
+                continue
+            if rpc_name.startswith("system."):
+                continue
+
+            json_rpc_methods += 1
+            self.assertIn(rpc_name, catalog_names)
 
         self.assertEqual(len(catalog_names), json_rpc_methods)
+
+    def test_system_methods_are_not_exposed(self):
+        names = []
+        for tool in build_catalog():
+            names.append(tool["name"])
+
+        self.assertNotIn("system.listMethods", names)
+        self.assertNotIn("system.methodHelp", names)
+        self.assertNotIn("system.methodSignature", names)
