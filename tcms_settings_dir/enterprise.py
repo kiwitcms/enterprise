@@ -63,6 +63,7 @@ if (
 
 SOCIAL_AUTH_PIPELINE = [
     "social_core.pipeline.social_auth.social_details",
+    "social_core.pipeline.social_auth.social_names",
     "tcms_enterprise.pipeline.email_is_required",
     "social_core.pipeline.social_auth.social_uid",
     "social_core.pipeline.social_auth.social_user",
