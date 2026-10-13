@@ -27,6 +27,10 @@ def build_catalog():
         if not wrapper.is_available_in_json_rpc:
             continue
 
+        # exclude the RPC system procedures, they are not part of the API
+        if rpc_name.startswith("system."):
+            continue
+
         properties = {}
         required = []
         signature = wrapper.introspector.signature
