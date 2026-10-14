@@ -16,7 +16,12 @@ from django.views.generic.base import View
 
 from django_tenants.utils import get_public_schema_name
 from tcms.kiwi_auth import views
+from tcms.rpc.registry import REGISTRY
+
 from tcms_tenants.utils import can_access, tenant_url
+from tcms_enterprise.mcp_server import MCPServer
+
+mcp_server = MCPServer(REGISTRY)
 
 
 class LoginView(
