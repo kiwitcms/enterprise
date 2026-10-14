@@ -17,13 +17,13 @@ def scope_for_permission(codename):
     return SCOPES.get(verb)
 
 
-def declared_permissions(wrapper):
+def declared_permissions(method):
     implicit_permissions = {
         "User.update": ["auth.change_user"],
     }
 
     # permissions_required() returns a closure over the permission codenames
-    auth = getattr(wrapper, "auth", None)
+    auth = getattr(method, "auth", None)
     if auth is not None:
         closure = getattr(auth, "__closure__", None)
         if closure:
@@ -32,14 +32,14 @@ def declared_permissions(wrapper):
                 if name == "perms":
                     return list(cell.cell_contents)
 
-    return list(implicit_permissions.get(wrapper.name, []))
+    return list(implicit_permissions.get(method.name, []))
 
 
-def required_scopes(wrapper):
-    permissions = declared_permissions(wrapper)
+def required_scopes(method):
+    permissions = declared_permissions(method)
     if not permissions:
         # public method, no permission check
-        if getattr(wrapper, "auth", None) is None:
+        if getattr(method, "auth", None) is None:
             return set()
 
         # authenticated but no specific permission, e.g. django_login_required
