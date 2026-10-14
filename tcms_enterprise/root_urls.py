@@ -46,6 +46,7 @@ urlpatterns = (
     url_overrides
     + urlpatterns
     + [
+        re_path(r"^mcp/", views.mcp_server.view),
         re_path(r"", include("social_django.urls", namespace="social")),
     ]
 )
