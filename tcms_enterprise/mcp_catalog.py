@@ -5,6 +5,8 @@
 
 import inspect
 
+from modernrpc.introspection import DocstringParser, Introspector
+
 _JSON_TYPE_BY_DOC = {
     "str": "string",
     "int": "integer",
@@ -17,38 +19,35 @@ _JSON_TYPE_BY_DOC = {
 }
 
 
-def build_catalog(server):
+def build_catalog(registry):
     catalog = []
-    for rpc_name, wrapper in sorted(server.procedures.items()):
-        # MCP tools are invoked over JSON-RPC so procedures which are not
-        # registered for that protocol (e.g. XML-RPC only) cannot be included
-        if not wrapper.is_available_in_json_rpc:
-            continue
-
-        # exclude the RPC system procedures, they are not part of the API
-        if rpc_name.startswith("system."):
-            continue
+    for name, method in sorted(registry.items()):
+        parser = DocstringParser(method.func)
+        signature = Introspector(method.func).signature
 
         properties = {}
         required = []
-        signature = wrapper.introspector.signature
-        for arg, docs in wrapper.arguments.items():
+        for arg in signature.parameters:
+            # the RPC request context is injected by the server, not a tool argument
+            if arg == method.context_target:
+                continue
+
             prop = {}
-            if docs.docstring:
-                prop["description"] = docs.docstring
-            json_type = _JSON_TYPE_BY_DOC.get(docs.documented_type)
+            arg_doc = parser.args_docstrings.get(arg)
+            if arg_doc:
+                prop["description"] = arg_doc
+            json_type = _JSON_TYPE_BY_DOC.get(parser.args_types.get(arg, ""))
             if json_type:
                 prop["type"] = json_type
             properties[arg] = prop
 
-            param = signature.parameters.get(arg)
-            if param is not None and param.default is inspect.Parameter.empty:
+            if signature.parameters[arg].default is inspect.Parameter.empty:
                 required.append(arg)
 
         catalog.append(
             {
-                "name": rpc_name,
-                "description": wrapper.text_doc or f"Kiwi TCMS API method {rpc_name}",
+                "name": name,
+                "description": parser.docstring or f"Kiwi TCMS API method {name}",
                 "inputSchema": {
                     "type": "object",
                     "properties": properties,

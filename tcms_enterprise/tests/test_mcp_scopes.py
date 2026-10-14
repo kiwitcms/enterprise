@@ -5,7 +5,7 @@
 
 from django.test import SimpleTestCase
 
-from tcms.rpc.views import json_rpc_server
+from tcms.rpc.registry import REGISTRY
 
 from tcms_enterprise.mcp_scopes import (
     SCOPES,
@@ -36,21 +36,21 @@ class TestScopeForPermission(SimpleTestCase):
 
 class TestDeclaredPermissions(SimpleTestCase):
     def test_method_with_permissions_required_decorator(self):
-        wrapper = json_rpc_server.procedures["Product.filter"]
+        wrapper = REGISTRY["Product.filter"]
         self.assertEqual(declared_permissions(wrapper), ["management.view_product"])
 
     def test_public_method_has_no_permissions(self):
-        wrapper = json_rpc_server.procedures["Auth.login"]
+        wrapper = REGISTRY["Auth.login"]
         self.assertEqual(declared_permissions(wrapper), [])
 
     def test_methods_with_implicitly_declared_permissions(self):
-        wrapper = json_rpc_server.procedures["User.update"]
+        wrapper = REGISTRY["User.update"]
         self.assertEqual(declared_permissions(wrapper), ["auth.change_user"])
 
 
 class TestRequiredScopes(SimpleTestCase):
     def test_for_methods_with_view_add_change_delete_permission(self):
-        procedures = json_rpc_server.procedures
+        procedures = REGISTRY
         self.assertEqual(
             required_scopes(procedures["Product.filter"]), {"kiwitcms:view"}
         )
@@ -65,30 +65,23 @@ class TestRequiredScopes(SimpleTestCase):
         )
 
     def test_public_method_has_no_scopes(self):
-        self.assertEqual(
-            required_scopes(json_rpc_server.procedures["Auth.login"]), set()
-        )
+        self.assertEqual(required_scopes(REGISTRY["Auth.login"]), set())
 
     def test_login_only_method_requires_view(self):
         self.assertEqual(
-            required_scopes(json_rpc_server.procedures["Bug.details"]),
+            required_scopes(REGISTRY["Bug.details"]),
             {"kiwitcms:view"},
         )
 
     def test_scope_for_methods_with_implicit_permissions(self):
         self.assertEqual(
-            required_scopes(json_rpc_server.procedures["User.update"]),
+            required_scopes(REGISTRY["User.update"]),
             {"kiwitcms:change"},
         )
 
     def test_every_exposed_method_maps_to_known_scopes(self):
-        for rpc_name, wrapper in json_rpc_server.procedures.items():
-            if not wrapper.is_available_in_json_rpc:
-                continue
-            if rpc_name.startswith("system."):
-                continue
-
-            scopes = required_scopes(wrapper)
+        for method in REGISTRY.values():
+            scopes = required_scopes(method)
             for scope in scopes:
                 self.assertIn(scope, SCOPES.values())
 
