@@ -28,6 +28,8 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
   - [django-storages](https://github.com/jschneier/django-storages) - storage backends
   - [dj-database-url](https://github.com/jacobian/dj-database-url) - DB configuration
     via the `DATABASE_URL` environment variable
+  - [django-oauth-toolkit](https://django-oauth-toolkit.readthedocs.io/) - OAuth 2.1
+    authorization server for the MCP endpoint
   - [django-prometheus](https://github.com/korfuri/django-prometheus) - Export Django
     monitoring metrics for Prometheus.io
   - [kiwitcms-github-app](https://github.com/kiwitcms/github-app/) - extra integration

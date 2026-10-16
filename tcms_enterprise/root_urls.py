@@ -11,6 +11,8 @@ from django.conf import settings
 from django.conf.urls import include
 from django.views.generic import RedirectView
 
+from oauth2_provider import urls as oauth2_urls
+
 from tcms.urls import urlpatterns
 from tcms_enterprise import views
 
@@ -47,6 +49,7 @@ urlpatterns = (
     + urlpatterns
     + [
         re_path(r"^mcp/", views.mcp_server.view),
+        re_path(r"^o/", include(oauth2_urls)),
         re_path(r"", include("social_django.urls", namespace="social")),
     ]
 )
