@@ -6,6 +6,11 @@
 import inspect
 import json
 
+from django.http import HttpResponseForbidden
+from django.utils.translation import gettext_lazy as _
+
+from django_tenants.utils import get_public_schema_name
+
 from modernrpc.constants import Protocol
 from modernrpc.core import RpcRequestContext
 from modernrpc.introspection import DocstringParser, Introspector
@@ -13,6 +18,8 @@ from modernrpc.jsonrpc.handler import JsonRpcHandler
 from modernrpc.server import RpcServer
 
 from tcms import __version__
+
+from tcms_enterprise.mcp_scopes import has_required_scopes, required_scopes
 
 
 class MCPHandler(JsonRpcHandler):
@@ -45,6 +52,7 @@ class MCPHandler(JsonRpcHandler):
 
 class MCPServer(RpcServer):
     META_SERVER_INFO = "io.modelcontextprotocol/serverInfo"
+    DISCOVERY_METHODS = ("server/discover", "tools/list")
 
     def __init__(self, registry):
         super().__init__(
@@ -62,6 +70,28 @@ class MCPServer(RpcServer):
             auth=None,
             context_target="mcp_context",
         )
+
+    @staticmethod
+    def request_method(request):
+        try:
+            payload = json.loads(request.body)
+        except ValueError:
+            return None
+
+        if isinstance(payload, dict):
+            return payload.get("method")
+
+        return None
+
+    def check_request(self, request):
+        if (
+            request.tenant.schema_name == get_public_schema_name()
+            or self.request_method(request) in self.DISCOVERY_METHODS
+            or request.tenant.authorized_users.filter(pk=request.user.pk).exists()
+        ):
+            return super().check_request(request)
+
+        return HttpResponseForbidden(_("Unauthorized"))
 
     def server_discover(self, **kwargs):
         return {
@@ -126,6 +156,14 @@ class MCPServer(RpcServer):
 
         return catalog
 
+    @staticmethod
+    def granted_scopes(request):
+        token = getattr(request, "access_token", None)
+        if token is None:
+            return {"kiwitcms:none"}
+
+        return set(token.scope.split())
+
     def tools_list(self, **kwargs):
         return {"tools": self.build_catalog()}
 
@@ -137,6 +175,11 @@ class MCPServer(RpcServer):
         request = mcp_context.request
         if method.auth is not None and not method.auth(request):
             return self.error_result(f"Authentication failed for {name}")
+
+        if not has_required_scopes(
+            required_scopes(method), self.granted_scopes(request)
+        ):
+            return self.error_result(f"Insufficient scope for {name}")
 
         arguments = dict(arguments or {})
         if method.context_target:
