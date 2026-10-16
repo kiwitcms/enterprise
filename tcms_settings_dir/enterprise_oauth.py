@@ -26,3 +26,7 @@ for middleware in (
 ):
     if middleware not in MIDDLEWARE:  # noqa: F821
         MIDDLEWARE.append(middleware)  # noqa: F821
+
+backend = "oauth2_provider.backends.OAuth2Backend"  # pylint: disable=invalid-name
+if backend not in AUTHENTICATION_BACKENDS:  # noqa: F821
+    AUTHENTICATION_BACKENDS.append(backend)  # noqa: F821

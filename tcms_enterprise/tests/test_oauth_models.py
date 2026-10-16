@@ -10,7 +10,7 @@ from django_tenants.utils import schema_context, tenant_context
 
 from oauth2_provider.models import get_access_token_model, get_application_model
 
-from tcms_tenants.tests import LoggedInTestCase
+from tcms_tenants.tests import LoggedInTestCase, UserFactory
 
 AccessToken = get_access_token_model()
 Application = get_application_model()
@@ -19,22 +19,23 @@ Application = get_application_model()
 class TestAccessTokenIsPerTenant(LoggedInTestCase):
     def test_access_token_is_not_shared_between_schemas(self):
         with tenant_context(self.tenant):
+            owner = UserFactory()
             application = Application.objects.create(
                 name="MCP",
-                user=self.tester,
+                user=owner,
                 client_type=Application.CLIENT_CONFIDENTIAL,
                 authorization_grant_type=Application.GRANT_CLIENT_CREDENTIALS,
             )
             AccessToken.objects.create(
-                user=self.tester,
+                user=owner,
                 application=application,
                 token="***",
                 expires=timezone.now() + timedelta(hours=1),
                 scope="kiwitcms:view",
             )
-            self.assertEqual(AccessToken.objects.count(), 1)
+            self.assertEqual(AccessToken.objects.filter(user=owner).count(), 1)
 
         # the access token must not leak into the shared (public) schema
         with schema_context("public"):
-            self.assertEqual(AccessToken.objects.count(), 0)
-            self.assertEqual(Application.objects.count(), 0)
+            self.assertEqual(AccessToken.objects.filter(user=owner).count(), 0)
+            self.assertEqual(Application.objects.filter(user=owner).count(), 0)
