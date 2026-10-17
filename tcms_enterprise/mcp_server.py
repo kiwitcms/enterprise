@@ -5,8 +5,10 @@
 
 import inspect
 import json
+from http import HTTPStatus
 
-from django.http import HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from django_tenants.utils import get_public_schema_name
@@ -19,7 +21,7 @@ from modernrpc.server import RpcServer
 
 from tcms import __version__
 
-from tcms_enterprise.mcp_scopes import has_required_scopes, required_scopes
+from tcms_enterprise.mcp_scopes import SCOPES, has_required_scopes, required_scopes
 
 
 class MCPHandler(JsonRpcHandler):
@@ -72,26 +74,57 @@ class MCPServer(RpcServer):
         )
 
     @staticmethod
-    def request_method(request):
+    def request_payload(request):
         try:
             payload = json.loads(request.body)
         except ValueError:
             return None
 
         if isinstance(payload, dict):
-            return payload.get("method")
+            return payload
 
         return None
 
+    def requested_scopes(self, payload):
+        if payload is not None and payload.get("method") == "tools/call":
+            params = payload.get("params") or {}
+            method = self.registry.get(params.get("name"))
+            if method is not None:
+                scopes = required_scopes(method)
+                if scopes:
+                    return scopes
+
+        return {SCOPES["view"]}
+
     def check_request(self, request):
+        payload = self.request_payload(request)
+        if payload is not None and payload.get("method") in self.DISCOVERY_METHODS:
+            return super().check_request(request)
+
+        if not request.user.is_authenticated:
+            return self.build_unauthorized_response(
+                request, self.requested_scopes(payload)
+            )
+
         if (
             request.tenant.schema_name == get_public_schema_name()
-            or self.request_method(request) in self.DISCOVERY_METHODS
             or request.tenant.authorized_users.filter(pk=request.user.pk).exists()
         ):
             return super().check_request(request)
 
         return HttpResponseForbidden(_("Unauthorized"))
+
+    @staticmethod
+    def build_unauthorized_response(request, scopes):
+        metadata_url = request.build_absolute_uri(
+            reverse("mcp-oauth-protected-resource")
+        )
+        scope = " ".join(sorted(scopes))
+        response = HttpResponse(status=HTTPStatus.UNAUTHORIZED)
+        response["WWW-Authenticate"] = (
+            f'Bearer resource_metadata="{metadata_url}", scope="{scope}"'
+        )
+        return response
 
     def server_discover(self, **kwargs):
         return {
