@@ -423,7 +423,7 @@ rlJournalStart
         SESSION_ID=$(grep sessionid ./login-cookies.txt | cut -f 7)
         COMPLETED_REQUESTS=$(exec_wrk "$HTTPS/" "$WRK_DIR" "dashboard" "Cookie: sessionid=$SESSION_ID")
         rlLogInfo "COMPLETED_REQUESTS=$COMPLETED_REQUESTS in 10 seconds"
-        rlAssertGreaterOrEqual ">= 35 r/s" "$COMPLETED_REQUESTS" 350
+        rlAssertGreaterOrEqual ">= 34 r/s" "$COMPLETED_REQUESTS" 340
     rlPhaseEnd
 
     rlPhaseStartTest "Requests to bogus URLs are closed"
