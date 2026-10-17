@@ -5,8 +5,10 @@
 
 import inspect
 import json
+from http import HTTPStatus
 
-from django.http import HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from django_tenants.utils import get_public_schema_name
@@ -19,7 +21,7 @@ from modernrpc.server import RpcServer
 
 from tcms import __version__
 
-from tcms_enterprise.mcp_scopes import has_required_scopes, required_scopes
+from tcms_enterprise.mcp_scopes import SCOPES, has_required_scopes, required_scopes
 
 
 class MCPHandler(JsonRpcHandler):
@@ -72,26 +74,58 @@ class MCPServer(RpcServer):
         )
 
     @staticmethod
-    def request_method(request):
-        try:
-            payload = json.loads(request.body)
-        except ValueError:
-            return None
+    def request_payload(request):
+        return json.loads(request.body)
 
-        if isinstance(payload, dict):
-            return payload.get("method")
+    def requested_scopes(self, payload):
+        if payload.get("method") == "tools/call":
+            params = payload.get("params", {})
+            method = self.registry.get(params.get("name"))
+            if method is not None:
+                return required_scopes(method) or {SCOPES["view"]}
 
-        return None
+        return {SCOPES["view"]}
 
     def check_request(self, request):
-        if (
-            request.tenant.schema_name == get_public_schema_name()
-            or self.request_method(request) in self.DISCOVERY_METHODS
-            or request.tenant.authorized_users.filter(pk=request.user.pk).exists()
-        ):
+        payload = self.request_payload(request)
+        if payload.get("method") in self.DISCOVERY_METHODS:
             return super().check_request(request)
 
-        return HttpResponseForbidden(_("Unauthorized"))
+        if request.user.is_authenticated:
+            # a user which is not authorized on non-public schema is forbidden
+            forbidden = (
+                request.tenant.schema_name != get_public_schema_name()
+                and not request.tenant.authorized_users.filter(
+                    pk=request.user.pk
+                ).exists()
+            )
+        else:
+            # a token which was not found on this tenant is forbidden
+            forbidden = getattr(
+                request, "access_token", None
+            ) is None and request.META.get("HTTP_AUTHORIZATION", "")
+
+        if forbidden:
+            return HttpResponseForbidden(_("Unauthorized"))
+
+        if not request.user.is_authenticated:
+            return self.build_unauthorized_response(
+                request, self.requested_scopes(payload)
+            )
+
+        return super().check_request(request)
+
+    @staticmethod
+    def build_unauthorized_response(request, scopes):
+        metadata_url = request.build_absolute_uri(
+            reverse("mcp-oauth-protected-resource")
+        )
+        scope = " ".join(sorted(scopes))
+        response = HttpResponse(status=HTTPStatus.UNAUTHORIZED)
+        response["WWW-Authenticate"] = (
+            f'Bearer resource_metadata="{metadata_url}", scope="{scope}"'
+        )
+        return response
 
     def server_discover(self, **kwargs):
         return {

@@ -48,7 +48,12 @@ urlpatterns = (
     url_overrides
     + urlpatterns
     + [
-        re_path(r"^mcp/", views.mcp_server.view),
+        re_path(
+            r"^mcp/oauth-protected-resource/$",
+            views.OAuthProtectedResource.as_view(),
+            name="mcp-oauth-protected-resource",
+        ),
+        re_path(r"^mcp/", views.mcp_server.view, name="mcp-endpoint"),
         re_path(r"^o/", include(oauth2_urls)),
         re_path(r"", include("social_django.urls", namespace="social")),
     ]

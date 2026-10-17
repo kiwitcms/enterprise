@@ -9,7 +9,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import ObjectDoesNotExist
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.base import View
@@ -19,6 +19,7 @@ from tcms.kiwi_auth import views
 from tcms.rpc.registry import REGISTRY
 
 from tcms_tenants.utils import can_access, tenant_url
+from tcms_enterprise.mcp_scopes import SCOPES
 from tcms_enterprise.mcp_server import MCPServer
 
 mcp_server = MCPServer(REGISTRY)
@@ -92,3 +93,15 @@ class ViewAttachment(views.ViewAttachment):
             raise PermissionDenied
 
         return super().get(request, path)
+
+
+class OAuthProtectedResource(View):  # pylint: disable=missing-permission-required
+    def get(self, request):
+        base = f"{request.scheme}://{request.get_host()}"
+        return JsonResponse(
+            {
+                "resource": request.build_absolute_uri(reverse("mcp-endpoint")),
+                "authorization_servers": [base],
+                "scopes_supported": list(SCOPES.values()),
+            }
+        )

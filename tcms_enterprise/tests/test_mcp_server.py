@@ -6,6 +6,7 @@
 import json
 from datetime import timedelta
 
+from django.urls import reverse
 from django.utils import timezone
 
 from django_tenants.utils import schema_context, tenant_context
@@ -172,11 +173,25 @@ class TestMCPServer(LoggedInTestCase):
             response["result"]["content"][0]["text"],
         )
 
-    def test_tools_call_should_403_when_token_missing(self):
+    def test_tools_call_should_401_when_token_missing(self):
         response = self.call(
             "tools/call", {"name": "Product.filter", "arguments": {}}, raw=True
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
+        self.assertIn(
+            reverse("mcp-oauth-protected-resource"),
+            response["WWW-Authenticate"],
+        )
+        self.assertIn('scope="kiwitcms:view"', response["WWW-Authenticate"])
+
+    def test_tools_call_should_401_with_the_scope_of_the_requested_tool(self):
+        response = self.call(
+            "tools/call",
+            {"name": "Product.create", "arguments": {"values": {"name": "New"}}},
+            raw=True,
+        )
+        self.assertEqual(response.status_code, 401)
+        self.assertIn('scope="kiwitcms:add"', response["WWW-Authenticate"])
 
     def test_tools_call_should_error_when_without_permissions(self):
         self.assertFalse(self.tester.has_perm("management.view_product"))
@@ -225,7 +240,7 @@ class TestMCPServer(LoggedInTestCase):
             response["result"]["content"][0]["text"],
         )
 
-    def test_tools_call_should_403_when_token_is_expired(self):
+    def test_tools_call_should_401_when_token_is_expired(self):
         user_should_have_perm(self.tester, "management.view_product")
         response = self.call(
             "tools/call",
@@ -233,7 +248,7 @@ class TestMCPServer(LoggedInTestCase):
             bearer_token=self.expired_bearer_token,
             raw=True,
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     def test_tools_call_should_error_when_with_permissions_but_token_scope_insufficient(
         self,
