@@ -20,6 +20,9 @@ rlJournalStart
         # give the database and the container time to come up
         sleep 10
 
+        # check the package versions installed in the image before installing development dependencies
+        rlRun -t -c "docker exec -i web /Kiwi/manage.py test -v 2 tcms_enterprise.tests.test_dependencies"
+
         # install Kiwi TCMS development dependencies (factory_boy, etc.)
         # which are needed by the Django tests
         rlRun -t -c "docker exec -i web /venv/bin/pip install -r https://raw.githubusercontent.com/kiwitcms/Kiwi/master/requirements/devel.txt"
