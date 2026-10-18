@@ -100,6 +100,13 @@ http {
             alias /Kiwi/static/robots.txt;
         }
 
+        # RFC 8414 authorization server metadata is served by Django
+        location /.well-known/oauth-authorization-server {
+            include     /etc/nginx/uwsgi_params;
+            uwsgi_pass  kiwitcms;
+            uwsgi_intercept_errors on;
+        }
+
         location /.well-known/ {
             alias /Kiwi/static/.well-known/;
         }
