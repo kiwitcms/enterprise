@@ -4,3 +4,5 @@ dist/
 *.pyc
 postgres-initdb.d/*.crt
 postgres-initdb.d/*.key
+testing/node_modules/
+testing/package-lock.json
