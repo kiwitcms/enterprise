@@ -12,6 +12,7 @@ from django.conf.urls import include
 from django.views.generic import RedirectView
 
 from oauth2_provider import urls as oauth2_urls
+from oauth2_provider import views as oauth2_views
 
 from tcms.urls import urlpatterns
 from tcms_enterprise import views
@@ -48,6 +49,11 @@ urlpatterns = (
     url_overrides
     + urlpatterns
     + [
+        re_path(
+            r"^\.well-known/oauth-authorization-server$",
+            oauth2_views.OAuthServerMetadataView.as_view(),
+            name="oauth-server-metadata",
+        ),
         re_path(
             r"^mcp/oauth-protected-resource/$",
             views.OAuthProtectedResource.as_view(),
