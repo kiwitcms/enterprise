@@ -70,6 +70,17 @@ jobs:
             --index-url https://$PKG_TOKEN@pkg.kiwitcms.eu/pypi/ \
             --extra-index-url https://pypi.org/simple/
 
+    - name: Set up Node.js
+      if: matrix.command == 'test-docker-image'
+      uses: actions/setup-node@v7
+      with:
+        node-version: 24
+
+    - name: Install Node.js dependencies
+      if: matrix.command == 'test-docker-image'
+      working-directory: testing
+      run: npm install
+
     - name: Install packages used during container testing
       if: matrix.command == 'test-docker-image'
       run: |
