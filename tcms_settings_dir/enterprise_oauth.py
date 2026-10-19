@@ -15,6 +15,11 @@ for app_list in (INSTALLED_APPS, TENANT_APPS):  # noqa: F821
 OAUTH2_PROVIDER = {
     "PKCE_REQUIRED": True,
     "SCOPES": {},
+    # allow MCP clients to register themselves (RFC 7591)
+    "DCR_ENABLED": True,
+    "DCR_REGISTRATION_PERMISSION_CLASSES": (
+        "oauth2_provider.dcr.AllowAllDCRPermission",
+    ),
 }
 for scope in SCOPES.values():
     OAUTH2_PROVIDER["SCOPES"][scope] = scope
