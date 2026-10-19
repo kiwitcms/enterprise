@@ -36,7 +36,11 @@ class MCPHandler(JsonRpcHandler):
     )
     UNSUPPORTED_PROTOCOL_VERSION = -32022
     META_PROTOCOL_VERSION = "io.modelcontextprotocol/protocolVersion"
-    HANDSHAKE_METHODS = ("server/discover", "initialize")
+    HANDSHAKE_METHODS = (
+        "server/discover",
+        "initialize",
+        "notifications/initialized",
+    )
 
     def process_single_request(self, rpc_request, context):
         if rpc_request.method_name not in self.HANDSHAKE_METHODS:
@@ -74,6 +78,11 @@ class MCPServer(RpcServer):
         self.handlers = [MCPHandler()]
 
         self.register_procedure(self.initialize, name="initialize", auth=None)
+        self.register_procedure(
+            self.notifications_initialized,
+            name="notifications/initialized",
+            auth=None,
+        )
         self.register_procedure(self.server_discover, name="server/discover", auth=None)
         self.register_procedure(
             self.tools_call,
@@ -151,6 +160,10 @@ class MCPServer(RpcServer):
                 "version": __version__,
             },
         }
+
+    @staticmethod
+    def notifications_initialized(**kwargs):
+        return None
 
     def server_discover(self, **kwargs):
         return {
