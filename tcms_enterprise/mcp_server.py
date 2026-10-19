@@ -48,12 +48,17 @@ class MCPHandler(JsonRpcHandler):
             meta = kwargs.get("_meta") or {}
             requested = meta.get(self.META_PROTOCOL_VERSION)
 
-            if requested != self.PROTOCOL_VERSION:
+            # _meta is optional; clients which negotiated via initialize()
+            # don't send it. Only reject an explicitly unsupported version.
+            if requested is not None and requested not in self.SUPPORTED_VERSIONS:
                 return self.build_error_result(
                     request=rpc_request,
                     code=self.UNSUPPORTED_PROTOCOL_VERSION,
                     message="Unsupported protocol version",
-                    data={"supported": [self.PROTOCOL_VERSION], "requested": requested},
+                    data={
+                        "supported": list(self.SUPPORTED_VERSIONS),
+                        "requested": requested,
+                    },
                 )
 
         return super().process_single_request(rpc_request, context)

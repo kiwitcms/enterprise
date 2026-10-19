@@ -24,7 +24,7 @@ AccessToken = get_access_token_model()
 Application = get_application_model()
 
 
-class TestMCPServer(LoggedInTestCase):
+class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-methods
     bearer_token = "mcp-test-bearer-0001"
     unauthorized_bearer_token = "mcp-test-bearer-unauthorized-0001"
     stale_bearer_token = "mcp-test-bearer-stale-0001"
@@ -107,13 +107,15 @@ class TestMCPServer(LoggedInTestCase):
         bearer_token=None,
         raw=False,
     ):
+        if params is None:
+            params = {}
+
         meta = {}
         if version is not None:
             meta["io.modelcontextprotocol/protocolVersion"] = version
 
-        if params is None:
-            params = {}
-        params["_meta"] = meta
+        if meta:
+            params["_meta"] = meta
 
         payload = {
             "jsonrpc": "2.0",
@@ -147,11 +149,13 @@ class TestMCPServer(LoggedInTestCase):
         )
 
     def test_unsupported_protocol_version_should_error(self):
-        response = self.call("tools/list", version="2025-06-18")
+        response = self.call("tools/list", version="1999-01-01")
         error = response["error"]
         self.assertEqual(error["code"], -32022)
-        self.assertEqual(error["data"]["supported"], [MCPHandler.PROTOCOL_VERSION])
-        self.assertEqual(error["data"]["requested"], "2025-06-18")
+        self.assertEqual(
+            error["data"]["supported"], list(MCPHandler.SUPPORTED_VERSIONS)
+        )
+        self.assertEqual(error["data"]["requested"], "1999-01-01")
 
     def test_tools_list_should_return_a_list(self):
         response = self.call("tools/list")
@@ -326,6 +330,17 @@ class TestMCPServer(LoggedInTestCase):
             HTTP_AUTHORIZATION=f"Bearer {self.bearer_token}",
         )
         self.assertEqual(response.status_code, HTTPStatus.NO_CONTENT)
+
+    def test_tools_call_without_meta_should_succeed(self):
+        user_should_have_perm(self.tester, "management.view_product")
+        response = self.call(
+            "tools/call",
+            params={"name": "Product.filter", "arguments": {}},
+            version=None,
+            bearer_token=self.bearer_token,
+        )
+        result = response["result"]
+        self.assertFalse(result["isError"])
 
     def test_unknown_method_should_error(self):
         response = self.call("nope", bearer_token=self.bearer_token)
