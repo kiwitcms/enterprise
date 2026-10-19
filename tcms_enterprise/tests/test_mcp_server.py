@@ -5,6 +5,7 @@
 
 import json
 from datetime import timedelta
+from http import HTTPStatus
 
 from django.urls import reverse
 from django.utils import timezone
@@ -177,7 +178,7 @@ class TestMCPServer(LoggedInTestCase):
         response = self.call(
             "tools/call", {"name": "Product.filter", "arguments": {}}, raw=True
         )
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, HTTPStatus.UNAUTHORIZED)
         self.assertIn(
             reverse("mcp-oauth-protected-resource"),
             response["WWW-Authenticate"],
@@ -190,7 +191,7 @@ class TestMCPServer(LoggedInTestCase):
             {"name": "Product.create", "arguments": {"values": {"name": "New"}}},
             raw=True,
         )
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, HTTPStatus.UNAUTHORIZED)
         self.assertIn('scope="kiwitcms:add"', response["WWW-Authenticate"])
 
     def test_tools_call_should_error_when_without_permissions(self):
@@ -248,7 +249,7 @@ class TestMCPServer(LoggedInTestCase):
             bearer_token=self.expired_bearer_token,
             raw=True,
         )
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, HTTPStatus.UNAUTHORIZED)
 
     def test_tools_call_should_error_when_with_permissions_but_token_scope_insufficient(
         self,
@@ -274,7 +275,7 @@ class TestMCPServer(LoggedInTestCase):
             bearer_token=self.unauthorized_bearer_token,
             raw=True,
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
     def test_tools_call_should_403_when_stale_token_exists_but_user_not_authorized_for_tenant(
         self,
@@ -285,7 +286,7 @@ class TestMCPServer(LoggedInTestCase):
             bearer_token=self.stale_bearer_token,
             raw=True,
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
     def test_unknown_method_should_error(self):
         response = self.call("nope", bearer_token=self.bearer_token)
