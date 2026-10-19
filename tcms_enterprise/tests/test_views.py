@@ -3,6 +3,7 @@
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
 
+import json
 from http import HTTPStatus
 
 from django.urls import reverse
@@ -43,4 +44,28 @@ class TestOAuthServerMetadata(LoggedInTestCase):
         self.assertTrue(payload["issuer"].startswith("http://"))
         self.assertTrue(payload["authorization_endpoint"].endswith("/o/authorize/"))
         self.assertTrue(payload["token_endpoint"].endswith("/o/token/"))
+        self.assertTrue(payload["registration_endpoint"].endswith("/o/register/"))
         self.assertEqual(payload["scopes_supported"], sorted(SCOPES.values()))
+
+
+class TestDynamicClientRegistration(LoggedInTestCase):
+    def setUp(self):
+        super().setUp()
+        self.client.logout()
+
+    def test_anonymous_registration(self):
+        response = self.client.post(
+            "/o/register/",
+            data=json.dumps(
+                {
+                    "client_name": "MCP e2e",
+                    "redirect_uris": ["http://127.0.0.1:8765/callback"],
+                    "grant_types": ["authorization_code", "refresh_token"],
+                    "response_types": ["code"],
+                    "token_endpoint_auth_method": "none",
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, HTTPStatus.CREATED)
+        self.assertIn("client_id", response.json())

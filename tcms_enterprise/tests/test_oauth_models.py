@@ -3,12 +3,14 @@
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
 
+import secrets
 from datetime import timedelta
 
 from django.utils import timezone
 from django_tenants.utils import schema_context, tenant_context
 
 from oauth2_provider.models import get_access_token_model, get_application_model
+from oauth2_provider.signals import app_authorized
 
 from tcms_tenants.tests import LoggedInTestCase, UserFactory
 
@@ -39,3 +41,27 @@ class TestAccessTokenIsPerTenant(LoggedInTestCase):
         with schema_context("public"):
             self.assertEqual(AccessToken.objects.filter(user=owner).count(), 0)
             self.assertEqual(Application.objects.filter(user=owner).count(), 0)
+
+
+class TestApplicationOwnerBinding(LoggedInTestCase):
+    def test_application_user_is_bound_on_first_authorization(self):
+        with tenant_context(self.tenant):
+            application = Application.objects.create(
+                name="MCP dynamic client",
+                user=None,
+                client_type=Application.CLIENT_CONFIDENTIAL,
+                authorization_grant_type=Application.GRANT_AUTHORIZATION_CODE,
+            )
+            access_token = AccessToken(
+                user=self.tester,
+                application=application,
+                expires=timezone.now() + timedelta(hours=1),
+                scope="kiwitcms:view",
+            )
+            access_token.token = secrets.token_hex(24)
+            access_token.save()
+
+            app_authorized.send(sender=None, request=None, token=access_token)
+
+            application.refresh_from_db()
+            self.assertEqual(application.user, self.tester)
