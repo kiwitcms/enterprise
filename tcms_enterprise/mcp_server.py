@@ -37,9 +37,9 @@ class MCPHandler(JsonRpcHandler):
     UNSUPPORTED_PROTOCOL_VERSION = -32022
     META_PROTOCOL_VERSION = "io.modelcontextprotocol/protocolVersion"
     HANDSHAKE_METHODS = (
-        "server/discover",
         "initialize",
         "notifications/initialized",
+        "server/discover",
     )
 
     def process_single_request(self, rpc_request, context):
@@ -171,6 +171,7 @@ class MCPServer(RpcServer):
         return None
 
     def server_discover(self, **kwargs):
+        # kept for MCP clients which don't perform initialize at all
         return {
             "supportedVersions": [MCPHandler.PROTOCOL_VERSION],
             "capabilities": {"tools": {}},
