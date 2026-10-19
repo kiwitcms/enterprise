@@ -288,6 +288,31 @@ class TestMCPServer(LoggedInTestCase):
         )
         self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
+    def test_initialize_should_succeed(self):
+        response = self.call(
+            "initialize",
+            {
+                "protocolVersion": "DRAFT-2026-v1",
+                "capabilities": {},
+                "clientInfo": {"name": "test", "version": "1.0"},
+            },
+            bearer_token=self.bearer_token,
+        )
+        result = response["result"]
+        self.assertEqual(result["protocolVersion"], "DRAFT-2026-v1")
+        self.assertIn("tools", result["capabilities"])
+        self.assertEqual(result["serverInfo"]["name"], "kiwitcms")
+
+    def test_initialize_should_fall_back_to_native_version(self):
+        response = self.call(
+            "initialize",
+            {"protocolVersion": "1999-01-01"},
+            bearer_token=self.bearer_token,
+        )
+        self.assertEqual(
+            response["result"]["protocolVersion"], MCPHandler.PROTOCOL_VERSION
+        )
+
     def test_unknown_method_should_error(self):
         response = self.call("nope", bearer_token=self.bearer_token)
         self.assertEqual(response["error"]["message"], 'Method not found: "nope"')
