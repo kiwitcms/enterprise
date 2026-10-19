@@ -313,6 +313,20 @@ class TestMCPServer(LoggedInTestCase):
             response["result"]["protocolVersion"], MCPHandler.PROTOCOL_VERSION
         )
 
+    def test_notifications_initialized_is_accepted(self):
+        payload = {
+            "jsonrpc": "2.0",
+            "method": "notifications/initialized",
+            "params": {},
+        }
+        response = self.client.post(
+            "/mcp/",
+            data=json.dumps(payload),
+            content_type="application/json",
+            HTTP_AUTHORIZATION=f"Bearer {self.bearer_token}",
+        )
+        self.assertEqual(response.status_code, HTTPStatus.NO_CONTENT)
+
     def test_unknown_method_should_error(self):
         response = self.call("nope", bearer_token=self.bearer_token)
         self.assertEqual(response["error"]["message"], 'Method not found: "nope"')
