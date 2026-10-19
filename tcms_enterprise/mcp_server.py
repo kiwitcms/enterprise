@@ -26,11 +26,20 @@ from tcms_enterprise.mcp_scopes import SCOPES, has_required_scopes, required_sco
 
 class MCPHandler(JsonRpcHandler):
     PROTOCOL_VERSION = "2026-07-28"
+    SUPPORTED_VERSIONS = (
+        "2026-07-28",
+        "DRAFT-2026-v1",
+        "2025-06-18",
+        "2025-03-26",
+        "2024-11-05",
+        "2024-10-07",
+    )
     UNSUPPORTED_PROTOCOL_VERSION = -32022
     META_PROTOCOL_VERSION = "io.modelcontextprotocol/protocolVersion"
+    HANDSHAKE_METHODS = ("server/discover", "initialize")
 
     def process_single_request(self, rpc_request, context):
-        if rpc_request.method_name != "server/discover":
+        if rpc_request.method_name not in self.HANDSHAKE_METHODS:
             kwargs = getattr(rpc_request, "kwargs", None) or {}
             meta = kwargs.get("_meta") or {}
             requested = meta.get(self.META_PROTOCOL_VERSION)
@@ -64,14 +73,15 @@ class MCPServer(RpcServer):
         self.registry = registry
         self.handlers = [MCPHandler()]
 
+        self.register_procedure(self.initialize, name="initialize", auth=None)
         self.register_procedure(self.server_discover, name="server/discover", auth=None)
-        self.register_procedure(self.tools_list, name="tools/list", auth=None)
         self.register_procedure(
             self.tools_call,
             name="tools/call",
             auth=None,
             context_target="mcp_context",
         )
+        self.register_procedure(self.tools_list, name="tools/list", auth=None)
 
     @staticmethod
     def request_payload(request):
@@ -126,6 +136,21 @@ class MCPServer(RpcServer):
             f'Bearer resource_metadata="{metadata_url}", scope="{scope}"'
         )
         return response
+
+    @staticmethod
+    def initialize(**kwargs):
+        negotiated = kwargs.get("protocolVersion")
+        if negotiated not in MCPHandler.SUPPORTED_VERSIONS:
+            negotiated = MCPHandler.PROTOCOL_VERSION
+
+        return {
+            "protocolVersion": negotiated,
+            "capabilities": {"tools": {}},
+            "serverInfo": {
+                "name": "kiwitcms",
+                "version": __version__,
+            },
+        }
 
     def server_discover(self, **kwargs):
         return {
