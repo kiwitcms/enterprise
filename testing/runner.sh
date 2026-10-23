@@ -37,6 +37,7 @@ echo "**** DONE STARTING KEYCLOAK ****"
 ./testing/test_django.sh
 ./testing/test_upstream_nginx_config.sh
 ./testing/test_docker.sh
+./testing/test_mcp.sh
 
 
 # look for failures
