@@ -456,9 +456,6 @@ rlJournalStart
         rlRun -t -c "docker kill keycloak_server"
         rlRun -t -c "docker compose -f docker-compose.testing logs --no-color > docker.log"
         rlRun -t -c "docker compose -f docker-compose.testing down"
-        if [ -n "$ImageOS" ]; then
-            rlRun -t -c "docker volume rm enterprise_db_data"
-        fi
     rlPhaseEnd
 rlJournalEnd
 
