@@ -1,6 +1,6 @@
 {
   "tools": {
     "profile": "minimal",
-    "allow": ["bundle-mcp"]
+    "alsoAllow": ["group:plugins"]
   }
 }
