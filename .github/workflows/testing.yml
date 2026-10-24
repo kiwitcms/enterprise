@@ -90,7 +90,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/.ollama/models
-        key: ollama-models-llama3.1-8b
+        key: ollama-models-qwen2.5-7b
 
     - name: Install Node.js dependencies
       if: matrix.command == 'test-docker-image'
@@ -108,8 +108,8 @@ jobs:
               curl -sf http://127.0.0.1:11434/api/tags && break
               sleep 2
           done
-          ollama pull llama3.1:8b
-          ollama run llama3.1:8b "ok" >/dev/null
+          ollama pull qwen2.5:7b
+          ollama run qwen2.5:7b "ok" >/dev/null
 
     - name: Install packages used during container testing
       if: matrix.command == 'test-docker-image'
