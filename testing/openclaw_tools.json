@@ -1,0 +1,6 @@
+{
+  "tools": {
+    "profile": "minimal",
+    "alsoAllow": ["group:plugins"]
+  }
+}

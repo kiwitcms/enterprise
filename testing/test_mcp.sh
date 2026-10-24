@@ -64,6 +64,22 @@ rlJournalStart
         rlRun -t -c "jq -e '.tools | length > 100' mcp-probe.json"
     rlPhaseEnd
 
+    rlPhaseStartTest "execute OpenClaw agent"
+        # use the local Ollama model
+        rlRun -t -c "$OPENCLAW config set models.providers.ollama.baseUrl http://127.0.0.1:11434"
+        rlRun -t -c "$OPENCLAW config set models.providers.ollama.params.num_ctx 16384"
+        rlRun -t -c "$OPENCLAW config set models.providers.ollama.timeoutSeconds 3600"
+        rlRun -t -c "$OPENCLAW config set agents.defaults.timeoutSeconds 3600"
+        rlRun -t -c "$OPENCLAW config set agents.defaults.model.primary ollama/llama3.1:8b"
+        rlRun -t -c "$OPENCLAW config set agents.defaults.experimental.localModelLean true"
+        rlRun -t -c "$OPENCLAW config set tools.toolSearch false"
+        rlRun -t -c "$OPENCLAW config patch --file testing/openclaw_tools.json"
+        export OLLAMA_API_KEY=ollama-local
+
+        rlRun -t -c "$OPENCLAW mcp tools kiwitcms --include 'Product.filter'"
+        rlRun -t -c "$OPENCLAW agent --local --timeout 3600 -m 'List all products' --json"
+    rlPhaseEnd
+
     rlPhaseStartCleanup
         rlRun -t -c "docker compose -f docker-compose.testing logs --no-color > docker.log"
         rlRun -t -c "docker compose -f docker-compose.testing down"

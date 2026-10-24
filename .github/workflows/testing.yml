@@ -76,10 +76,40 @@ jobs:
       with:
         node-version: 24
 
+    - name: Cache npm packages
+      if: matrix.command == 'test-docker-image'
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-${{ hashFiles('testing/package.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+
+    - name: Cache Ollama models
+      if: matrix.command == 'test-docker-image'
+      uses: actions/cache@v4
+      with:
+        path: ~/.ollama/models
+        key: ollama-models-llama3.1-8b
+
     - name: Install Node.js dependencies
       if: matrix.command == 'test-docker-image'
       working-directory: testing
-      run: npm install
+      run: |
+          npm install
+
+          curl -fsSL https://ollama.com/install.sh | sh
+          sudo systemctl stop ollama || true
+          export OLLAMA_MODELS="$HOME/.ollama/models"
+          export OLLAMA_NUM_THREADS="$(nproc)"
+          export OLLAMA_KEEP_ALIVE=-1
+          nohup ollama serve > /tmp/ollama.log 2>&1 &
+          for i in $(seq 1 30); do
+              curl -sf http://127.0.0.1:11434/api/tags && break
+              sleep 2
+          done
+          ollama pull llama3.1:8b
+          ollama run llama3.1:8b "ok" >/dev/null
 
     - name: Install packages used during container testing
       if: matrix.command == 'test-docker-image'
