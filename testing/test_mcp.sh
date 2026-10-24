@@ -68,13 +68,15 @@ rlJournalStart
         # use the local Ollama model
         rlRun -t -c "$OPENCLAW config set models.providers.ollama.baseUrl http://127.0.0.1:11434"
         rlRun -t -c "$OPENCLAW config set models.providers.ollama.params.num_ctx 16384"
+        rlRun -t -c "$OPENCLAW config set models.providers.ollama.timeoutSeconds 3600"
+        rlRun -t -c "$OPENCLAW config set agents.defaults.timeoutSeconds 3600"
         rlRun -t -c "$OPENCLAW config set agents.defaults.model.primary ollama/llama3.1:8b"
         rlRun -t -c "$OPENCLAW config set agents.defaults.experimental.localModelLean true"
         rlRun -t -c "$OPENCLAW config set tools.toolSearch false"
         rlRun -t -c "$OPENCLAW config patch --file testing/openclaw_tools.json"
         export OLLAMA_API_KEY=ollama-local
 
-        rlRun -t -c "$OPENCLAW mcp tools kiwitcms --include 'Product.*'"
+        rlRun -t -c "$OPENCLAW mcp tools kiwitcms --include 'Product.filter'"
         rlRun -t -c "$OPENCLAW agent --local -m 'List all products' --json"
     rlPhaseEnd
 
