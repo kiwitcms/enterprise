@@ -77,7 +77,7 @@ rlJournalStart
         export OLLAMA_API_KEY=ollama-local
 
         rlRun -t -c "$OPENCLAW mcp tools kiwitcms --include 'Product.filter'"
-        rlRun -t -c "$OPENCLAW agent --local -m 'List all products' --json"
+        rlRun -t -c "$OPENCLAW agent --local --timeout 3600 -m 'List all products' --json"
     rlPhaseEnd
 
     rlPhaseStartCleanup
