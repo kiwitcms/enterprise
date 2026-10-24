@@ -70,7 +70,7 @@ rlJournalStart
         rlRun -t -c "$OPENCLAW config set models.providers.ollama.params.num_ctx 16384"
         rlRun -t -c "$OPENCLAW config set models.providers.ollama.timeoutSeconds 3600"
         rlRun -t -c "$OPENCLAW config set agents.defaults.timeoutSeconds 3600"
-        rlRun -t -c "$OPENCLAW config set agents.defaults.model.primary ollama/llama3.1:8b"
+        rlRun -t -c "$OPENCLAW config set agents.defaults.model.primary ollama/qwen2.5:7b"
         rlRun -t -c "$OPENCLAW config set agents.defaults.experimental.localModelLean true"
         rlRun -t -c "$OPENCLAW config set tools.toolSearch false"
         rlRun -t -c "$OPENCLAW config patch --file testing/openclaw_tools.json"
