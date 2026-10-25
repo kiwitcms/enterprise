@@ -5,6 +5,8 @@
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
 
+from urllib.parse import urlencode
+
 from django.conf import settings
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import PermissionDenied
@@ -35,12 +37,22 @@ class LoginView(
                 "/"
             )
             accounts_login = reverse("tcms-login").lstrip("/")
-            next_page = reverse(
-                "tcms_tenants:redirect-to", args=[request.tenant.schema_name, ""]
-            )
 
+            original_next = request.GET.get(self.redirect_field_name, "/")
+            if not original_next.startswith("/") or original_next.startswith("//"):
+                original_next = "/"
+
+            path, _, query = original_next.partition("?")
+            next_page = reverse(
+                "tcms_tenants:redirect-to",
+                args=[request.tenant.schema_name, path.lstrip("/")],
+            )
+            if query:
+                next_page = f"{next_page}?{query}"
+
+            next_param = urlencode({self.redirect_field_name: next_page})
             return HttpResponseRedirect(
-                f"{public_tenant_url}/{accounts_login}?{self.redirect_field_name}={next_page}"
+                f"{public_tenant_url}/{accounts_login}?{next_param}"
             )
 
         return super().get(request, *args, **kwargs)
@@ -50,9 +62,10 @@ class LoginView(
 
         login_destination = self.request.tenant
         next_page = context.get(self.redirect_field_name, "/")
-        if next_page.startswith("/kiwitcms_tenants/go/to/"):
+        prefix = "/kiwitcms_tenants/go/to/"
+        if next_page.startswith(prefix):
             try:
-                next_schema = next_page.rstrip("/").split("/")[-1]
+                next_schema = next_page.removeprefix(prefix).split("/")[0]
                 login_destination = login_destination.__class__.objects.get(
                     schema_name=next_schema
                 )
