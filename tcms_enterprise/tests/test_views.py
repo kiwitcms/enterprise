@@ -5,6 +5,7 @@
 
 import json
 from http import HTTPStatus
+from urllib.parse import parse_qs, urlsplit
 
 from django.urls import reverse
 
@@ -69,3 +70,34 @@ class TestDynamicClientRegistration(LoggedInTestCase):
         )
         self.assertEqual(response.status_code, HTTPStatus.CREATED)
         self.assertIn("client_id", response.json())
+
+
+class TestLoginView(LoggedInTestCase):
+    def setUp(self):
+        super().setUp()
+        self.client.logout()
+
+    def test_private_tenant_login_preserves_next_path_and_query(self):
+        next_url = "/o/authorize/?response_type=code&client_id=abc&scope=kiwitcms:view"
+        response = self.client.get(reverse("tcms-login"), {"next": next_url})
+
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        location = urlsplit(response["Location"])
+        self.assertEqual(location.path, "/accounts/login/")
+        self.assertEqual(
+            parse_qs(location.query)["next"][0],
+            f"/kiwitcms_tenants/go/to/{self.tenant.schema_name}/o/authorize/"
+            "?response_type=code&client_id=abc&scope=kiwitcms:view",
+        )
+
+    def test_private_tenant_login_ignores_absolute_next(self):
+        response = self.client.get(
+            reverse("tcms-login"), {"next": "https://evil.example/o/authorize/"}
+        )
+
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        location = urlsplit(response["Location"])
+        self.assertEqual(
+            parse_qs(location.query)["next"][0],
+            f"/kiwitcms_tenants/go/to/{self.tenant.schema_name}/",
+        )
