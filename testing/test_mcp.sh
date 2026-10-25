@@ -117,6 +117,63 @@ rlJournalStart
         rlAssertNotGrep "The current version of Kiwi TCMS is" mcp-cross-tenant.json
     rlPhaseEnd
 
+    rlPhaseStartTest "execute OpenClaw agent against Private Tenant"
+        # drop config, cached catalogs and OAuth tokens from previous phases
+        rlRun -t -c "rm -rf $HOME/.openclaw"
+
+        # use the local Ollama model
+        rlRun -t -c "$OPENCLAW config set models.providers.ollama.baseUrl http://127.0.0.1:11434"
+        rlRun -t -c "$OPENCLAW config set models.providers.ollama.params.num_ctx 16384"
+        rlRun -t -c "$OPENCLAW config set models.providers.ollama.timeoutSeconds 3600"
+        rlRun -t -c "$OPENCLAW config set agents.defaults.timeoutSeconds 3600"
+        rlRun -t -c "$OPENCLAW config set agents.defaults.model.primary ollama/qwen2.5:7b"
+        rlRun -t -c "$OPENCLAW config set agents.defaults.experimental.localModelLean true"
+        rlRun -t -c "$OPENCLAW config set tools.toolSearch false"
+        rlRun -t -c "$OPENCLAW config patch --file testing/openclaw_tools.json"
+        export OLLAMA_API_KEY=ollama-local
+
+        rlRun -t -c "$OPENCLAW mcp add kiwitcms-private-tenant --transport streamable-http --url https://empty.testing.example.bg/mcp/ --auth oauth --oauth-scope 'kiwitcms:view kiwitcms:add kiwitcms:change kiwitcms:delete' --ssl-verify false"
+
+        # start the OAuth flow for the private tenant
+        $OPENCLAW mcp login kiwitcms-private-tenant > mcp-private-login.log 2>&1 &
+        LOGIN_PID=$!
+
+        AUTH_URL=""
+        for _ in $(seq 1 30); do
+            AUTH_URL=$(grep -m1 -oP '^https?://\S+$' mcp-private-login.log)
+            [ -n "$AUTH_URL" ] && break
+            sleep 1
+        done
+        rlAssertNotEquals "OAuth authorization URL obtained" "$AUTH_URL" ""
+
+        # complete the authorization in the browser (login + consent)
+        export AUTH_URL
+        rlRun -t -c "robot testing/mcp_oauth.robot"
+
+        wait "$LOGIN_PID"
+        rlAssertEquals "OAuth login completed" "$?" "0"
+
+        rlRun -t -c "$OPENCLAW mcp tools kiwitcms-private-tenant --include 'KiwiTCMS.version'"
+        rlRun -t -c "$OPENCLAW agent --local --timeout 3600 --session-key agent:main:mcp-private-tenant -m 'What is the current Kiwi TCMS version' --json > mcp-private-agent.json 2> mcp-private-agent.log"
+        rlRun -t -c "cat mcp-private-agent.json"
+
+        rlRun -t -c "jq -r '.terminalReply.text // .meta.terminalReply.text // .final // .payloads[0].text' mcp-private-agent.json > test-mcp-private-agent.txt"
+        rlRun -t -c "cat test-mcp-private-agent.txt"
+
+        # the MCP tool ran and did not fail
+        rlRun -t -c "jq -e '(.meta.toolSummary // .toolSummary) | .calls >= 1' mcp-private-agent.json"
+        rlRun -t -c "jq -e '(.meta.toolSummary // .toolSummary) | (.failures // 0) == 0' mcp-private-agent.json"
+
+        # it was the Kiwi TCMS MCP tool, not a built-in
+        rlRun -t -c "jq -e '((.meta.toolSummary // .toolSummary).tools // []) | join(\",\") | ascii_downcase | test(\"kiwitcms[-.]version\")' mcp-private-agent.json"
+
+        # the answer matches the version served by the web container
+        rlRun -t -c "docker exec -i web /venv/bin/python -c 'import tcms; print(tcms.__version__)' > test-private-expected-version.txt"
+        EXPECTED_VERSION=$(cat test-private-expected-version.txt)
+        rlAssertNotEquals "expected version obtained" "$EXPECTED_VERSION" ""
+        rlAssertGrep "Kiwi TCMS is $EXPECTED_VERSION" test-mcp-private-agent.txt
+    rlPhaseEnd
+
     rlPhaseStartCleanup
         rlRun -t -c "docker compose -f docker-compose.testing logs --no-color > docker.log"
         rlRun -t -c "docker compose -f docker-compose.testing down"
