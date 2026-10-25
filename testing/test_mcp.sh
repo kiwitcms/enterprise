@@ -77,7 +77,25 @@ rlJournalStart
         export OLLAMA_API_KEY=ollama-local
 
         rlRun -t -c "$OPENCLAW mcp tools kiwitcms --include 'KiwiTCMS.version'"
-        rlRun -t -c "$OPENCLAW agent --local --timeout 3600 -m 'What is the current Kiwi TCMS version' --json"
+        rlRun -t -c "$OPENCLAW agent --local --timeout 3600 -m 'What is the current Kiwi TCMS version' --json > mcp-agent.json 2> mcp-agent.log"
+        rlRun -t -c "cat mcp-agent.json"
+
+        # plain-text view of the same run, no second agent invocation
+        rlRun -t -c "jq -r '.terminalReply.text // .meta.terminalReply.text // .final // .payloads[0].text' mcp-agent.json > test-mcp-agent.txt"
+        rlRun -t -c "cat test-mcp-agent.txt"
+
+        # the MCP tool ran and did not fail
+        rlRun -t -c "jq -e '(.meta.toolSummary // .toolSummary) | .calls >= 1' mcp-agent.json"
+        rlRun -t -c "jq -e '(.meta.toolSummary // .toolSummary) | (.failures // 0) == 0' mcp-agent.json"
+
+        # it was the Kiwi TCMS MCP tool, not a built-in
+        rlRun -t -c "jq -e '((.meta.toolSummary // .toolSummary).tools // []) | join(\",\") | ascii_downcase | test(\"kiwitcms[-.]version\")' mcp-agent.json"
+
+        # the answer matches the version served by the web container
+        rlRun -t -c "docker exec -i web /venv/bin/python -c 'import tcms; print(tcms.__version__)' > test-expected-version.txt"
+        EXPECTED_VERSION=$(cat test-expected-version.txt)
+        rlAssertNotEquals "expected version obtained" "$EXPECTED_VERSION" ""
+        rlAssertGrep "Kiwi TCMS is $EXPECTED_VERSION" test-mcp-agent.txt
     rlPhaseEnd
 
     rlPhaseStartCleanup
