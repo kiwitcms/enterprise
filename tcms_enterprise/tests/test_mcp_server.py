@@ -29,6 +29,7 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
     unauthorized_bearer_token = "mcp-test-bearer-unauthorized-0001"
     stale_bearer_token = "mcp-test-bearer-stale-0001"
     expired_bearer_token = "mcp-test-bearer-expired-0001"
+    cross_tenant_bearer_token = "mcp-test-bearer-cross-tenant-0001"
 
     @classmethod
     def setUpClass(cls):
@@ -288,6 +289,33 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
             "tools/call",
             {"name": "Product.filter", "arguments": {}},
             bearer_token=self.stale_bearer_token,
+            raw=True,
+        )
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
+
+    def test_tools_call_should_403_when_token_belongs_to_another_tenant(self):
+        # the user is authorized here but the token was issued on the public
+        # schema, i.e. it doesn't exist in this tenant's schema
+        with schema_context("public"):
+            application = Application.objects.create(
+                name=f"MCP cross tenant {timezone.now().timestamp()}",
+                user=self.tester,
+                client_type=Application.CLIENT_CONFIDENTIAL,
+                authorization_grant_type=Application.GRANT_CLIENT_CREDENTIALS,
+            )
+            AccessToken.objects.create(
+                user=self.tester,
+                application=application,
+                token=self.cross_tenant_bearer_token,
+                expires=timezone.now() + timedelta(hours=1),
+                scope="kiwitcms:view",
+            )
+
+        self.assertTrue(self.tenant.authorized_users.filter(pk=self.tester.pk).exists())
+        response = self.call(
+            "tools/call",
+            {"name": "Product.filter", "arguments": {}},
+            bearer_token=self.cross_tenant_bearer_token,
             raw=True,
         )
         self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)

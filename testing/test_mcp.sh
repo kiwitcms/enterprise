@@ -98,6 +98,25 @@ rlJournalStart
         rlAssertGrep "Kiwi TCMS is $EXPECTED_VERSION" test-mcp-agent.txt
     rlPhaseEnd
 
+    rlPhaseStartTest "attempt cross-tenant requests"
+        # authorize openclaw-dev on empty.testing.example.bg
+        rlRun -t -c "cat testing/configure_tenant_users.py | docker exec -i web /Kiwi/manage.py shell"
+
+        # change only the host: the OAuth token was issued for
+        # testing.example.bg and is not present in the empty tenant's schema
+        rlRun -t -c "$OPENCLAW config set mcp.servers.kiwitcms.url https://empty.testing.example.bg/mcp/"
+
+        # fresh session, otherwise the answer from the previous run is reused
+        rlRun -t -c "$OPENCLAW agent --local --timeout 3600 --session-key agent:main:mcp-cross-tenant -m 'What is the current Kiwi TCMS version' --json > mcp-cross-tenant.json 2> mcp-cross-tenant.log || true"
+        rlRun -t -c "cat mcp-cross-tenant.json"
+        rlRun -t -c "cat mcp-cross-tenant.log"
+
+        # OpenClaw redacts the response body and doesn't print the HTTP status,
+        # so the transport-level rejection is what the agent log exposes.
+        rlAssertGrep "Error POSTing to endpoint" mcp-cross-tenant.log
+        rlAssertNotGrep "The current version of Kiwi TCMS is" mcp-cross-tenant.json
+    rlPhaseEnd
+
     rlPhaseStartCleanup
         rlRun -t -c "docker compose -f docker-compose.testing logs --no-color > docker.log"
         rlRun -t -c "docker compose -f docker-compose.testing down"
