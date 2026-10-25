@@ -76,8 +76,8 @@ rlJournalStart
         rlRun -t -c "$OPENCLAW config patch --file testing/openclaw_tools.json"
         export OLLAMA_API_KEY=ollama-local
 
-        rlRun -t -c "$OPENCLAW mcp tools kiwitcms --include 'Product.filter'"
-        rlRun -t -c "$OPENCLAW agent --local --timeout 3600 -m 'List all products' --json"
+        rlRun -t -c "$OPENCLAW mcp tools kiwitcms --include 'KiwiTCMS.version'"
+        rlRun -t -c "$OPENCLAW agent --local --timeout 3600 -m 'What is the current Kiwi TCMS version' --json"
     rlPhaseEnd
 
     rlPhaseStartCleanup
