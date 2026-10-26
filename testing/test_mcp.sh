@@ -35,7 +35,7 @@ rlJournalStart
         OPENCLAW="./testing/node_modules/.bin/openclaw"
         rlAssertExists "$OPENCLAW"
 
-        rlRun -t -c "$OPENCLAW mcp add kiwitcms --transport streamable-http --url $HTTPS/mcp/ --auth oauth --oauth-scope 'kiwitcms:view kiwitcms:add kiwitcms:change kiwitcms:delete' --ssl-verify false"
+        rlRun -t -c "$OPENCLAW mcp add kiwitcms --transport streamable-http --url $HTTPS/mcp/ --auth oauth --ssl-verify false"
 
         # start the OAuth flow: the CLI prints the authorization URL and waits for the callback
         $OPENCLAW mcp login kiwitcms > mcp-login.log 2>&1 &
@@ -132,7 +132,7 @@ rlJournalStart
         rlRun -t -c "$OPENCLAW config patch --file testing/openclaw_tools.json"
         export OLLAMA_API_KEY=ollama-local
 
-        rlRun -t -c "$OPENCLAW mcp add kiwitcms-private-tenant --transport streamable-http --url https://empty.testing.example.bg/mcp/ --auth oauth --oauth-scope 'kiwitcms:view kiwitcms:add kiwitcms:change kiwitcms:delete' --ssl-verify false"
+        rlRun -t -c "$OPENCLAW mcp add kiwitcms-private-tenant --transport streamable-http --url https://empty.testing.example.bg/mcp/ --auth oauth --ssl-verify false"
 
         # start the OAuth flow for the private tenant
         $OPENCLAW mcp login kiwitcms-private-tenant > mcp-private-login.log 2>&1 &
