@@ -74,7 +74,7 @@ KIWI_LINT_INCLUDE_PATH="../Kiwi"
 pylint:
 	if [ ! -d "$(KIWI_LINT_INCLUDE_PATH)/kiwi_lint" ]; then \
 	    git clone --depth 1 https://github.com/kiwitcms/Kiwi.git $(KIWI_LINT_INCLUDE_PATH); \
-	    pip install -U -r $(KIWI_LINT_INCLUDE_PATH)/requirements/base.txt; \
+	    pip install -U -r $(KIWI_LINT_INCLUDE_PATH)/requirements/devel.txt; \
 	fi
 
 	PYTHONPATH=$(KIWI_LINT_INCLUDE_PATH):. \

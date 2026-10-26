@@ -9,6 +9,8 @@ from urllib.parse import parse_qs, urlsplit
 
 from django.urls import reverse
 
+from parameterized import parameterized
+
 from tcms_tenants.tests import LoggedInTestCase
 
 from tcms_enterprise.mcp_scopes import SCOPES
@@ -19,8 +21,16 @@ class TestOAuthProtectedResource(LoggedInTestCase):
         super().setUp()
         self.client.logout()
 
-    def test_describes_the_mcp_endpoint(self):
-        response = self.client.get(reverse("mcp-oauth-protected-resource"))
+    @parameterized.expand(
+        [
+            reverse("mcp-oauth-protected-resource"),
+            "/.well-known/oauth-protected-resource",
+            "/.well-known/oauth-protected-resource/mcp",
+            "/.well-known/oauth-protected-resource/mcp/",
+        ]
+    )
+    def test_describes_the_mcp_endpoint(self, url):
+        response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
         payload = response.json()
