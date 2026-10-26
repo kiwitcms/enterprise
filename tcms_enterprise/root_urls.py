@@ -55,6 +55,10 @@ urlpatterns = (
             name="oauth-server-metadata",
         ),
         re_path(
+            r"^\.well-known/oauth-protected-resource(?:/.*)?$",
+            views.OAuthProtectedResource.as_view(),
+        ),
+        re_path(
             r"^mcp/oauth-protected-resource/$",
             views.OAuthProtectedResource.as_view(),
             name="mcp-oauth-protected-resource",

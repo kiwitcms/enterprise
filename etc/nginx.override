@@ -107,6 +107,13 @@ http {
             uwsgi_intercept_errors on;
         }
 
+        # RFC 9728 protected resource metadata is served by Django
+        location /.well-known/oauth-protected-resource {
+            include     /etc/nginx/uwsgi_params;
+            uwsgi_pass  kiwitcms;
+            uwsgi_intercept_errors on;
+        }
+
         location /.well-known/ {
             alias /Kiwi/static/.well-known/;
         }
