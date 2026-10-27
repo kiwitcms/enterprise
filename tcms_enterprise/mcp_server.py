@@ -284,7 +284,11 @@ class MCPServer(RpcServer):
         value = KiwiTCMSHandlerMixin.normalize(value)
         value = KiwiTCMSHandlerMixin.escape(value)
         text = json.dumps(value, ensure_ascii=False, default=str)
-        return {"content": [{"type": "text", "text": text}], "isError": False}
+        return {
+            "content": [{"type": "text", "text": text}],
+            "_meta": {"kiwitcms/untrusted": True},
+            "isError": False,
+        }
 
     @staticmethod
     def error_result(message):
