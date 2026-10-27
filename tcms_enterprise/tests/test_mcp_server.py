@@ -216,6 +216,48 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
             names.append(product["name"])
         self.assertIn(self.product.name, names)
 
+    def test_tools_call_should_normalize_and_escape_output(self):
+        with tenant_context(self.tenant):
+            self.product.name = "<script>alert(1)</script> ＜b＞\u200bﬁ"
+            self.product.save()
+
+        user_should_have_perm(self.tester, "management.view_product")
+        response = self.call(
+            "tools/call",
+            {
+                "name": "Product.filter",
+                "arguments": {"query": {"pk": self.product.pk}},
+            },
+            bearer_token=self.bearer_token,
+        )
+        result = response["result"]
+        self.assertFalse(result["isError"])
+
+        text = result["content"][0]["text"]
+        self.assertNotIn("<script>", text)
+        self.assertNotIn("\u200b", text)
+        self.assertIn("&lt;script&gt;", text)
+
+        products = json.loads(text)
+        self.assertEqual(
+            products[0]["name"],
+            "&lt;script&gt;alert(1)&lt;/script&gt; &lt;b&gt;fi",
+        )
+
+    def test_error_result_should_normalize_and_escape(self):
+        response = self.call(
+            "tools/call",
+            {"name": "<script>\u200b", "arguments": {}},
+            bearer_token=self.bearer_token,
+        )
+        result = response["result"]
+        self.assertTrue(result["isError"])
+
+        text = result["content"][0]["text"]
+        self.assertNotIn("<script>", text)
+        self.assertNotIn("\u200b", text)
+        self.assertIn("&lt;script&gt;", text)
+
     def test_tools_call_with_unknown_tool_should_error(self):
         response = self.call(
             "tools/call",
