@@ -18,7 +18,7 @@ from tcms.tests import user_should_have_perm
 from tcms.tests.factories import ProductFactory
 from tcms_tenants.tests import LoggedInTestCase, UserFactory
 
-from tcms_enterprise.mcp_server import MCPHandler
+from tcms_enterprise.mcp_server import MCPHandler, UNTRUSTED_DATA_NOTICE
 
 AccessToken = get_access_token_model()
 Application = get_application_model()
@@ -258,6 +258,14 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
         self.assertNotIn("\u200b", text)
         self.assertIn("&lt;script&gt;", text)
 
+    def test_tools_list_should_suffix_descriptions_with_untrusted_notice(self):
+        response = self.call("tools/list")
+        tools = response["result"]["tools"]
+        for tool in tools:
+            self.assertTrue(tool["description"].endswith(UNTRUSTED_DATA_NOTICE))
+            if tool["name"] == "Product.filter":
+                self.assertIn("Perform a search", tool["description"])
+
     def test_tools_call_with_unknown_tool_should_error(self):
         response = self.call(
             "tools/call",
@@ -424,6 +432,7 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
         result = response["result"]
         self.assertEqual(result["protocolVersion"], "DRAFT-2026-v1")
         self.assertIn("tools", result["capabilities"])
+        self.assertEqual(result["instructions"], UNTRUSTED_DATA_NOTICE)
         self.assertEqual(result["serverInfo"]["name"], "kiwitcms")
 
     def test_initialize_should_fall_back_to_native_version(self):
