@@ -281,9 +281,13 @@ class MCPServer(RpcServer):
         except Exception as exc:  # pylint: disable=broad-exception-caught
             return self.error_result(str(exc))
 
+        value = KiwiTCMSHandlerMixin.normalize(value)
+        value = KiwiTCMSHandlerMixin.escape(value)
         text = json.dumps(value, ensure_ascii=False, default=str)
         return {"content": [{"type": "text", "text": text}], "isError": False}
 
     @staticmethod
     def error_result(message):
+        message = KiwiTCMSHandlerMixin.normalize(str(message))
+        message = KiwiTCMSHandlerMixin.escape(message)
         return {"content": [{"type": "text", "text": message}], "isError": True}
