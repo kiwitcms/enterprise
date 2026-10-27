@@ -18,7 +18,11 @@ from tcms.tests import user_should_have_perm
 from tcms.tests.factories import ProductFactory
 from tcms_tenants.tests import LoggedInTestCase, UserFactory
 
-from tcms_enterprise.mcp_server import MCPHandler, UNTRUSTED_DATA_NOTICE
+from tcms_enterprise.mcp_server import (
+    MCP_EXCLUDED_TOOLS,
+    MCPHandler,
+    UNTRUSTED_DATA_NOTICE,
+)
 
 AccessToken = get_access_token_model()
 Application = get_application_model()
@@ -265,6 +269,26 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
             self.assertTrue(tool["description"].endswith(UNTRUSTED_DATA_NOTICE))
             if tool["name"] == "Product.filter":
                 self.assertIn("Perform a search", tool["description"])
+
+    def test_tools_list_should_exclude_blacklisted_tools(self):
+        response = self.call("tools/list")
+        names = []
+        for tool in response["result"]["tools"]:
+            names.append(tool["name"])
+
+        for excluded in MCP_EXCLUDED_TOOLS:
+            self.assertNotIn(excluded, names)
+        self.assertIn("Product.filter", names)
+
+    def test_tools_call_should_reject_blacklisted_tool(self):
+        response = self.call(
+            "tools/call",
+            {"name": "Auth.login", "arguments": {}},
+            bearer_token=self.bearer_token,
+        )
+        result = response["result"]
+        self.assertTrue(result["isError"])
+        self.assertIn("Unknown tool: Auth.login", result["content"][0]["text"])
 
     def test_tools_call_with_unknown_tool_should_error(self):
         response = self.call(
