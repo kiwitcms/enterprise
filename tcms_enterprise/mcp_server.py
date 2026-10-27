@@ -15,11 +15,13 @@ from django_tenants.utils import get_public_schema_name
 
 from modernrpc.constants import Protocol
 from modernrpc.core import RpcRequestContext
+from modernrpc.exceptions import RPCInvalidRequest
 from modernrpc.introspection import DocstringParser, Introspector
 from modernrpc.jsonrpc.handler import JsonRpcHandler
 from modernrpc.server import RpcServer
 
 from tcms import __version__
+from tcms.rpc.handlers import KiwiTCMSHandlerMixin
 
 from tcms_enterprise.mcp_scopes import SCOPES, has_required_scopes, required_scopes
 
@@ -250,6 +252,11 @@ class MCPServer(RpcServer):
         method = self.registry.get(name)
         if method is None:
             return self.error_result(f"Unknown tool: {name}")
+
+        try:
+            KiwiTCMSHandlerMixin.inspect_rpc_args(name, kwargs=arguments or {})
+        except RPCInvalidRequest as exc:
+            return self.error_result(exc.message)
 
         request = mcp_context.request
         if method.auth is not None and not method.auth(request):

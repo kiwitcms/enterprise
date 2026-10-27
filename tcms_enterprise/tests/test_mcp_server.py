@@ -167,6 +167,55 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
             names.append(tool["name"])
         self.assertIn("Product.filter", names)
 
+    def test_tools_call_should_reject_restricted_lookup_path(self):
+        user_should_have_perm(self.tester, "testcases.view_testcase")
+        response = self.call(
+            "tools/call",
+            {
+                "name": "TestCase.filter",
+                "arguments": {
+                    "query": {"author__password__startswith": "pbkdf2_sha256$"}
+                },
+            },
+            bearer_token=self.bearer_token,
+        )
+        result = response["result"]
+        self.assertTrue(result["isError"])
+        self.assertIn("Unsupported field", result["content"][0]["text"])
+
+    def test_tools_call_should_reject_restricted_email_lookup_path(self):
+        user_should_have_perm(self.tester, "testcases.view_testcase")
+        response = self.call(
+            "tools/call",
+            {
+                "name": "TestCase.filter",
+                "arguments": {"query": {"author__email__icontains": "x"}},
+            },
+            bearer_token=self.bearer_token,
+        )
+        result = response["result"]
+        self.assertTrue(result["isError"])
+        self.assertIn("Unsupported field", result["content"][0]["text"])
+
+    def test_tools_call_should_allow_safe_lookup_path(self):
+        user_should_have_perm(self.tester, "management.view_product")
+        response = self.call(
+            "tools/call",
+            {
+                "name": "Product.filter",
+                "arguments": {"query": {"name__icontains": "MCP"}},
+            },
+            bearer_token=self.bearer_token,
+        )
+        result = response["result"]
+        self.assertFalse(result["isError"])
+
+        products = json.loads(result["content"][0]["text"])
+        names = []
+        for product in products:
+            names.append(product["name"])
+        self.assertIn(self.product.name, names)
+
     def test_tools_call_with_unknown_tool_should_error(self):
         response = self.call(
             "tools/call",
