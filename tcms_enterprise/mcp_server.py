@@ -95,6 +95,7 @@ class MCPServer(RpcServer):
             register_system_procedures=False,
         )
         self.registry = registry
+        self._catalog = None
         self.handlers = [MCPHandler()]
 
         self.register_procedure(self.initialize, name="initialize", auth=None)
@@ -205,6 +206,9 @@ class MCPServer(RpcServer):
         }
 
     def build_catalog(self):
+        if self._catalog is not None:
+            return self._catalog
+
         json_type_by_doc = {
             "str": "string",
             "int": "integer",
@@ -257,6 +261,7 @@ class MCPServer(RpcServer):
                 }
             )
 
+        self._catalog = catalog
         return catalog
 
     @staticmethod
