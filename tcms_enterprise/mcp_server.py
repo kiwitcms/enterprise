@@ -110,7 +110,12 @@ class MCPServer(RpcServer):
             auth=None,
             context_target="mcp_context",
         )
-        self.register_procedure(self.tools_list, name="tools/list", auth=None)
+        self.register_procedure(
+            self.tools_list,
+            name="tools/list",
+            auth=None,
+            context_target="mcp_context",
+        )
 
     @staticmethod
     def request_payload(request):
@@ -262,8 +267,23 @@ class MCPServer(RpcServer):
 
         return set(token.scope.split())
 
-    def tools_list(self, **kwargs):
-        return {"tools": self.build_catalog()}
+    def tools_list(self, mcp_context=None, **kwargs):
+        tools = self.build_catalog()
+
+        request = getattr(mcp_context, "request", None)
+        if request is None or getattr(request, "access_token", None) is None:
+            # unauthenticated discovery: advertise the full catalog, the client
+            # authenticates before calling any tool
+            return {"tools": tools}
+
+        granted = self.granted_scopes(request)
+        visible = []
+        for tool in tools:
+            method = self.registry.get(tool["name"])
+            if has_required_scopes(required_scopes(method), granted):
+                visible.append(tool)
+
+        return {"tools": visible}
 
     def tools_call(self, name, arguments=None, mcp_context=None, **kwargs):
         method = self.registry.get(name)

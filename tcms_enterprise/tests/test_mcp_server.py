@@ -162,15 +162,6 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
         )
         self.assertEqual(error["data"]["requested"], "1999-01-01")
 
-    def test_tools_list_should_return_a_list(self):
-        response = self.call("tools/list")
-        result = response["result"]
-        self.assertEqual(result["resultType"], "complete")
-        names = []
-        for tool in result["tools"]:
-            names.append(tool["name"])
-        self.assertIn("Product.filter", names)
-
     def test_tools_call_should_reject_restricted_lookup_path(self):
         user_should_have_perm(self.tester, "testcases.view_testcase")
         response = self.call(
@@ -289,6 +280,57 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
         result = response["result"]
         self.assertTrue(result["isError"])
         self.assertIn("Unknown tool: Auth.login", result["content"][0]["text"])
+
+    def test_tools_list_without_token_returns_full_catalog(self):
+        response = self.call("tools/list")
+        names = []
+        for tool in response["result"]["tools"]:
+            names.append(tool["name"])
+
+        self.assertIn("Product.filter", names)
+        self.assertIn("Product.create", names)
+        self.assertIn("TestRun.update", names)
+        self.assertIn("TestRun.remove", names)
+
+    def test_tools_list_should_filter_by_granted_scopes(self):
+        response = self.call("tools/list", bearer_token=self.bearer_token)
+        names = []
+        for tool in response["result"]["tools"]:
+            names.append(tool["name"])
+
+        self.assertIn("Product.filter", names)
+        self.assertNotIn("Product.create", names)
+        self.assertNotIn("TestRun.update", names)
+        self.assertNotIn("TestRun.remove", names)
+
+    def test_tools_list_should_include_change_tools_for_change_scope(self):
+        change_token = "mcp-test-bearer-change-0002"
+        with tenant_context(self.tenant):
+            application = Application.objects.create(
+                name=f"MCP change {timezone.now().timestamp()}",
+                user=self.tester,
+                client_type=Application.CLIENT_CONFIDENTIAL,
+                authorization_grant_type=Application.GRANT_CLIENT_CREDENTIALS,
+            )
+            AccessToken.objects.create(
+                user=self.tester,
+                application=application,
+                token=change_token,
+                expires=timezone.now() + timedelta(hours=1),
+                scope="kiwitcms:change",
+            )
+
+        response = self.call("tools/list", bearer_token=change_token)
+        names = []
+        for tool in response["result"]["tools"]:
+            names.append(tool["name"])
+
+        self.assertIn("TestCase.update", names)
+        self.assertIn("TestRun.update", names)
+        self.assertNotIn("Product.filter", names)
+        self.assertNotIn("Product.create", names)
+        self.assertNotIn("TestRun.create", names)
+        self.assertNotIn("TestRun.remove", names)
 
     def test_tools_call_with_unknown_tool_should_error(self):
         response = self.call(
