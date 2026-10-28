@@ -332,6 +332,17 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
         self.assertNotIn("TestRun.create", names)
         self.assertNotIn("TestRun.remove", names)
 
+    def test_tools_list_uses_core_schema_descriptions(self):
+        response = self.call("tools/list")
+        tools = response["result"]["tools"]
+
+        product = next(tool for tool in tools if tool["name"] == "Product.filter")
+        query = product["inputSchema"]["properties"]["query"]
+        self.assertGreater(len(query["properties"]), 60)
+        self.assertIn("name__icontains", query["properties"])
+        self.assertTrue(query["examples"])
+        self.assertIn("Pass {} to return every object", query["description"])
+
     def test_tools_call_with_unknown_tool_should_error(self):
         response = self.call(
             "tools/call",
