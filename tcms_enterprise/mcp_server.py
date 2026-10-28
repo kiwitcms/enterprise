@@ -205,6 +205,29 @@ class MCPServer(RpcServer):
             },
         }
 
+    @staticmethod
+    def tool_annotations(name, method):
+        try:
+            scope = required_scopes(method)
+        except ValueError:
+            # unknown permission mapping: fail closed
+            return {
+                "readOnlyHint": False,
+                "destructiveHint": True,
+                "idempotentHint": False,
+                "openWorldHint": False,
+            }
+
+        read_only = scope <= {SCOPES["view"]}
+        destructive = bool(scope & {SCOPES["change"], SCOPES["delete"]})
+
+        return {
+            "readOnlyHint": read_only,
+            "destructiveHint": destructive,
+            "idempotentHint": read_only or name == "Bug.details",
+            "openWorldHint": name in {"Bug.details", "Bug.report"},
+        }
+
     def build_catalog(self):
         if self._catalog is not None:
             return self._catalog
@@ -252,6 +275,7 @@ class MCPServer(RpcServer):
                 {
                     "name": name,
                     "description": f"{description} {UNTRUSTED_DATA_NOTICE}",
+                    "annotations": self.tool_annotations(name, method),
                     "inputSchema": {
                         "type": "object",
                         "properties": properties,
