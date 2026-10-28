@@ -77,6 +77,20 @@ rlJournalStart
         rlRun -t -c "make extract-static-files"
     rlPhaseEnd
 
+    rlPhaseStartTest "Static API files"
+        rlRun -t -c "docker exec -i web ls -lR /Kiwi/static/api/"
+        echo "--------------------"
+        rlRun -t -c "curl -k -L -f -o- $HTTPS/static/api/llms.txt"
+        echo "--------------------"
+        rlRun -t -c "curl -k -L -f -o- $HTTPS/static/api/methods/Product.filter.md"
+        echo "--------------------"
+        rlRun -t -c "curl -k -L -f -o- $HTTPS/static/api/methods/TenantGroup.filter.md"
+        echo "--------------------"
+        rlRun -t -c "curl -k -L -f -o- $HTTPS/static/api/methods/TenantGroup.create.md"
+        echo "--------------------"
+        rlRun -t -c "curl -k -L -f -o /dev/null -w 'openapi.json: %{size_download} bytes\n' $HTTPS/static/api/openapi.json"
+    rlPhaseEnd
+
     rlPhaseStartTest "Sanity test - initial configuration"
         # need to monkey-patch createsuperuser.py b/c it rejects input when not using a TTY
         rlRun -t -c 'docker exec -i web sed -i "s/raise NotRunningInTTYException/pass/" /venv/lib64/python3.12/site-packages/django/contrib/auth/management/commands/createsuperuser.py'
