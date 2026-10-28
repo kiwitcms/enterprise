@@ -74,7 +74,7 @@ jobs:
       if: matrix.command == 'test-docker-image'
       uses: actions/setup-node@v7
       with:
-        node-version: 24
+        node-version: 24.22.1
 
     - name: Cache npm packages
       if: matrix.command == 'test-docker-image'
