@@ -95,7 +95,7 @@ rlJournalStart
         rlRun -t -c "docker exec -i web /venv/bin/python -c 'import tcms; print(tcms.__version__)' > test-expected-version.txt"
         EXPECTED_VERSION=$(cat test-expected-version.txt)
         rlAssertNotEquals "expected version obtained" "$EXPECTED_VERSION" ""
-        rlAssertGrep "Kiwi TCMS is $EXPECTED_VERSION" test-mcp-agent.txt
+        rlAssertGrep "Kiwi TCMS is[[:space:]].*$EXPECTED_VERSION" test-mcp-agent.txt
     rlPhaseEnd
 
     rlPhaseStartTest "attempt cross-tenant requests"
@@ -171,7 +171,7 @@ rlJournalStart
         rlRun -t -c "docker exec -i web /venv/bin/python -c 'import tcms; print(tcms.__version__)' > test-private-expected-version.txt"
         EXPECTED_VERSION=$(cat test-private-expected-version.txt)
         rlAssertNotEquals "expected version obtained" "$EXPECTED_VERSION" ""
-        rlAssertGrep "Kiwi TCMS is $EXPECTED_VERSION" test-mcp-private-agent.txt
+        rlAssertGrep "Kiwi TCMS is[[:space:]].*$EXPECTED_VERSION" test-mcp-private-agent.txt
     rlPhaseEnd
 
     rlPhaseStartCleanup
