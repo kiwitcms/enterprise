@@ -61,5 +61,6 @@ RUN touch /venv/lib64/python3.12/site-packages/tcms/node_modules/bootstrap-slide
 # collect static files again
 RUN cp /Kiwi/static/ca.crt /Kiwi/ssl/ && \
     /Kiwi/manage.py collectstatic --clear --link --noinput && \
+    /Kiwi/manage.py generate_rpc_schema && \
     mv /Kiwi/ssl/ca.crt /Kiwi/static/ && \
     mkdir -p /Kiwi/static/.well-known/acme-challenge/
