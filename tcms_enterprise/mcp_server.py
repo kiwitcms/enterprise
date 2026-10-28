@@ -3,7 +3,6 @@
 # Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
 # https://www.gnu.org/licenses/agpl-3.0.html
 
-import inspect
 import json
 from http import HTTPStatus
 
@@ -16,12 +15,12 @@ from django_tenants.utils import get_public_schema_name
 from modernrpc.constants import Protocol
 from modernrpc.core import RpcRequestContext
 from modernrpc.exceptions import RPCInvalidRequest
-from modernrpc.introspection import DocstringParser, Introspector
 from modernrpc.jsonrpc.handler import JsonRpcHandler
 from modernrpc.server import RpcServer
 
 from tcms import __version__
 from tcms.rpc.handlers import KiwiTCMSHandlerMixin
+from tcms.rpc.schema import describe_methods
 
 from tcms_enterprise.mcp_scopes import SCOPES, has_required_scopes, required_scopes
 
@@ -232,53 +231,32 @@ class MCPServer(RpcServer):
         if self._catalog is not None:
             return self._catalog
 
-        json_type_by_doc = {
-            "str": "string",
-            "int": "integer",
-            "float": "number",
-            "bool": "boolean",
-            "list": "array",
-            "tuple": "array",
-            "set": "array",
-            "dict": "object",
-        }
-
         catalog = []
-        for name, method in sorted(self.registry.items()):
-            if name in MCP_EXCLUDED_TOOLS:
+        for description in describe_methods():
+            if description.name in MCP_EXCLUDED_TOOLS:
                 continue
 
-            parser = DocstringParser(method.func)
-            signature = Introspector(method.func).signature
-
+            method = self.registry.get(description.name)
             properties = {}
             required = []
-            for arg in signature.parameters:
-                # the RPC request context is injected by the server, not a tool argument
-                if arg == method.context_target:
-                    continue
 
-                prop = {}
-                arg_doc = parser.args_docstrings.get(arg)
-                if arg_doc:
-                    prop["description"] = arg_doc
-                json_type = json_type_by_doc.get(parser.args_types.get(arg, ""))
-                if json_type:
-                    prop["type"] = json_type
-                    if json_type == "object":
-                        # free-form dict arguments such as query/values
-                        prop["additionalProperties"] = True
-                properties[arg] = prop
+            for parameter in description.parameters:
+                prop = dict(parameter.schema)
+                if prop.get("type") == "object" and "additionalProperties" not in prop:
+                    # free-form dict arguments, e.g. User.update values
+                    prop["additionalProperties"] = True
+                properties[parameter.name] = prop
+                if parameter.required:
+                    required.append(parameter.name)
 
-                if signature.parameters[arg].default is inspect.Parameter.empty:
-                    required.append(arg)
-
-            description = parser.docstring or f"Kiwi TCMS API method {name}"
+            summary = (
+                description.description or f"Kiwi TCMS API method {description.name}"
+            )
             catalog.append(
                 {
-                    "name": name,
-                    "description": f"{description} {UNTRUSTED_DATA_NOTICE}",
-                    "annotations": self.tool_annotations(name, method),
+                    "name": description.name,
+                    "description": f"{summary} {UNTRUSTED_DATA_NOTICE}",
+                    "annotations": self.tool_annotations(description.name, method),
                     "inputSchema": {
                         "type": "object",
                         "properties": properties,
