@@ -265,6 +265,9 @@ class MCPServer(RpcServer):
                 json_type = json_type_by_doc.get(parser.args_types.get(arg, ""))
                 if json_type:
                     prop["type"] = json_type
+                    if json_type == "object":
+                        # free-form dict arguments such as query/values
+                        prop["additionalProperties"] = True
                 properties[arg] = prop
 
                 if signature.parameters[arg].default is inspect.Parameter.empty:
@@ -280,7 +283,7 @@ class MCPServer(RpcServer):
                         "type": "object",
                         "properties": properties,
                         "required": required,
-                        "additionalProperties": True,
+                        "additionalProperties": False,
                     },
                 }
             )
