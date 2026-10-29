@@ -95,7 +95,7 @@ rlJournalStart
         rlRun -t -c "docker exec -i web /venv/bin/python -c 'import tcms; print(tcms.__version__)' > test-expected-version.txt"
         EXPECTED_VERSION=$(cat test-expected-version.txt)
         rlAssertNotEquals "expected version obtained" "$EXPECTED_VERSION" ""
-        rlAssertGrep "Kiwi TCMS is[[:space:]].*$EXPECTED_VERSION" test-mcp-agent.txt
+        rlAssertGrep "The current version of Kiwi TCMS.*$EXPECTED_VERSION" test-mcp-agent.txt
     rlPhaseEnd
 
     rlPhaseStartTest "attempt cross-tenant requests"
@@ -114,7 +114,7 @@ rlJournalStart
         # OpenClaw redacts the response body and doesn't print the HTTP status,
         # so the transport-level rejection is what the agent log exposes.
         rlAssertGrep "Error POSTing to endpoint" mcp-cross-tenant.log
-        rlAssertNotGrep "The current version of Kiwi TCMS is" mcp-cross-tenant.json
+        rlAssertNotGrep "The current version of Kiwi TCMS" mcp-cross-tenant.json
     rlPhaseEnd
 
     rlPhaseStartTest "execute OpenClaw agent against Private Tenant"
@@ -171,7 +171,7 @@ rlJournalStart
         rlRun -t -c "docker exec -i web /venv/bin/python -c 'import tcms; print(tcms.__version__)' > test-private-expected-version.txt"
         EXPECTED_VERSION=$(cat test-private-expected-version.txt)
         rlAssertNotEquals "expected version obtained" "$EXPECTED_VERSION" ""
-        rlAssertGrep "Kiwi TCMS is[[:space:]].*$EXPECTED_VERSION" test-mcp-private-agent.txt
+        rlAssertGrep "The current version of Kiwi TCMS.*$EXPECTED_VERSION" test-mcp-private-agent.txt
     rlPhaseEnd
 
     rlPhaseStartCleanup
