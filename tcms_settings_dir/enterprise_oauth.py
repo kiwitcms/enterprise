@@ -15,6 +15,10 @@ for app_list in (INSTALLED_APPS, TENANT_APPS):  # noqa: F821
 OAUTH2_PROVIDER = {
     "PKCE_REQUIRED": True,
     "SCOPES": {},
+    # Token lifetimes: https://django-oauth-toolkit.readthedocs.io/en/latest/settings.html
+    "AUTHORIZATION_CODE_EXPIRE_SECONDS": 60,  # 1 minute
+    "ACCESS_TOKEN_EXPIRE_SECONDS": 36000,  # 10 hours
+    "REFRESH_TOKEN_EXPIRE_SECONDS": 604800,  # 7 days
     # allow MCP clients to register themselves (RFC 7591)
     "DCR_ENABLED": True,
     "DCR_REGISTRATION_PERMISSION_CLASSES": (
