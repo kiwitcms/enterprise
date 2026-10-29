@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.12]
+        python-version: [3.14]
 
     steps:
       - uses: actions/checkout@v7
@@ -40,7 +40,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: [3.12]
+        python-version: [3.14]
         command: [flake8, pylint, test-docker-image]
 
     steps:
@@ -150,7 +150,7 @@ jobs:
       env:
         RUNTIME_BASE: registry.access.redhat.com/ubi10-minimal:latest
       run: |
-          git clone https://github.com/kiwitcms/Kiwi
+          git clone --branch prepare/v17.0-py3.14 https://github.com/kiwitcms/Kiwi
           make -C Kiwi/ docker-image
           docker tag pub.kiwitcms.eu/kiwitcms/kiwi:latest hub.kiwitcms.eu/kiwitcms/version:16.6
 

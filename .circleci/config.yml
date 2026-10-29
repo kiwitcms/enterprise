@@ -34,7 +34,7 @@ jobs:
             --extra-index-url https://pypi.org/simple/
 
       - run: |
-          git clone https://github.com/kiwitcms/Kiwi
+          git clone --branch prepare/v17.0-py3.14 https://github.com/kiwitcms/Kiwi
           make -C Kiwi/ docker-image
           docker tag pub.kiwitcms.eu/kiwitcms/kiwi:latest hub.kiwitcms.eu/kiwitcms/version:16.6
 
