@@ -9,6 +9,17 @@ from django.utils.translation import gettext_lazy as _
 # Follows the format of ``tcms.settings.common.MENU_ITEMS``
 MENU_ITEMS = [
     (
+        _("API Help"),
+        [
+            (
+                _("Documentation"),
+                "https://kiwitcms.readthedocs.io/en/latest/api/index.html",
+            ),
+            (_("Context for LLMs"), "/static/api/llms.txt"),
+            (_("OpenAPI schema"), "/static/api/openapi.json"),
+        ],
+    ),
+    (
         _("Model Context Protocol"),
         [
             (
