@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% comment %}
+Copyright (c) 2026 Alexander Todorov <atodorov@otb.bg>
+
+Licensed under GNU Affero General Public License v3 or later (AGPLv3+)
+https://www.gnu.org/licenses/agpl-3.0.html
+
+Django OAuth Toolkit ships a standalone base.html without site chrome, so all
+of its pages render as bare HTML. Override it here so they extend Kiwi TCMS'
+base.html instead. Keep this minimal: map only the ``content`` block, which
+every DOT page defines, so upstream template changes don't break the override.
+{% endcomment %}
+
+{% block contents %}
+    <div class="container container-cards-pf">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
