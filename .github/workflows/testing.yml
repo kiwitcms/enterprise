@@ -78,7 +78,7 @@ jobs:
 
     - name: Cache npm packages
       if: matrix.command == 'test-docker-image'
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ~/.npm
         key: ${{ runner.os }}-npm-${{ hashFiles('testing/package.json') }}
@@ -87,7 +87,7 @@ jobs:
 
     - name: Cache Ollama models
       if: matrix.command == 'test-docker-image'
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ~/.ollama/models
         key: ollama-models-qwen2.5-7b
