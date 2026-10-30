@@ -139,6 +139,18 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### UNRELEASED CHANGES
+
+- Added Model Context Protocol server with OAuth 2.1 authorization.
+  Available under `https://<kiwitcms-host>/mcp/`
+- Added API Help menu to navbar
+- Added Model Context Protocol menu to navbar
+- Added Privacy Policy menu under Help menu item
+- Added `remove_stale_tenant_tokens` management command
+- Added django-oauth-toolkit add-on
+- Removed django-prometheus add-on
+
+
 ### v16.6-mt (07 Oct 2026)
 
 - Based on Kiwi TCMS v16.6
