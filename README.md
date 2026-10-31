@@ -139,16 +139,24 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
-### UNRELEASED CHANGES
+### v17.0-mt
 
-- Added Model Context Protocol server with OAuth 2.1 authorization.
+- Based on Kiwi TCMS v17.0
+- Update Python runtime from 3.12 to 3.14
+- Update certbot from 5.8.0 to 5.9.0
+- Update django-ses from 4.8.0 to 4.9.0
+- Update kiwitcms-tenants from 4.10.0 to 4.10.3
+- Update sentry-sdk from 2.71.0 to 2.72.0
+- Update social-auth-app-django from 6.1.0 to 7.2.0
+- Keep automatic name normalization in social-auth pipeline
+- Add Model Context Protocol server with OAuth 2.1 authorization.
   Available under `https://<kiwitcms-host>/mcp/`
-- Added API Help menu to navbar
-- Added Model Context Protocol menu to navbar
-- Added Privacy Policy menu under Help menu item
-- Added `remove_stale_tenant_tokens` management command
-- Added django-oauth-toolkit add-on
-- Removed django-prometheus add-on
+- Add API Help menu to navbar
+- Add Model Context Protocol menu to navbar
+- Add Privacy Policy menu under Help menu item
+- Add `remove_stale_tenant_tokens` management command
+- Add django-oauth-toolkit add-on
+- Remove django-prometheus add-on
 
 
 ### v16.6-mt (07 Oct 2026)
