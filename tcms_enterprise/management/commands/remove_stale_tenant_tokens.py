@@ -30,7 +30,7 @@ class Command(ClearTokensCommand):
         if kwargs["verbosity"]:
             output = self.stdout
 
-        for tenant in get_tenant_model().objects.all():
+        for tenant in get_tenant_model().objects.order_by("pk"):
             if output:
                 output.write(
                     f"\n\n {timezone.now()} === Removing tokens"
