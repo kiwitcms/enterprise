@@ -8,7 +8,7 @@ jobs:
   aarch64-build-docker-image:
     machine:
       # https://circleci.com/docs/2.0/configuration-reference/#available-machine-images
-      image: ubuntu-2404:2026.05.1
+      image: ubuntu-2604:2026.07.1
     resource_class: arm.medium
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
@@ -19,13 +19,8 @@ jobs:
       # fail if not using Python 3
       - run: python3 --version | grep "3\."
       - run: |
-          sudo cp .circleci/daemon.json /etc/docker/
-          sudo systemctl restart docker
-          docker --version
-          docker info -f '{{ .DriverStatus }}'
-
           sudo apt-get update
-          sudo apt-get install libkrb5-dev libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+          sudo apt-get install libkrb5-dev libxml2-dev libxmlsec1-dev libxmlsec1-openssl1
           pip3 install -U pip setuptools wheel
           pip3 install -r devel.txt \
             --index-url https://$PKG_TOKEN@pkg.kiwitcms.eu/pypi/ \
@@ -37,7 +32,7 @@ jobs:
           make docker-image
 
           echo "+++++ Docker images +++++"
-          docker images --digests
+          docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t$(date '+%d %b %Y')\t{{.Size}}"
 
           docker logout hub.kiwitcms.eu
 
@@ -48,7 +43,7 @@ jobs:
   aarch64-build-and-push-docker-image:
     machine:
       # https://circleci.com/docs/2.0/configuration-reference/#available-machine-images
-      image: ubuntu-2404:2026.05.1
+      image: ubuntu-2604:2026.07.1
     resource_class: arm.medium
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
@@ -59,13 +54,8 @@ jobs:
       # fail if not using Python 3
       - run: python3 --version | grep "3\."
       - run: |
-          sudo cp .circleci/daemon.json /etc/docker/
-          sudo systemctl restart docker
-          docker --version
-          docker info -f '{{ .DriverStatus }}'
-
           sudo apt-get update
-          sudo apt-get install libkrb5-dev libxml2-dev libxmlsec1-dev libxmlsec1-openssl
+          sudo apt-get install libkrb5-dev libxml2-dev libxmlsec1-dev libxmlsec1-openssl1
           pip3 install -U pip setuptools wheel
           pip3 install -r devel.txt \
             --index-url https://$PKG_TOKEN@pkg.kiwitcms.eu/pypi/ \
@@ -82,7 +72,7 @@ jobs:
           docker tag hub.kiwitcms.eu/kiwitcms/enterprise:$VERSION-$(uname -m) quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
 
           echo "+++++ Docker images +++++"
-          docker images --digests
+          docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t$(date '+%d %b %Y')\t{{.Size}}"
 
           docker push quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
           docker logout quay.io

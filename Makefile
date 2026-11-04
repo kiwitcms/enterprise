@@ -25,6 +25,8 @@ docker-image: build
 	# everything else below is Enterprise + multi-tenant
 	docker build \
 	    --progress=plain \
+	    --provenance=false \
+	    --sbom=false \
 	    --build-arg KIWI_VERSION=$(KIWI_VERSION) \
 	    --secret id=PKG_TOKEN,env=PKG_TOKEN \
 	    -t hub.kiwitcms.eu/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-$(shell uname -m) .
@@ -47,21 +49,11 @@ extract-static-files:
 
 .PHONY: docker-manifest
 docker-manifest:
-	# versioned manifest
-	docker manifest rm quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) || echo
-	docker manifest create \
-	    quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) \
+	docker buildx imagetools create \
+	    -t quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION) \
+	    -t quay.io/kiwitcms/enterprise:latest \
 	    quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-x86_64 \
 	    quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-aarch64
-	docker manifest push quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION)
-
-	# latest manifest
-	docker manifest rm quay.io/kiwitcms/enterprise:latest || echo
-	docker manifest create \
-	    quay.io/kiwitcms/enterprise:latest \
-	    quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-x86_64 \
-	    quay.io/kiwitcms/enterprise:$(ENTERPRISE_VERSION)-aarch64
-	docker manifest push quay.io/kiwitcms/enterprise:latest
 
 
 .PHONY: flake8
