@@ -6,7 +6,7 @@
 import json
 from http import HTTPStatus
 
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -130,10 +130,21 @@ class MCPServer(RpcServer):
 
         return {SCOPES["view"]}
 
-    def check_request(self, request):
-        payload = self.request_payload(request)
+    def check_request(self, request):  # pylint: disable=too-many-return-statements
+        error = super().check_request(request)
+        if error:
+            return error
+
+        try:
+            payload = self.request_payload(request)
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            return HttpResponseBadRequest(content_type="text/plain")
+
+        if not isinstance(payload, dict):
+            return HttpResponseBadRequest(content_type="text/plain")
+
         if payload.get("method") in self.DISCOVERY_METHODS:
-            return super().check_request(request)
+            return None
 
         if request.user.is_authenticated:
             # a user which is not authorized on non-public schema is forbidden
@@ -157,7 +168,7 @@ class MCPServer(RpcServer):
                 request, self.requested_scopes(payload)
             )
 
-        return super().check_request(request)
+        return None
 
     @staticmethod
     def build_unauthorized_response(request, scopes):
