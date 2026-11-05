@@ -23,6 +23,11 @@ MENU_ITEMS = [
         _("Model Context Protocol"),
         [
             (
+                _("How To"),
+                "https://kiwitcms.org/blog/kiwi-tcms-team/2026/11/05/"
+                "feature-spotlight-model-context-protocol/",
+            ),
+            (
                 _("Authorized Tokens"),
                 reverse_lazy("oauth2_provider:authorized-token-list"),
             ),
