@@ -134,7 +134,7 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
             headers["HTTP_AUTHORIZATION"] = f"Bearer {bearer_token}"
 
         response = self.client.post(
-            "/mcp/",
+            reverse("mcp-endpoint"),
             data=json.dumps(payload),
             content_type="application/json",
             **headers,
@@ -142,6 +142,49 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
         if raw:
             return response
         return json.loads(response.content)
+
+    def test_get_method_should_error(self):
+        response = self.client.get(reverse("mcp-endpoint"))
+        self.assertEqual(response.status_code, HTTPStatus.METHOD_NOT_ALLOWED)
+        self.assertEqual(response["Allow"], "POST")
+
+    def test_post_with_empty_body_should_return_bad_request(self):
+        # an empty body drops Content-Type unless it is set explicitly
+        response = self.client.post(
+            reverse("mcp-endpoint"),
+            data="",
+            content_type="application/json",
+            headers={"content-type": "application/json"},
+        )
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+        self.assertEqual(response["Content-Type"], "text/plain")
+        self.assertEqual(response.content, b"")
+
+    def test_post_with_malformed_json_should_return_bad_request(self):
+        response = self.client.post(
+            reverse("mcp-endpoint"), data="{", content_type="application/json"
+        )
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+        self.assertEqual(response["Content-Type"], "text/plain")
+        self.assertEqual(response.content, b"")
+
+    def test_post_with_non_json_content_type_should_return_bad_request(self):
+        response = self.client.post(
+            reverse("mcp-endpoint"),
+            data="{}",
+            content_type="text/plain",
+            HTTP_AUTHORIZATION=f"Bearer {self.bearer_token}",
+        )
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+        self.assertIn(b"unsupported Content-Type", response.content)
+
+    def test_post_with_json_array_should_return_bad_request(self):
+        response = self.client.post(
+            reverse("mcp-endpoint"), data="[]", content_type="application/json"
+        )
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+        self.assertEqual(response["Content-Type"], "text/plain")
+        self.assertEqual(response.content, b"")
 
     def test_server_discover_should_succeed(self):
         response = self.call("server/discover")
@@ -529,7 +572,7 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
             "params": {},
         }
         response = self.client.post(
-            "/mcp/",
+            reverse("mcp-endpoint"),
             data=json.dumps(payload),
             content_type="application/json",
             HTTP_AUTHORIZATION=f"Bearer {self.bearer_token}",
