@@ -8,6 +8,7 @@
 import sentry_sdk
 import dj_database_url
 
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from tcms import __version__
@@ -49,6 +50,7 @@ if "social_django" not in INSTALLED_APPS:  # noqa: F821
     INSTALLED_APPS.append("social_django")  # noqa: F821
 
 SOCIAL_AUTH_URL_NAMESPACE = "social"
+SOCIAL_AUTH_LOGIN_ERROR_URL = reverse_lazy("tcms-login")
 
 if (
     "social_django.context_processors.backends"
@@ -81,6 +83,15 @@ SOCIAL_AUTH_PIPELINE = [
     "tcms_enterprise.pipeline.initiate_defaults",
 ]
 SOCIAL_AUTH_GITHUB_SCOPE = ["user:email"]
+
+# https://python-social-auth.readthedocs.io/en/latest/configuration/django.html#quickstart
+if (
+    "social_django.middleware.SocialAuthExceptionMiddleware"
+    not in MIDDLEWARE  # noqa: F821
+):
+    MIDDLEWARE.append(  # noqa: F821
+        "social_django.middleware.SocialAuthExceptionMiddleware"
+    )
 
 # https://plausible.io/kiwitcms-enterprise
 PLAUSIBLE_DOMAIN = "kiwitcms-enterprise"
