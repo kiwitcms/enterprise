@@ -23,7 +23,7 @@ DATABASES["default"].update(  # noqa: F821, pylint: disable=objects-update-used
     dj_database_url.config()
 )
 
-# link to legal information, see https://github.com/kiwitcms/Kiwi/issues/249
+# link to legal information, see https://github.com/kiwitcms/kiwitcms/issues/249
 LEGAL_MENU_ITEM = ("http://kiwitcms.org/legal/", _("Legal information"))
 if LEGAL_MENU_ITEM not in HELP_MENU_ITEMS:  # noqa: F821
     HELP_MENU_ITEMS.append(LEGAL_MENU_ITEM)  # noqa: F821

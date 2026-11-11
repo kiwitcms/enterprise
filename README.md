@@ -10,7 +10,7 @@ This repository contains downstream distribution for the
 [Kiwi TCMS](http://kiwitcms.org) open source test management
 system, dubbed *Enterprise Edition*, which contains the following changes:
 
-* Based on `kiwitcms/kiwi` Docker image
+* Based on `kiwitcms/kiwitcms` Docker image
 * **Compatible only with PostgreSQL !!!**
 * Versioned static files
 * Render Mermaid.js diagrams in Markdown fenced code blocks as PNG.
@@ -209,7 +209,7 @@ Changelog
 
 - Based on Kiwi TCMS v16.2
 - Revert social-auth-app-django back to 5.9.0. Fixes
-  [Issue #4466](https://github.com/kiwitcms/Kiwi/issues/4466)
+  [Issue #4466](https://github.com/kiwitcms/kiwitcms/issues/4466)
 - Update kiwitcms-tenants from 4.7.0 to 4.7.1
 
 
@@ -253,7 +253,7 @@ Changelog
 - Don't use legacy syntax in Dockerfile
 - Provide sample SSL configuration for Postgres and
   configure Kiwi TCMS to connect to it securely. Closes
-  [Issue #2413](https://github.com/kiwitcms/Kiwi/issues/2413)
+  [Issue #2413](https://github.com/kiwitcms/kiwitcms/issues/2413)
 
 
 ### v15.4-mt (17 Mar 2026)
@@ -403,7 +403,7 @@ Changelog
 - Relicense this source code under GNU Affero General Public License v3 or later
 - Prior versions are still licensed under GNU General Public License v3
 - Support Mermaid.js syntax in Markdown fenced code blocks. Closes
-  [Issue #3116](https://github.com/kiwitcms/Kiwi/issues/3116)
+  [Issue #3116](https://github.com/kiwitcms/kiwitcms/issues/3116)
 - Update certbot from 2.10.0 to 2.11.0
 - Update certbot-dns-* plugins from 2.10.0 to 2.11.0
 - Update django-ses from 4.0.0 to 4.1.0
@@ -583,8 +583,8 @@ Changelog
 - Update kiwitcms-tenants from 2.3.1 to 2.3.2
 - Update kiwitcms-trackers-integration from 0.2.0 to 0.3.0.
   Supports integration with OpenProject and Mantis BT. Closes
-  [Issue #2203](<https://github.com/kiwitcms/Kiwi/issues/2203>) and
-  [Issue #879](<https://github.com/kiwitcms/Kiwi/issues/879>)
+  [Issue #2203](<https://github.com/kiwitcms/kiwitcms/issues/2203>) and
+  [Issue #879](<https://github.com/kiwitcms/kiwitcms/issues/879>)
 
 
 
@@ -802,7 +802,7 @@ Changelog
 - Update django-ses from 0.8.14 to 1.0.1
 - Update kiwitcms-tenants from 1.1.1 to 1.2
 - Update social-auth-app-django from 3.4.0 to 4.0.0
-- Start tagging non-Enterprise images of `kiwitcms/kiwi` - will be provided
+- Start tagging non-Enterprise images of `kiwitcms/kiwitcms` - will be provided
   via separate private repository for enterprise customers
 
 
