@@ -54,3 +54,10 @@ jobs:
             docker push quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
             docker logout quay.io
             docker logout hub.kiwitcms.eu
+
+      - name: Remove container registry credentials
+        if: always()
+        run: |
+          docker logout quay.io || true
+          docker logout hub.kiwitcms.eu || true
+          rm -f ~/.docker/config.json

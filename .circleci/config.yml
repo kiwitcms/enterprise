@@ -39,6 +39,12 @@ jobs:
           VERSION=$(make echo-version)
           docker run --name web --rm -d hub.kiwitcms.eu/kiwitcms/enterprise:$VERSION-$(uname -m)
           make extract-static-files
+      - run:
+          name: Remove container registry credentials
+          when: always
+          command: |
+            docker logout hub.kiwitcms.eu || true
+            rm -f ~/.docker/config.json
 
   aarch64-build-and-push-docker-image:
     machine:
@@ -77,6 +83,13 @@ jobs:
           docker push quay.io/kiwitcms/enterprise:$VERSION-$(uname -m)
           docker logout quay.io
           docker logout hub.kiwitcms.eu
+      - run:
+          name: Remove container registry credentials
+          when: always
+          command: |
+            docker logout quay.io || true
+            docker logout hub.kiwitcms.eu || true
+            rm -f ~/.docker/config.json
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
