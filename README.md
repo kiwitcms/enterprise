@@ -49,6 +49,7 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
     [this URL schema](https://github.com/jazzband/dj-database-url#url-schema); Replaces individual
     database configuration via settings override, see
     [example](https://github.com/kiwitcms/enterprise/blob/master/docker-compose.testing)
+  - `KIWI_SECRET_KEY` - the value for `settings.SECRET_KEY` which MUST always be kept secret
   - `KIWI_TENANTS_DOMAIN` - FQDN for the multi-tenant configuration, e.g. *tcms.my-company.org*,
     see [kiwitcms-tenants](https://github.com/kiwitcms/tenants/#dns-configuration) for more info
   - `NGX_DENY_INCLUDE`  - full path to a list of `deny <ip>;` directives; **default: /dev/null**.
