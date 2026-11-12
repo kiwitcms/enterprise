@@ -6,7 +6,8 @@ on:
       - 'setup.**'
       - 'README.**'
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   acceptance:
