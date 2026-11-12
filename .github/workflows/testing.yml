@@ -165,6 +165,7 @@ jobs:
       if: ${{ always() && matrix.command == 'test-docker-image' }}
       run: |
         docker logout hub.kiwitcms.eu
+        rm -f ~/.docker/config.json
 
     - name: Upload testing artifacts
       if: always() && matrix.command == 'test-docker-image'
