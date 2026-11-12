@@ -41,9 +41,9 @@ services:
             - ./test_settings.py:/venv/lib64/python3.14/site-packages/tcms_settings_dir/test_settings.py:z,ro
             # IMPORTANT: ^^^ Remove or substitute your own settings overrides for Production deployments, see
             # https://kiwitcms.readthedocs.io/en/latest/installing_docker.html#customization
-            - kiwi_ssl:/Kiwi/ssl:Z
-            - kiwi_uploads:/Kiwi/uploads:Z
-            - kiwi_letsencrypt:/etc/letsencrypt:Z
+            - ssl:/Kiwi/ssl:Z
+            - uploads:/Kiwi/uploads:Z
+            - letsencrypt:/etc/letsencrypt:Z
         environment:
             NGX_UPLOADS_RATE: 55
             NGX_UPLOADS_BURST: 20
@@ -74,9 +74,9 @@ services:
 
 volumes:
     db_data:
-    kiwi_ssl:
-    kiwi_uploads:
-    kiwi_letsencrypt:
+    ssl:
+    uploads:
+    letsencrypt:
 
 # IMPORTANT: for testing purposes we use an external network!
 # for Production deployments you will probably remove this entire section
