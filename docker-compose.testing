@@ -50,6 +50,7 @@ services:
             NGX_CSP_SCRIPT_SRC: cdn.example.bg
             # IMPORTANT: ^^^ Remove or substitute your own overrides for Production deployments, see
             # https://github.com/kiwitcms/enterprise#kiwi-tcms-enterprise-edition
+            KIWI_SECRET_KEY: change-me
             KIWI_TENANTS_DOMAIN: testing.example.bg
             DATABASE_URL: postgres://dummy_usr:dummy_s3cr3t@db:5432/dummy_db?sslmode=require
         # IMPORTANT: not needed for Production deployments!
