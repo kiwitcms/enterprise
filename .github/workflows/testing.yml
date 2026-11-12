@@ -22,6 +22,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v7
@@ -53,6 +55,8 @@ jobs:
         docker compose --help
 
     - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v7
