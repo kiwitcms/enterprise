@@ -140,6 +140,19 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v17.1-mt
+
+- Based on Kiwi TCMS v17.1
+- Update kiwitcms-tenants from 4.10.3 to 4.10.4
+- Update sentry-sdk from 2.73.0 to 2.74.0
+- Add How To menu entry for Model Context Protocol
+- Return 4xx for invalid MCP HTTP requests
+- Redirect to login page instead of ISE 500 for failed OAuth logins
+- Order tenants by primary key in management commands
+- Add explicit note for `KIWI_SECRET_KEY` in README. See
+  [GHSA-m9h5-c637-cpcg](https://github.com/kiwitcms/kiwitcms/security/advisories/GHSA-m9h5-c637-cpcg)
+
+
 ### v17.0-mt
 
 - Based on Kiwi TCMS v17.0
