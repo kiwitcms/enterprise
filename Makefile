@@ -19,8 +19,16 @@ build:
 	twine check dist/*
 
 
+.PHONY: debug-wheels
+debug-wheels:
+	# DEBUG: build kiwitcms/tenants from PR #374 before it is released
+	rm -rf /tmp/debug-tenants-374
+	git clone --depth 1 --branch dependabot/pip/kiwitcms-django-tenants-3.8.4 https://github.com/kiwitcms/tenants.git /tmp/debug-tenants-374
+	bash -c 'pushd /tmp/debug-tenants-374 && python3 setup.py bdist_wheel && popd'
+	cp /tmp/debug-tenants-374/dist/kiwitcms_tenants-4.10.4-*.whl dist/
+
 .PHONY: docker-image
-docker-image: build
+docker-image: build debug-wheels
 	test -n "$(PKG_TOKEN)" || exit 1
 	# everything else below is Enterprise + multi-tenant
 	docker build \

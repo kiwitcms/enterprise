@@ -38,6 +38,10 @@ COPY ./dist/ /Kiwi/dist/
 
 RUN --mount=type=secret,id=PKG_TOKEN,env=PKG_TOKEN \
     pip install --no-cache-dir --only-binary :all: decorator lxml && \
+    pip install --no-cache-dir \
+        --index-url https://$PKG_TOKEN@pkg.kiwitcms.eu/pypi/ \
+        --extra-index-url https://pypi.org/simple/ \
+        /Kiwi/dist/kiwitcms_tenants-*.whl && \
     pip install --no-cache-dir --find-links /Kiwi/dist/ \
         --index-url https://$PKG_TOKEN@pkg.kiwitcms.eu/pypi/ \
         --extra-index-url https://pypi.org/simple/ \
