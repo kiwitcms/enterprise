@@ -6,6 +6,7 @@
 import json
 from datetime import timedelta
 from http import HTTPStatus
+from unittest.mock import patch
 
 from django.urls import reverse
 from django.utils import timezone
@@ -204,6 +205,22 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
             error["data"]["supported"], list(MCPHandler.SUPPORTED_VERSIONS)
         )
         self.assertEqual(error["data"]["requested"], "1999-01-01")
+
+    def test_tools_call_should_pass_user_to_inspect_rpc_args(self):
+        user_should_have_perm(self.tester, "management.view_product")
+        with patch(
+            "tcms_enterprise.mcp_server.KiwiTCMSHandlerMixin.inspect_rpc_args"
+        ) as inspect_rpc_args:
+            self.call(
+                "tools/call",
+                {
+                    "name": "Product.filter",
+                    "arguments": {"query": {"name__icontains": "MCP"}},
+                },
+                bearer_token=self.bearer_token,
+            )
+
+        self.assertEqual(inspect_rpc_args.call_args.kwargs["user"].pk, self.tester.pk)
 
     def test_tools_call_should_reject_restricted_lookup_path(self):
         user_should_have_perm(self.tester, "testcases.view_testcase")

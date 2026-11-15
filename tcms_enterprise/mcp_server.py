@@ -311,12 +311,14 @@ class MCPServer(RpcServer):
         if method is None or name in MCP_EXCLUDED_TOOLS:
             return self.error_result(f"Unknown tool: {name}")
 
+        request = mcp_context.request
+
         try:
-            KiwiTCMSHandlerMixin.inspect_rpc_args(name, kwargs=arguments or {})
+            KiwiTCMSHandlerMixin.inspect_rpc_args(
+                name, kwargs=arguments or {}, user=request.user
+            )
         except RPCInvalidRequest as exc:
             return self.error_result(exc.message)
-
-        request = mcp_context.request
         if method.auth is not None and not method.auth(request):
             return self.error_result(f"Authentication failed for {name}")
 
