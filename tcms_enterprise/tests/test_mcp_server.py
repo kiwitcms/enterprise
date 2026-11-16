@@ -12,6 +12,7 @@ from django.utils import timezone
 
 from django_tenants.utils import schema_context, tenant_context
 
+from modernrpc.exceptions import RPC_INVALID_REQUEST, RPC_METHOD_NOT_FOUND
 from oauth2_provider.models import get_access_token_model, get_application_model
 
 from tcms.tests import user_should_have_perm
@@ -185,6 +186,10 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(response["Content-Type"], "text/plain")
         self.assertEqual(response.content, b"")
+
+    def test_post_with_non_string_method_should_return_invalid_request(self):
+        response = self.call(["tools/list"], bearer_token=self.bearer_token)
+        self.assertEqual(response["error"]["code"], RPC_INVALID_REQUEST)
 
     def test_server_discover_should_succeed(self):
         response = self.call("server/discover")
@@ -592,4 +597,5 @@ class TestMCPServer(LoggedInTestCase):  # pylint: disable=too-many-public-method
 
     def test_unknown_method_should_error(self):
         response = self.call("nope", bearer_token=self.bearer_token)
+        self.assertEqual(response["error"]["code"], RPC_METHOD_NOT_FOUND)
         self.assertEqual(response["error"]["message"], 'Method not found: "nope"')
