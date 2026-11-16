@@ -13,7 +13,7 @@ import copy
 
 for backend in (
     "social_core.backends.fedora.FedoraOpenId",
-    "social_core.backends.github.GithubAppAuth",
+    "tcms_enterprise.social_auth.backends.GithubAppAuth",
     "social_core.backends.github.GithubOAuth2",
     "social_core.backends.gitlab.GitLabOAuth2",
     "social_core.backends.keycloak.KeycloakOAuth2",
