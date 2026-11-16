@@ -33,7 +33,7 @@ https://www.gnu.org/licenses/agpl-3.0.html
         {% trans "Continue with" %}
     </p>
 
-    {% for backend in backends.backends %}
+    {% for backend, metadata in backends.metadata.items %}
     <form
         class="inline-display"
         method="post"
@@ -41,7 +41,7 @@ https://www.gnu.org/licenses/agpl-3.0.html
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
         {% with "images/social_auth/backends/"|add:backend|lower|add:".png" as image_path %}
-            <input type="image" src='{% static image_path %}' alt="{{ backend|title }} login" id="login-icon-{{ backend|lower }}">
+            <input type="image" src='{% static image_path %}' alt="{{ metadata.title }} login" title="{{ metadata.title }} login" id="login-icon-{{ backend|lower }}">
         {% endwith %}
     </form>
     &nbsp;
