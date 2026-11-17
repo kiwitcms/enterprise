@@ -140,6 +140,18 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v17.2-mt
+
+- Based on Kiwi TCMS v17.2
+- Update certbot from 5.9.0 to 5.10.0
+- Update kiwitcms-tenants from 4.10.4 to 4.12.0
+- Update sentry-sdk from 2.74.0 to 2.75.0
+- Update social-auth-app-django from 7.2.0 to 8.1.0
+- Add title attribute to social auth login icons
+- Align MCP tool error handling with django-modern-rpc 2.2
+- Pass `request.user` to `KiwiTCMSHandlerMixin.inspect_rpc_args()`
+
+
 ### v17.1-mt
 
 - Based on Kiwi TCMS v17.1
