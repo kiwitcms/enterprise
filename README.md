@@ -140,6 +140,15 @@ the `make` and `docker` commands, the `wheel` and `twine` Python packages.
 Changelog
 ---------
 
+### v17.3-mt
+
+- Based on Kiwi TCMS v17.3
+- Update django-ses from 4.9.0 to 4.9.1
+- Update kiwitcms-tenants from 4.12.0 to 4.13.0 which
+  includes security related updates for the underlying
+  kiwitcms-django-storages and a `TenantS3Storage` storage backend
+
+
 ### v17.2-mt
 
 - Based on Kiwi TCMS v17.2
