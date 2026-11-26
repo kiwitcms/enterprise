@@ -35,7 +35,42 @@ system, dubbed *Enterprise Edition*, which contains the following changes:
   - [kiwitcms-tenants](https://github.com/kiwitcms/tenants/) - multi-tenant support
   - [kiwitcms-trackers-integration](https://github.com/kiwitcms/trackers-integration/) -
     integration with extra issue trackers
-  - [mount-s3](https://github.com/awslabs/mountpoint-s3) - mounting an S3 bucket as a local file system
+  - [mount-s3](https://github.com/awslabs/mountpoint-s3) - mount an S3 bucket locally (needs FUSE):
+
+    On Ubuntu/Debian based hosts start the container like this:
+    ```
+    $ docker run --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined hub.kiwitcms.eu/kiwitcms/enterprise
+    ```
+
+    On a Fedora/RHEL based host try this:
+    ```
+    $ docker run --device /dev/fuse --cap-add SYS_ADMIN --security-opt label=disable hub.kiwitcms.eu/kiwitcms/enterprise
+    ```
+
+    Compose equivalent:
+    ```yaml
+    devices:
+      - "/dev/fuse:/dev/fuse"
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - label=disable
+    ```
+
+    Then inside the running container:
+    ```bash
+    $ id
+    uid=1001(kiwitcms) gid=1001(kiwitcms) groups=1001(kiwitcms)
+
+    $ export AWS_ACCESS_KEY_ID="......."
+    $ export AWS_SECRET_ACCESS_KEY="..."
+
+    $ mount-s3 --read-only --region us-east-1 --endpoint-url https://s3.amazonaws.com --force-path-style [--prefix prefix/path/] <bucket-name> /Kiwi/mnt/
+    bucket <bucket-name> is mounted at /Kiwi/mnt/
+
+    $ ls -l /Kiwi/mnt/
+    $ umount /Kiwi/mnt/
+    ```
   - [psycopg-pool](https://www.psycopg.org/psycopg3/docs/advanced/pool.html) - support for Postgres connection pools
   - [restic](https://restic.readthedocs.io/) - fast and secure backup program
   - [sentry-sdk](https://docs.sentry.io/platforms/python/integrations/django/) - automatic error reporting with Sentry
