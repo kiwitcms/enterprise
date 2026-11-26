@@ -16,6 +16,8 @@ RUN microdnf -y --nodocs install augeas-libs fuse-libs psmisc restic util-linux-
     microdnf clean all
 
 HEALTHCHECK CMD [ -d /proc/$(cat /tmp/nginx.pid) ] && [ -d /proc/$(cat /tmp/kiwitcms.pid) ]
+
+RUN useradd --uid 1001 --gid 0 --home-dir /Kiwi kiwitcms
 USER 1001
 
 # override NGINX configuration
