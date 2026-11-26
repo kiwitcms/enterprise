@@ -22,7 +22,7 @@ USER 1001
 
 # override NGINX configuration
 CMD /Kiwi/bin/docker-entrypoint
-COPY ./etc/nginx.override /Kiwi/etc/nginx.override
+COPY --chown=1001:root ./etc/nginx.override /Kiwi/etc/nginx.override
 RUN ln -sf /tmp/actual.conf /Kiwi/etc/nginx.conf
 ENV NGX_AUTHENTICATED_RATE=300  \
     NGX_AUTHENTICATED_BURST=100 \
@@ -35,8 +35,8 @@ ENV NGX_AUTHENTICATED_RATE=300  \
     NGX_CSP_SCRIPT_SRC=""       \
     NGX_DENY_INCLUDE="/dev/null"
 
-COPY ./bin/* /Kiwi/bin/
-COPY ./dist/ /Kiwi/dist/
+COPY --chown=1001:root ./bin/* /Kiwi/bin/
+COPY --chown=1001:root ./dist/ /Kiwi/dist/
 
 RUN --mount=type=secret,id=PKG_TOKEN,env=PKG_TOKEN \
     pip install --no-cache-dir --only-binary :all: decorator lxml && \
