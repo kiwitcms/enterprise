@@ -109,6 +109,15 @@ rlJournalStart
         rlAssertGrep "pg_hba.conf rejects connection .* no encryption" "$rlRun_LOG"
     rlPhaseEnd
 
+    rlPhaseStartTest "Sanity test - execute pg_dump/psql"
+        for VERSION in 16 17 18 19; do
+            rlRun -t -c "docker exec -i web /usr/pgsql-$VERSION/bin/psql --help"
+            rlRun -t -c "docker exec -i web /usr/pgsql-$VERSION/bin/pg_dump --help"
+        done
+
+        rlRun -t -c 'docker exec -i web sh -c "/usr/pgsql-18/bin/pg_dump \"\$DATABASE_URL\" -j1 --format=plain --no-owner --schema-only --table public.auth_user"'
+    rlPhaseEnd
+
     rlPhaseStartTest "Sanity test - missing migrations"
         rlRun -t -c "docker exec -i web /Kiwi/manage.py makemigrations --check"
     rlPhaseEnd
