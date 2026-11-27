@@ -119,7 +119,7 @@ rlJournalStart
         rlRun -t -c "docker exec -i web /usr/pgsql-19/bin/psql --help"
         rlRun -t -c "docker exec -i web /usr/pgsql-19/bin/pg_dump --help"
 
-        rlRun -t -c 'docker exec -i web sh -c "/usr/pgsql-18/bin/pg_dump \"\$DATABASE_URL\" -j1 --format=plain --no-owner --schema-only --table public.auth_user"'
+        rlRun -t -c 'docker exec -i web /usr/pgsql-18/bin/pg_dump "$DATABASE_URL" -j1 --format=plain --no-owner --schema-only --table public.auth_user'
     rlPhaseEnd
 
     rlPhaseStartTest "Sanity test - missing migrations"
